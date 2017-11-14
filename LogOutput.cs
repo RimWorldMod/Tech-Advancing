@@ -13,7 +13,7 @@ namespace TechAdvancing
 
         public static readonly bool DebugMode_TA_enabled = false;
 
-        public static void writeLogMessage(Errorlevel level, string message)
+        public static void WriteLogMessage(Errorlevel level, string message)
         {
             if((level == Errorlevel.Debug && DebugMode_TA_enabled)|| level == Errorlevel.Information)
             {

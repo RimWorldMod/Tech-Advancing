@@ -9,9 +9,8 @@ using Verse;
 using RimWorld;
 using System.Reflection;
 using System.IO;
-using GHXXTechAdvancing;
 
-namespace GHXXTechAdvancing
+namespace TechAdvancing
 {
 
     [StaticConstructorOnStartup]
@@ -23,13 +22,13 @@ namespace GHXXTechAdvancing
             MethodInfo destination = typeof(_ResearchManager).GetMethod("_ReapplyAllMods", BindingFlags.Static | BindingFlags.NonPublic);
             //Log.Message("Source method = " + source.Name + "Target = " + destination.Name);
             
-            Detour.detour(source, destination);
+            Detour.DoDetour(source, destination);
             GameObject initializer = new GameObject("GHXXTAMapComponentInjector");
 
             initializer.AddComponent<MapComponentInjector>();
             UnityEngine.Object.DontDestroyOnLoad(initializer);
 
-            SetupHarmony.Setup();
+            HarmonyDetours.Setup();
         }
 
     }
@@ -58,16 +57,16 @@ namespace GHXXTechAdvancing
                     factionDefault = Faction.OfPlayer.def.techLevel;        //store the default value for the techlevel because we will modify it later and we need the one from right now
                     TechAdvancing_Config_Tab.tempOverridableLevel = factionDefault;
                     isTribe = factionDefault == TechLevel.Neolithic;
-                    loadCfgValues();
+                    LoadCfgValues();
                     firstpass = false;
 
                     //Debug
-                    LogOutput.writeLogMessage(Errorlevel.Debug,"Con A val= " + TechAdvancing_Config_Tab.Conditionvalue_A + "|||Con B Val= " + TechAdvancing_Config_Tab.Conditionvalue_B);
+                    LogOutput.WriteLogMessage(Errorlevel.Debug,"Con A val= " + TechAdvancing_Config_Tab.Conditionvalue_A + "|||Con B Val= " + TechAdvancing_Config_Tab.Conditionvalue_B);
 
                 }
                 catch (Exception ex)
                 {
-                    LogOutput.writeLogMessage(Errorlevel.Error, "Caught error in Reapply All Mods: " + ex.ToString());
+                    LogOutput.WriteLogMessage(Errorlevel.Error, "Caught error in Reapply All Mods: " + ex.ToString());
                 }
                 
             }
@@ -179,7 +178,7 @@ namespace GHXXTechAdvancing
             RecalculateTechlevel(false,false);
         }
 
-        private static void loadCfgValues() //could be improved using just vanilla loading
+        private static void LoadCfgValues() //could be improved using just vanilla loading
         {
             Scribe_Deep.Look(ref TechAdvancing_Config_Tab.Conditionvalue_A, "Conditionvalue_A");
             Scribe_Deep.Look(ref TechAdvancing_Config_Tab.Conditionvalue_B, "Conditionvalue_B");
@@ -195,18 +194,18 @@ namespace GHXXTechAdvancing
         {
             try
             {
-                TechLevel suggestedTechLevel1 = (TechLevel)Clamp((int)TechLevel.Undefined,(int)lowestProjectTechLevel + (int)TechAdvancing_Config_Tab.Conditionvalue_A - 1,(int)TechLevel.Transcendent);
-                TechLevel suggestedTechLevel2 = (TechLevel)Clamp((int)TechLevel.Undefined, (int)highestResearchCategoryOverHalf + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
+                TechLevel suggestedTechLevel1 = (TechLevel)Util.Clamp((int)TechLevel.Undefined,(int)lowestProjectTechLevel + (int)TechAdvancing_Config_Tab.Conditionvalue_A - 1,(int)TechLevel.Transcendent);
+                TechLevel suggestedTechLevel2 = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)highestResearchCategoryOverHalf + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
                 
                 if (!returnyes)
                 {
                     //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : TECHLEVEL INCREASED TO " + suggestedTechLevel.ToString());
                     //Log.Error("2 Setting techlevel to "+(TechLevel)(((int)suggestedTechLevel2 >(int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel2));
-                    TechLevel unclampedTL = (TechLevel)Clamp((int)TechAdvancing.TechAdvancing_Config_Tab.tempOverridableLevel, (int)Math.Max((int)suggestedTechLevel1, (int)suggestedTechLevel2), (int)TechLevel.Transcendent);
+                    TechLevel unclampedTL = (TechLevel)Util.Clamp((int)TechAdvancing.TechAdvancing_Config_Tab.tempOverridableLevel, (int)Math.Max((int)suggestedTechLevel1, (int)suggestedTechLevel2), (int)TechLevel.Transcendent);
 
-                    if (TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1 && !ColonyHasHiTechPeople())
+                    if (TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
 	                {
-		                Faction.OfPlayer.def.techLevel = (TechLevel)Clamp((int)TechLevel.Undefined,(int)unclampedTL,(int)TechAdvancing_Config_Tab.maxTechLevelForTribals);
+		                Faction.OfPlayer.def.techLevel = (TechLevel)Util.Clamp((int)TechLevel.Undefined,(int)unclampedTL,(int)TechAdvancing_Config_Tab.maxTechLevelForTribals);
                     }
                     else
 	                {
@@ -222,7 +221,7 @@ namespace GHXXTechAdvancing
                     //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : SUCCESS.  New tech lvl: " + Faction.OfPlayer.def.techLevel.ToString());
                 }
                 else {
-                    return new TechLevel[] { suggestedTechLevel1, suggestedTechLevel2, (ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals };
+                    return new TechLevel[] { suggestedTechLevel1, suggestedTechLevel2, (Util.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals };
                 }
             }
             catch (Exception)
@@ -231,47 +230,11 @@ namespace GHXXTechAdvancing
             }
             return null;
         }
-
-        private static int Clamp(int min, int val, int max) //helper method
-        {
-            if (val < min)
-            {
-                return min;
-            }
-            else if (max < val)
-            {
-                return max;
-            }
-            else
-            {
-                return val;
-            }
-        }
-
-        public static bool ColonyHasHiTechPeople()  
-        {
-            FactionDef[] hitechfactions = new FactionDef[] { FactionDefOf.Mechanoid, FactionDefOf.Outlander, FactionDefOf.Spacer, FactionDefOf.PlayerColony };
-            string[] hightechkinds = new string[] { "colonist" };
-
-            //Debug
-         //   foreach (var pawn in RimWorld.PawnsFinder.AllMaps_FreeColonists)
-         //   {
-         //       string techlvl = null;
-         //       if (MapComponent_TA_Expose.TA_Expose_People?.ContainsKey(pawn)==true)
-         //       {
-         //           techlvl = ((int?)(MapComponent_TA_Expose.TA_Expose_People[pawn])?.def?.techLevel ?? -1).ToString();
-         //       }
-         //       LogOutput.writeLogMessage(Errorlevel.Warning, "Pawn: " + pawn?.Name + " |Faction: " + pawn?.Faction?.Name + " |DefName: " + pawn?.kindDef?.defaultFactionType?.defName  + "|Tech lvl: "+ techlvl + " |High Tech (whitelist): " + (hitechfactions.Contains(pawn?.Faction?.def) ? "yes" : "no"));    
-	        //}
-         //   LogOutput.writeLogMessage(Errorlevel.Warning,"done");
-            
-            return RimWorld.PawnsFinder.AllMaps_FreeColonists.Any(x => hightechkinds.Contains(x.kindDef.defName.ToLowerInvariant())||((int?)((MapComponent_TA_Expose.TA_Expose_People?.ContainsKey(x)==true)?MapComponent_TA_Expose.TA_Expose_People[x]:null)?.def?.techLevel??-1)>=(int)TechLevel.Industrial); 
-        }
     }
 
     public static class Event
     {
-        public static void onKill(Pawn oldPawn) //event for when a pawn dies
+        public static void OnKill(Pawn oldPawn) //event for when a pawn dies
         {
             //namespace prefix is required
             if (TechAdvancing.MapComponent_TA_Expose.TA_Expose_People.ContainsKey(oldPawn))
@@ -284,9 +247,9 @@ namespace GHXXTechAdvancing
                     Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitleRev".Translate(), "newTechLevelMedievalCapRemLetterContentsRev".Translate(), LetterDefOf.BadNonUrgent);
                 }
             }
-            GHXXTechAdvancing._ResearchManager.RecalculateTechlevel(false,false);
+            TechAdvancing._ResearchManager.RecalculateTechlevel(false,false);
         }
-        public static void onNewPawn(Pawn oldPawn)  //event for new pawn in the colony
+        public static void OnNewPawn(Pawn oldPawn)  //event for new pawn in the colony
         {
             if (((int?)oldPawn?.Faction?.def?.techLevel??-1) >= (int)TechLevel.Industrial)
             {
@@ -306,9 +269,9 @@ namespace GHXXTechAdvancing
                 }
             }
         }
-        public static void postOnNewPawn()  //post version of onNewPawn (after the pawn joined)
+        public static void PostOnNewPawn()  //post version of onNewPawn (after the pawn joined)
         {
-            GHXXTechAdvancing._ResearchManager.RecalculateTechlevel(false, false);
+            TechAdvancing._ResearchManager.RecalculateTechlevel(false, false);
         }
     }
 }

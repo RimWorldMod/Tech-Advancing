@@ -10,11 +10,11 @@ namespace TechAdvancing
 {
     class Detour
     {
-        public static void detour(MethodInfo source, MethodInfo target)
+        public static void DoDetour(MethodInfo source, MethodInfo target)
         {
             //Log.Message("GHXX Techadvancing: Attempting detour: " + source.Name + " -- TO -> " + target.Name);
             MethodInfo methodToReplace = target;
-            if (LogOutput.DebugMode_TA_enabled) { LogOutput.writeLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }
+            if (LogOutput.DebugMode_TA_enabled) { LogOutput.WriteLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }
             //typeof(Target).GetMethod("targetMethod" + funcNum, BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
             MethodInfo methodToInject = source;
 

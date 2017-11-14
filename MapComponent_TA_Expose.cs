@@ -19,39 +19,38 @@ namespace TechAdvancing
         private static Dictionary<int, int> TA_Expose_Numbers = new Dictionary<int, int>();
         public static Dictionary<Pawn, Faction> TA_Expose_People = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
 
-        public static bool isValueSaved(string key) {  return TA_Expose_Numbers.ContainsKey(getInt(key)); }
+        public static bool IsValueSaved(string key) {  return TA_Expose_Numbers.ContainsKey(GetInt(key)); }
 
         public static void TA_ExposeData(string key, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
         {
             bool accessWasValid = false;
             if(mode == TA_Expose_Mode.Save)
             {
-                LogOutput.writeLogMessage(Errorlevel.Debug, "Adding " + key + " : " + value +"to save dictionary");
-                if (TA_Expose_Numbers.ContainsKey(getInt(key)))
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Adding " + key + " : " + value +"to save dictionary");
+                if (TA_Expose_Numbers.ContainsKey(GetInt(key)))
                 {
-                    TA_Expose_Numbers.Remove(getInt(key));
+                    TA_Expose_Numbers.Remove(GetInt(key));
                 }
-                TA_Expose_Numbers.Add(getInt(key), value);
+                TA_Expose_Numbers.Add(GetInt(key), value);
             }
             else if(mode == TA_Expose_Mode.Load)
             {
-                int tempval = 0;
-                accessWasValid=TA_Expose_Numbers.TryGetValue(getInt(key), out tempval);
-                if(accessWasValid)
+                accessWasValid = TA_Expose_Numbers.TryGetValue(GetInt(key), out int tempval);
+                if (accessWasValid)
                 {
                     value = tempval;
                 }
                 else
                 {
                     //TA_Expose_Numbers.Add(getInt(key),)
-                    LogOutput.writeLogMessage(Errorlevel.Warning, "Value " + getInt(key) + " could not be loaded. This usually happens when updating to the new config-system. Try saving and reloading the map.");
+                    LogOutput.WriteLogMessage(Errorlevel.Warning, "Value " + GetInt(key) + " could not be loaded. This usually happens when updating to the new config-system. Try saving and reloading the map.");
                 }
 
-                LogOutput.writeLogMessage(Errorlevel.Debug,"Loaded " + key + " : " + value + "from save dictionary. Valid? "+ accessWasValid);
+                LogOutput.WriteLogMessage(Errorlevel.Debug,"Loaded " + key + " : " + value + "from save dictionary. Valid? "+ accessWasValid);
             }
          }
 
-        private static int getInt(string key)
+        private static int GetInt(string key)
         {
             return (int)Enum.Parse(typeof(TA_Expose_Name),key);
         }
@@ -61,15 +60,15 @@ namespace TechAdvancing
             base.ExposeData();
             Scribe_Collections.Look(ref TA_Expose_Numbers, "TA_Expose_Numbers", LookMode.Value, LookMode.Value);
             int isPplDictSaved = 1;
-            LogOutput.writeLogMessage(Errorlevel.Warning, "val:"+ isPplDictSaved.ToString());
+            LogOutput.WriteLogMessage(Errorlevel.Warning, "val:"+ isPplDictSaved.ToString());
             Scribe_Values.Look(ref isPplDictSaved, "TA_Expose_People_isSaved", -1,true);
-            LogOutput.writeLogMessage(Errorlevel.Warning, "val:"+ isPplDictSaved.ToString());
+            LogOutput.WriteLogMessage(Errorlevel.Warning, "val:"+ isPplDictSaved.ToString());
             if (isPplDictSaved == 1)
             {
                 Scribe_Collections.Look(ref TA_Expose_People, "TA_Expose_People", LookMode.Reference, LookMode.Reference);
-                LogOutput.writeLogMessage(Errorlevel.Warning, "Read TA_ExposePeople");
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "Read TA_ExposePeople");
             }
-            LogOutput.writeLogMessage(Errorlevel.Warning, "Loading");
+            LogOutput.WriteLogMessage(Errorlevel.Warning, "Loading");
             TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
             if (TA_Expose_People==null)
             {
