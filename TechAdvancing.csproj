@@ -62,8 +62,9 @@
     <Compile Include="HarmonyDetours.cs" />
     <Compile Include="LogOutput.cs" />
     <Compile Include="MapComponentInjector.cs" />
-    <Compile Include="MapComponent_TA_Expose.cs" />
+    <Compile Include="MapCompSaveHandler.cs" />
     <Compile Include="ModSettings.cs" />
+    <Compile Include="Rules.cs" />
     <Compile Include="TechAdvancing_Config_Tab.cs" />
     <Compile Include="Detour.cs" />
     <Compile Include="Main.cs" />

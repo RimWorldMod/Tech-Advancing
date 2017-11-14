@@ -24,6 +24,23 @@ namespace TechAdvancing
             }
         }
 
+        internal static TechLevel Clamp(TechLevel min, TechLevel val, TechLevel max) //helper method
+        {
+            if (val < min)
+            {
+                return min;
+            }
+            else if (max < val)
+            {
+                return max;
+            }
+            else
+            {
+                return val;
+            }
+        }
+
+
         internal static bool ColonyHasHiTechPeople()
         {
             FactionDef[] hitechfactions = new FactionDef[] { FactionDefOf.Mechanoid, FactionDefOf.Outlander, FactionDefOf.Spacer, FactionDefOf.PlayerColony };
@@ -41,7 +58,13 @@ namespace TechAdvancing
             //}
             //   LogOutput.writeLogMessage(Errorlevel.Warning,"done");
 
-            return RimWorld.PawnsFinder.AllMaps_FreeColonists.Any(x => hightechkinds.Contains(x.kindDef.defName.ToLowerInvariant()) || ((int?)((MapComponent_TA_Expose.TA_Expose_People?.ContainsKey(x) == true) ? MapComponent_TA_Expose.TA_Expose_People[x] : null)?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial);
+            return RimWorld.PawnsFinder.AllMaps_FreeColonists.Any(x => hightechkinds.Contains(x.kindDef.defName.ToLowerInvariant()) || ((int?)((MapCompSaveHandler.ColonyPeople?.ContainsKey(x) == true) ? MapCompSaveHandler.ColonyPeople[x] : null)?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial);
+        }
+
+        internal static TechLevel GetHighestTechlevel(params TechLevel[] t)
+        {
+            var max = t.Select(x=>(int)x).Max();
+            return (max > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : (TechLevel)max;
         }
     }
 }

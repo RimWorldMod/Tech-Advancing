@@ -16,11 +16,6 @@ namespace TechAdvancing
         public static void Setup()
         {
             var harmony = HarmonyInstance.Create("com.ghxx.rimworld.techadvancing");
-            //var original = typeof(RimWorld.MainTabWindow_Research).GetMethod("DrawLeftRect");
-            //var prefix = typeof(TA_Research_Menu_Patch).GetMethod("Prefix");
-
-            //harmony.Patch(original,new HarmonyMethod(prefix), new HarmonyMethod());
-
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }

@@ -10,8 +10,11 @@ namespace TechAdvancing
 {
     class LogOutput
     {
-
+#if DEBUG 
+        public static readonly bool DebugMode_TA_enabled = true;
+#else
         public static readonly bool DebugMode_TA_enabled = false;
+#endif
 
         public static void WriteLogMessage(Errorlevel level, string message)
         {
@@ -25,7 +28,7 @@ namespace TechAdvancing
             }
             else if (level == Errorlevel.Error || level == Errorlevel.Critical)
             {
-                Log.Warning("[Tech Advancing] [" + level.ToString() + "] " + message);
+                Log.Error("[Tech Advancing] [" + level.ToString() + "] " + message);
             }
         }
 

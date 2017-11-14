@@ -21,7 +21,7 @@ namespace TechAdvancing
             MethodInfo source = typeof(ResearchManager).GetMethod("ReapplyAllMods", BindingFlags.Instance | BindingFlags.Public);
             MethodInfo destination = typeof(_ResearchManager).GetMethod("_ReapplyAllMods", BindingFlags.Static | BindingFlags.NonPublic);
             //Log.Message("Source method = " + source.Name + "Target = " + destination.Name);
-            
+
             Detour.DoDetour(source, destination);
             GameObject initializer = new GameObject("GHXXTAMapComponentInjector");
 
@@ -35,18 +35,21 @@ namespace TechAdvancing
 
     internal static class _ResearchManager
     {
-        private static TechLevel lowestProjectTechLevel = TechLevel.Transcendent;
+        private static TechLevel highestProjTechsOverHalf = TechLevel.Undefined;
+        private static TechLevel lowestProjectLvlNotResearched = TechLevel.Undefined;
+
         public static TechLevel factionDefault = TechLevel.Undefined;
         public static bool isTribe = true;
-        private static bool skippedWorldStart = false;
+        private static bool firstNotificationHidden = false;
         private static TechLevel suggestedTechLevel = TechLevel.Undefined;
         private static int[][] researchProjectsArray = new int[][] { new int[2], new int[2], new int[2],
             new int[2], new int[2], new int[2], new int[2], new int[2]}; // Techlevel --> Researched | Total
                                                                          //   .. ....  . . .. . . . .. .. . 
+
+
         public static string facName = "";
         public static bool firstpass = true;
         private static bool isInceased = false;
-        private static TechLevel highestResearchCategoryOverHalf = TechLevel.Undefined;
         internal static void _ReapplyAllMods(this ResearchManager _this)    //new ReaookyAllMods Method
         {
             if (firstpass || facName != Faction.OfPlayer.def.defName)
@@ -55,32 +58,36 @@ namespace TechAdvancing
                 try
                 {
                     factionDefault = Faction.OfPlayer.def.techLevel;        //store the default value for the techlevel because we will modify it later and we need the one from right now
-                    TechAdvancing_Config_Tab.tempOverridableLevel = factionDefault;
+                    TechAdvancing_Config_Tab.baseFactionTechLevel = factionDefault;
                     isTribe = factionDefault == TechLevel.Neolithic;
                     LoadCfgValues();
                     firstpass = false;
 
                     //Debug
-                    LogOutput.WriteLogMessage(Errorlevel.Debug,"Con A val= " + TechAdvancing_Config_Tab.Conditionvalue_A + "|||Con B Val= " + TechAdvancing_Config_Tab.Conditionvalue_B);
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, "Con A val= " + TechAdvancing_Config_Tab.Conditionvalue_A + "|||Con B Val= " + TechAdvancing_Config_Tab.Conditionvalue_B);
 
                 }
                 catch (Exception ex)
                 {
                     LogOutput.WriteLogMessage(Errorlevel.Error, "Caught error in Reapply All Mods: " + ex.ToString());
                 }
-                
-            }
-            for (int i = 0; i < researchProjectsArray.GetLength(0); i++)        //Reset Start
-            {
-                researchProjectsArray[i][0] = 0;                    //Reset value so that it can be recalculated.
-                researchProjectsArray[i][1] = 0;                    
 
             }
-            lowestProjectTechLevel = TechLevel.Transcendent;        //Reset End
+
+            var researchProjectStoreTotal = new Dictionary<TechLevel, int>();
+            var researchProjectStoreFinished = new Dictionary<TechLevel, int>();
+
+            for (int i = 0; i < Enum.GetValues(typeof(TechLevel)).Length; i++)
+            {
+                researchProjectStoreTotal.Add((TechLevel)i, 0);
+                researchProjectStoreFinished.Add((TechLevel)i, 0);
+            }
+
+            lowestProjectLvlNotResearched = TechLevel.Transcendent; //set it to something high.
 
             foreach (var researchProjectDef in DefDatabase<ResearchProjectDef>.AllDefs)
             {
-                if (researchProjectDef?.tags?.Contains("ta-ignore") == true)
+                if (researchProjectDef.tags?.Contains("ta-ignore") == true)
                 {
                     break;  //skip the research if it contains the disabled tag:
                     #region tagDesc                    
@@ -105,80 +112,70 @@ namespace TechAdvancing
                     */
                     #endregion
                 }
-                researchProjectsArray[(int)researchProjectDef.techLevel][1]++;  //total projects for techlevel  
+                researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                 if (researchProjectDef.IsFinished)
-                {
-                    if (researchProjectDef.techLevel != TechLevel.Undefined)
-                    { 
-                        researchProjectsArray[(int)researchProjectDef.techLevel][0]++;  //finished projects for techlevel
-                    }
-                    
-                    researchProjectDef.ReapplyAllMods();
+                {   // TODO filter out undefined later
+                    researchProjectStoreFinished[researchProjectDef.techLevel]++;  //finished projects for techlevel
+                    researchProjectDef.ReapplyAllMods();    // TODO always run it?
                 }
 
-                if (!researchProjectDef.IsFinished&&researchProjectDef.techLevel!=TechLevel.Undefined)
+                if (!researchProjectDef.IsFinished && researchProjectDef.techLevel != TechLevel.Undefined)
                 {
-                    lowestProjectTechLevel=(TechLevel)Math.Min((int)researchProjectDef.techLevel,(int)lowestProjectTechLevel);
+                    if (lowestProjectLvlNotResearched > researchProjectDef.techLevel)   // TODO merge?
+                        lowestProjectLvlNotResearched = researchProjectDef.techLevel;
                 }
-               
-
             }
 
+            TechAdvancing.Rules.researchProjectStoreTotal = researchProjectStoreTotal;
+            TechAdvancing.Rules.researchProjectStoreFinished = researchProjectStoreFinished;
 
             // player researched all techs of techlevel X and below. the techlevel rises to X+1
-            suggestedTechLevel = (TechLevel)Math.Max((int)((int)lowestProjectTechLevel+(int)TechAdvancing_Config_Tab.Conditionvalue_A-1), (int)TechAdvancing_Config_Tab.tempOverridableLevel);
+            // techlevelRuleA = (TechLevel)Math.Max((int)lowestProjectLvlNotResearched + TechAdvancing_Config_Tab.Conditionvalue_A - 1, (int)TechAdvancing_Config_Tab.baseFactionTechLevel);
 
-
+            // techlevelRuleA = (TechLevel)Util.Clamp(0, (int)techlevelRuleA, (int)TechLevel.Transcendent);
 
             //player researched more than 50% of the techlevel Y then the techlevel rises to Y
-            for (int i = 0; i < researchProjectsArray.Length; i++)
+            //int highestProjTechsOverHalf = 0;
+            //for (int i = 0; i < researchProjectStoreTotal.Count; i++)
+            //{
+            //    if (researchProjectStoreTotal[(TechLevel)i] != 0)
+            //    {
+            //        if ((float)researchProjectStoreFinished[(TechLevel)i] / (float)researchProjectStoreFinished[(TechLevel)i] > 0.5f)
+            //            highestProjTechsOverHalf = i;
+
+            //    }
+            //}
+
+            //techlevelRuleB = (TechLevel)Util.Clamp((int)TechAdvancing.TechAdvancing_Config_Tab.baseFactionTechLevel, highestProjTechsOverHalf + TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
+            //techlevelResult = (TechLevel)(Math.Max((int)techlevelRuleA, (int)techlevelRuleB));
+
+            TechLevel newLevel = TechAdvancing.Rules.GetNewTechLevel();
+
+            if (newLevel != TechLevel.Undefined)
             {
-                if (researchProjectsArray[i][1] != 0)
+                if (firstNotificationHidden) //hiding the notification on world start
                 {
-                   // Log.Message("Debug GHXX: Division Check for techlevel: "+((TechLevel) i)+ " Researchech projects: "+researchProjectsArray[i][0]+" | Projects Total: "+ researchProjectsArray[i][1]);
-                   // Log.Message("Debug GHXX: Division a:" + (float)researchProjectsArray[i][0] / (double)researchProjectsArray[i][1]);
-                    
-                    if ((float)researchProjectsArray[i][0]/(double)researchProjectsArray[i][1]>0.5)
-                    {
-                        highestResearchCategoryOverHalf = (TechLevel) i;
-                    }
-                }
-            }
-            
-            //TechAdvancing.LogOutput.writeLogMessage(Errorlevel.Error, "50% techlvl:" + ((TechLevel)highestResearchCategoryOverHalf));
-            
-            suggestedTechLevel = (TechLevel)Math.Max((int)suggestedTechLevel, (int)((int)highestResearchCategoryOverHalf + (int)TechAdvancing_Config_Tab.Conditionvalue_B));
-            if (suggestedTechLevel != TechLevel.Undefined)
-            {
-                isInceased = Faction.OfPlayer.def.techLevel < (((int)suggestedTechLevel > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel) ;
-                Faction.OfPlayer.def.techLevel = ((int)suggestedTechLevel>(int)TechLevel.Transcendent)?TechLevel.Transcendent:suggestedTechLevel;
-                
-                //Log.Error("1 Setting techlevel to " +(TechLevel) (((int)suggestedTechLevel > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel));
-                if (skippedWorldStart) //hiding the notification on world start
-                {
-                    if (isInceased)
-                    {
-                        Find.LetterStack.ReceiveLetter("newTechLevelLetterTitle".Translate(), "newTechLevelLetterContents".Translate(isTribe ? "configTribe".Translate() : "configColony".Translate()) + " " + Faction.OfPlayer.def.techLevel + ".",LetterDefOf.Good);
-                        
-                        isInceased = false;
-                    }
+                    if (Faction.OfPlayer.def.techLevel < newLevel)
+                        Find.LetterStack.ReceiveLetter("newTechLevelLetterTitle".Translate(), "newTechLevelLetterContents".Translate(isTribe ? "configTribe".Translate() : "configColony".Translate()) + " " + newLevel.ToString() + ".", LetterDefOf.Good);
                 }
                 else
                 {
-                    skippedWorldStart = true;
+                    firstNotificationHidden = true;
                 }
+
+                Faction.OfPlayer.def.techLevel = newLevel;
             }
-            
+
             /***
             how techlevel increases:
             player researched all techs of techlevel X and below. the techlevel rises to X+1
 
             player researched more than 50% of the techlevel Y then the techlevel rises to Y
             **/
-            RecalculateTechlevel(false,false);
+            RecalculateTechlevel(false);
         }
 
-        private static void LoadCfgValues() //could be improved using just vanilla loading
+        private static void LoadCfgValues() //could be improved using just vanilla loading  // TODO obsolete?
         {
             Scribe_Deep.Look(ref TechAdvancing_Config_Tab.Conditionvalue_A, "Conditionvalue_A");
             Scribe_Deep.Look(ref TechAdvancing_Config_Tab.Conditionvalue_B, "Conditionvalue_B");
@@ -186,49 +183,51 @@ namespace TechAdvancing
             Scribe_Deep.Look(ref TechAdvancing_Config_Tab.configCheckboxNeedTechColonists, "configCheckboxNeedTechColonists");
             if (TechAdvancing_Config_Tab.baseTechlvlCfg != 1)
             {
-                TechAdvancing_Config_Tab.tempOverridableLevel = (TechAdvancing_Config_Tab.baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
+                TechAdvancing_Config_Tab.baseFactionTechLevel = (TechAdvancing_Config_Tab.baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
             }
         }
 
-        internal static TechLevel[] RecalculateTechlevel(bool returnyes=false,bool showIncreaseMsg = true)
+        internal static void RecalculateTechlevel(bool showIncreaseMsg = true)
         {
-            try
+            //try
+            //{
+            //TechLevel suggestedTechLevel1 = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)lowestProjectLvlNotResearched + (int)TechAdvancing_Config_Tab.Conditionvalue_A - 1, (int)TechLevel.Transcendent);
+            //TechLevel suggestedTechLevel2 = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)highestProjTechsOverHalf + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
+
+            //if (!returnyes)
+            //{
+            //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : TECHLEVEL INCREASED TO " + suggestedTechLevel.ToString());
+            //Log.Error("2 Setting techlevel to "+(TechLevel)(((int)suggestedTechLevel2 >(int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel2));
+            //TechLevel unclampedTL = (TechLevel)Util.Clamp((int)TechAdvancing.TechAdvancing_Config_Tab.baseFactionTechLevel, (int)Math.Max((int)suggestedTechLevel1, (int)suggestedTechLevel2), (int)TechLevel.Transcendent);
+            
+            TechLevel baseNewTL = Rules.GetNewTechLevel();
+            if (TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
             {
-                TechLevel suggestedTechLevel1 = (TechLevel)Util.Clamp((int)TechLevel.Undefined,(int)lowestProjectTechLevel + (int)TechAdvancing_Config_Tab.Conditionvalue_A - 1,(int)TechLevel.Transcendent);
-                TechLevel suggestedTechLevel2 = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)highestResearchCategoryOverHalf + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
-                
-                if (!returnyes)
-                {
-                    //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : TECHLEVEL INCREASED TO " + suggestedTechLevel.ToString());
-                    //Log.Error("2 Setting techlevel to "+(TechLevel)(((int)suggestedTechLevel2 >(int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel2));
-                    TechLevel unclampedTL = (TechLevel)Util.Clamp((int)TechAdvancing.TechAdvancing_Config_Tab.tempOverridableLevel, (int)Math.Max((int)suggestedTechLevel1, (int)suggestedTechLevel2), (int)TechLevel.Transcendent);
-
-                    if (TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
-	                {
-		                Faction.OfPlayer.def.techLevel = (TechLevel)Util.Clamp((int)TechLevel.Undefined,(int)unclampedTL,(int)TechAdvancing_Config_Tab.maxTechLevelForTribals);
-                    }
-                    else
-	                {
-                        Faction.OfPlayer.def.techLevel = unclampedTL;
-                    }
-
-                    // ((int)suggestedTechLevel2 > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel2;
-                    if (showIncreaseMsg) //used to supress the first update message| Treat as always false
-                    {
-                        Messages.Message("ConfigEditTechlevelChange".Translate() + " " + (TechLevel)Faction.OfPlayer.def.techLevel + ".", MessageSound.Benefit);
-                    }
-                    //TRANSLATION: OLD:"Due to editing how Tech Advancing affects your game, your technology level has been changed to"
-                    //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : SUCCESS.  New tech lvl: " + Faction.OfPlayer.def.techLevel.ToString());
-                }
-                else {
-                    return new TechLevel[] { suggestedTechLevel1, suggestedTechLevel2, (Util.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals };
-                }
+                Faction.OfPlayer.def.techLevel = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)baseNewTL, (int)TechAdvancing_Config_Tab.maxTechLevelForTribals);
             }
-            catch (Exception)
+            else
             {
-
+                Faction.OfPlayer.def.techLevel = baseNewTL;
             }
-            return null;
+
+            // ((int)suggestedTechLevel2 > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel2;
+            if (showIncreaseMsg) //used to supress the first update message| Treat as always false
+            {
+                Messages.Message("ConfigEditTechlevelChange".Translate() + " " + (TechLevel)Faction.OfPlayer.def.techLevel + ".", MessageSound.Benefit);
+            }
+            //TRANSLATION: OLD:"Due to editing how Tech Advancing affects your game, your technology level has been changed to"
+            //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : SUCCESS.  New tech lvl: " + Faction.OfPlayer.def.techLevel.ToString());
+            //}
+            //else
+            //{
+            //    return new TechLevel[] { suggestedTechLevel1, suggestedTechLevel2, (Util.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals };
+            //}
+            //}
+            //catch (Exception)
+            //{
+
+            //}
+            //return null;
         }
     }
 
@@ -237,27 +236,27 @@ namespace TechAdvancing
         public static void OnKill(Pawn oldPawn) //event for when a pawn dies
         {
             //namespace prefix is required
-            if (TechAdvancing.MapComponent_TA_Expose.TA_Expose_People.ContainsKey(oldPawn))
+            if (TechAdvancing.MapCompSaveHandler.ColonyPeople.ContainsKey(oldPawn))
             {
-                TechAdvancing.MapComponent_TA_Expose.TA_Expose_People.Remove(oldPawn);
-                if (TechAdvancing.MapComponent_TA_Expose.TA_Expose_People.Count == 0 &&   // that means there was something in there before -> now the techlvl is locked
+                TechAdvancing.MapCompSaveHandler.ColonyPeople.Remove(oldPawn);
+                if (TechAdvancing.MapCompSaveHandler.ColonyPeople.Count == 0 &&   // that means there was something in there before -> now the techlvl is locked
                     TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1         // and the limit is enabled
                     )
                 {
                     Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitleRev".Translate(), "newTechLevelMedievalCapRemLetterContentsRev".Translate(), LetterDefOf.BadNonUrgent);
                 }
             }
-            TechAdvancing._ResearchManager.RecalculateTechlevel(false,false);
+            TechAdvancing._ResearchManager.RecalculateTechlevel(false);
         }
         public static void OnNewPawn(Pawn oldPawn)  //event for new pawn in the colony
         {
-            if (((int?)oldPawn?.Faction?.def?.techLevel??-1) >= (int)TechLevel.Industrial)
+            if (((int?)oldPawn?.Faction?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial)
             {
-                if (!TechAdvancing.MapComponent_TA_Expose.TA_Expose_People.ContainsKey(oldPawn))
+                if (!TechAdvancing.MapCompSaveHandler.ColonyPeople.ContainsKey(oldPawn))
                 {
-                    TechAdvancing.MapComponent_TA_Expose.TA_Expose_People.Add(oldPawn,oldPawn.Faction);
-                    if (TechAdvancing.MapComponent_TA_Expose.TA_Expose_People.Count==1 &&   // that means there was nothing in there before -> now the techlvl is unlocked
-                        TechAdvancing_Config_Tab.configCheckboxNeedTechColonists==1         // and the limit is enabled
+                    TechAdvancing.MapCompSaveHandler.ColonyPeople.Add(oldPawn, oldPawn.Faction);
+                    if (TechAdvancing.MapCompSaveHandler.ColonyPeople.Count == 1 &&   // that means there was nothing in there before -> now the techlvl is unlocked
+                        TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1         // and the limit is enabled
                         )
                     {
                         Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitle".Translate(), "newTechLevelMedievalCapRemLetterContents".Translate(_ResearchManager.isTribe ? "configTribe".Translate() : "configColony".Translate()), LetterDefOf.Good);
@@ -265,13 +264,13 @@ namespace TechAdvancing
                 }
                 else
                 {
-                    TechAdvancing.MapComponent_TA_Expose.TA_Expose_People[oldPawn] = oldPawn.Faction;
+                    TechAdvancing.MapCompSaveHandler.ColonyPeople[oldPawn] = oldPawn.Faction;
                 }
             }
         }
         public static void PostOnNewPawn()  //post version of onNewPawn (after the pawn joined)
         {
-            TechAdvancing._ResearchManager.RecalculateTechlevel(false, false);
+            TechAdvancing._ResearchManager.RecalculateTechlevel(false);
         }
     }
 }
