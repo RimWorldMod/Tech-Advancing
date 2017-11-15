@@ -79,8 +79,6 @@ namespace TechAdvancing
 
             AddSpace(ref drawpos, 10f);
             DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
-            //GUI.TextArea(contentCanvasA, "Conditionvalue_A");
-            //GUI.TextArea(contentCanvasB, "Conditionvalue_B");
             AddSpace(ref drawpos, 20f);
 
             //if (b_configCheckboxNeedTechColonists != (configCheckboxNeedTechColonists == 1))
@@ -102,7 +100,7 @@ namespace TechAdvancing
 
 
             AddSpace(ref drawpos, 50f);
-            DrawText(canvas, "configResultingTechLvl".Translate() + " " + ((TechLevel)Math.Min(Math.Max((int)TechLevel.Animal, Math.Min((int)TechLevel.Transcendent, Math.Max((int)baseFactionTechLevel, Math.Max((int)previewTechLevels[0], (int)previewTechLevels[1])))), (int)((b_configCheckboxNeedTechColonists) ? previewTechLevels[2] : TechLevel.Transcendent))).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            DrawText(canvas, "configResultingTechLvl".Translate() + " " + Rules.GetNewTechLevel().ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
             AddSpace(ref drawpos, 30f);
             DrawText(canvas, "availableTechLvls".Translate(), ref drawpos);
