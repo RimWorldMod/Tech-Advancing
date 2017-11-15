@@ -44,7 +44,7 @@
       <HintPath>.\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\rimworld src a17\Assembly-CSharp.dll</HintPath>
+      <HintPath>.\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
