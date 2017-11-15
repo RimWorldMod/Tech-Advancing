@@ -8,6 +8,13 @@ namespace TechAdvancing
 {
     class Util
     {
+        /// <summary>
+        /// Helper method for clamping an int value.
+        /// </summary>
+        /// <param name="min">Lower limit.</param>
+        /// <param name="val">The value.</param>
+        /// <param name="max">Upper limit.</param>
+        /// <returns>The value or the border that was exceeded.</returns>
         internal static int Clamp(int min, int val, int max) //helper method
         {
             if (val < min)
@@ -24,6 +31,13 @@ namespace TechAdvancing
             }
         }
 
+        /// <summary>
+        /// Helper method for clamping a Techlevel.
+        /// </summary>
+        /// <param name="min">Lower limit.</param>
+        /// <param name="val">The value.</param>
+        /// <param name="max">Upper limit.</param>
+        /// <returns>The value or the border that was exceeded.</returns>
         internal static TechLevel Clamp(TechLevel min, TechLevel val, TechLevel max) //helper method
         {
             if (val < min)

@@ -33,7 +33,10 @@ namespace TechAdvancing
 
     }
 
-    internal static class _ResearchManager
+    /// <summary>
+    /// Class storing the new ReapplyAllMods method to perform the old-school detour with.
+    /// </summary>
+    internal static class _ResearchManager  // TODO use Harmony for this.
     {
         private static TechLevel highestProjTechsOverHalf = TechLevel.Undefined;
         private static TechLevel lowestProjectLvlNotResearched = TechLevel.Undefined;
