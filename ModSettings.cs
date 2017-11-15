@@ -10,7 +10,7 @@ namespace TechAdvancing
     public class Settings : ModSettings
     {
 
-        private static void drawText(Rect canvas, string Text, ref float drawpos, bool increaseDrawpos = true)
+        private static void DrawText(Rect canvas, string Text, ref float drawpos, bool increaseDrawpos = true)
         {
             var descHeight = Verse.Text.CalcSize(Text).y;  //Verse.Text.CalcHeight(descTR, Listing.ColumnSpacing);
             Rect drawCanvas = new Rect(canvas.x+200, canvas.y + drawpos, canvas.width, descHeight);
@@ -45,7 +45,7 @@ namespace TechAdvancing
             else
             {
                 GUI.contentColor = Color.red;
-                drawText(rect,"TAcfgunavailable".Translate(),ref drawpos,true);
+                DrawText(rect,"TAcfgunavailable".Translate(),ref drawpos,true);
                 GUI.contentColor = defaultGuiColor;
             }
         }
