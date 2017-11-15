@@ -87,42 +87,44 @@ namespace TechAdvancing
 
             foreach (var researchProjectDef in DefDatabase<ResearchProjectDef>.AllDefs)
             {
-                if (researchProjectDef.tags?.Contains("ta-ignore") == true)
-                {
-                    break;  //skip the research if it contains the disabled tag:
-                    #region tagDesc                    
-                    /*
-                    	<ResearchProjectDef>
-	                        <defName>Firefoam</defName>
-	                        <label>firefoam</label>
-	                        <description>Allows the construction of firefoam poppers; fire-safety buildings which spread fire-retardant foam in response to encroaching flames.</description>
-	                        <baseCost>800</baseCost>
-	                        <techLevel>Industrial</techLevel>
-	                        <prerequisites>
-		                        <li>MicroelectronicsBasics</li>
-	                        </prerequisites>
-	                   !    <tags>
-		    Important  !        <li>ta-ignore</li>
-	                   !    </tags>
-	                        <requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
-	                        <researchViewX>7</researchViewX>
-	                        <researchViewY>4</researchViewY>
-                        </ResearchProjectDef>
+                //skip the research if it contains the disabled-tag:
+                #region tagDesc                    
+                /*
+                    <ResearchProjectDef>
+                        <defName>Firefoam</defName>
+                        <label>firefoam</label>
+                        <description>Allows the construction of firefoam poppers; fire-safety buildings which spread fire-retardant foam in response to encroaching flames.</description>
+                        <baseCost>800</baseCost>
+                        <techLevel>Industrial</techLevel>
+                        <prerequisites>
+                            <li>MicroelectronicsBasics</li>
+                        </prerequisites>
+                   !    <tags>
+        Important  !        <li>ta-ignore</li>
+                   !    </tags>
+                        <requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
+                        <researchViewX>7</researchViewX>
+                        <researchViewY>4</researchViewY>
+                    </ResearchProjectDef>
 
-                    */
-                    #endregion
-                }
-                researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
-                if (researchProjectDef.IsFinished)
-                {   // TODO filter out undefined later
-                    researchProjectStoreFinished[researchProjectDef.techLevel]++;  //finished projects for techlevel
-                    researchProjectDef.ReapplyAllMods();    // TODO always run it?
-                }
+                */
+                #endregion
 
-                if (!researchProjectDef.IsFinished && researchProjectDef.techLevel != TechLevel.Undefined)
-                {
-                    if (lowestProjectLvlNotResearched > researchProjectDef.techLevel)
-                        lowestProjectLvlNotResearched = researchProjectDef.techLevel;
+                if (researchProjectDef.tags?.Contains("ta-ignore") != true)
+                { 
+
+                    researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
+                    if (researchProjectDef.IsFinished)
+                    {   // TODO filter out undefined later
+                        researchProjectStoreFinished[researchProjectDef.techLevel]++;  //finished projects for techlevel
+                        researchProjectDef.ReapplyAllMods();    // TODO always run it?
+                    }
+
+                    if (!researchProjectDef.IsFinished && researchProjectDef.techLevel != TechLevel.Undefined)
+                    {
+                        if (lowestProjectLvlNotResearched > researchProjectDef.techLevel)
+                            lowestProjectLvlNotResearched = researchProjectDef.techLevel;
+                    }
                 }
             }
 
