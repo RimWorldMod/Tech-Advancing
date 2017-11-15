@@ -95,7 +95,7 @@ namespace TechAdvancing
             configCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
             AddSpace(ref drawpos, 32f);
 
-            if (previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)    // TODO simplify with direct call
+            if (previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)
             {
                 DrawText(canvas, "configCheckboxNeedTechColonists_CappedAt".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref drawpos, false, Color.red);
             }

@@ -121,7 +121,7 @@ namespace TechAdvancing
 
                 if (!researchProjectDef.IsFinished && researchProjectDef.techLevel != TechLevel.Undefined)
                 {
-                    if (lowestProjectLvlNotResearched > researchProjectDef.techLevel)   // TODO merge?
+                    if (lowestProjectLvlNotResearched > researchProjectDef.techLevel)
                         lowestProjectLvlNotResearched = researchProjectDef.techLevel;
                 }
             }
