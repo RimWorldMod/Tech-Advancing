@@ -6,7 +6,6 @@ using System.Text;
 using Verse;
 using UnityEngine;
 using TechAdvancing;
-using GHXXTechAdvancing;
 using Harmony;
 using Verse.Sound;
 using System.Reflection;
@@ -15,25 +14,24 @@ namespace TechAdvancing
 {
     class TechAdvancing_Config_Tab : Window
     {
-
         public static int Conditionvalue_A = 1;
         public static int Conditionvalue_B = 0;
         internal static int last_Conditionvalue_A = 1;
         internal static int last_Conditionvalue_B = 0;
         public const int Conditionvalue_A_Default = 1;
         public const int Conditionvalue_B_Default = 0;
-        TechLevel[] previewTechLevels = { TechLevel.Undefined, TechLevel.Undefined };
+        TechLevel[] previewTechLevels = { TechLevel.Undefined, TechLevel.Undefined, TechLevel.Undefined };
         public readonly string description = "configHeader".Translate();           //translation default:You can edit the rules here:
         private readonly string descriptionA2 = "configRuleAdesc".Translate();     //Rule A: \nIf the Player researched all techs of the techlevel X and below, the techlevel rises to X +
         private readonly string descriptionB2 = "configRuleBdesc".Translate();     //Rule B: \nIf the Player researched more than 50% of the techs of the techlevel Y and below, the techlevel rises to Y +
         private readonly string descriptionA2_calc = "configRuleAdesc".Translate();
         private readonly string descriptionB2_calc = "configRuleBdesc".Translate();
         private bool settingsChanged = false;
-       // private static float _iconSize = 30f;
-       // private static float _margin = 6f;
+        // private static float _iconSize = 30f;
+        // private static float _margin = 6f;
         public static int baseTechlvlCfg = 1; //0=neolithic ; 1= auto ; 2=colony
         public static int last_baseTechlvlCfg = 1; //default for auto
-        public static TechLevel tempOverridableLevel = TechLevel.Undefined;
+        public static TechLevel baseFactionTechLevel = TechLevel.Undefined;
         public const TechLevel maxTechLevelForTribals = TechLevel.Medieval;
         public static int configCheckboxNeedTechColonists = 0; //bool for selecting if we need colonists instead of tribals if we want to advance past medival tech
         public static int last_configCheckboxNeedTechColonists = 0;
@@ -44,9 +42,9 @@ namespace TechAdvancing
             // zooming in seems to cause Text.Font to start at Tiny, make sure it's set to Small for our panels.
             Text.Font = GameFont.Small;
             float drawpos = 0;
-            // delegate actual content to the specific manager.
-            drawText(canvas, description, ref drawpos);
-            addSpace(ref drawpos, 10f);
+
+            DrawText(canvas, description, ref drawpos);
+            AddSpace(ref drawpos, 10f);
             if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 20, drawpos, 100f, 60f), "configRadioBtnNeolithic".Translate(), baseTechlvlCfg == 0)) //translation default: Neolithic / Tribal
             {
                 baseTechlvlCfg = 0;
@@ -60,84 +58,88 @@ namespace TechAdvancing
             {
                 baseTechlvlCfg = 2;
             }
-            addSpace(ref drawpos, 70f);
-            drawText(canvas, "configBaseTechLvl".Translate() + " (" + ((baseTechlvlCfg == 1) ? ((_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((baseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((baseTechlvlCfg == 1) ? _ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((baseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
-            addSpace(ref drawpos, 20f);
-            tempOverridableLevel = _ResearchManager.factionDefault;
+            AddSpace(ref drawpos, 70f);
+            DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((baseTechlvlCfg == 1) ? ((_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((baseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((baseTechlvlCfg == 1) ? _ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((baseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
+            AddSpace(ref drawpos, 20f);
+            baseFactionTechLevel = _ResearchManager.factionDefault;
             if (baseTechlvlCfg != 1)
             {
-                tempOverridableLevel = (baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
+                baseFactionTechLevel = (baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
             }
-            drawText(canvas, descriptionA2 + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")", ref drawpos);
+            DrawText(canvas, descriptionA2 + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")", ref drawpos);
             string bufferA = null;
             string bufferB = null;
             Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionA2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_A, ref bufferA, -100, 100);
-            addSpace(ref drawpos, 10f);
-            drawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            AddSpace(ref drawpos, 10f);
+            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
-            addSpace(ref drawpos, 20f);
-            drawText(canvas, descriptionB2 + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
+            AddSpace(ref drawpos, 20f);
+            DrawText(canvas, descriptionB2 + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
             Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
-            //Widgets.TextFieldNumeric(new Rect(canvas.x, canvas.y + drawpos, canvas.width, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
-            addSpace(ref drawpos, 10f);
-            drawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel) Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null,"TA_TL_"), ref drawpos);
-            //GUI.TextArea(contentCanvasA, "Conditionvalue_A");
-            //GUI.TextArea(contentCanvasB, "Conditionvalue_B");
-            addSpace(ref drawpos, 20f);
 
-            if (b_configCheckboxNeedTechColonists != (configCheckboxNeedTechColonists == 1))
-            {
-                previewTechLevels[2] = (_ResearchManager.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals;
-            }
+            AddSpace(ref drawpos, 10f);
+            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            AddSpace(ref drawpos, 20f);
+
+            //if (b_configCheckboxNeedTechColonists != (configCheckboxNeedTechColonists == 1))
+            //{
+            //    previewTechLevels[2] = (Util.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals;
+            //}
 
             b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
 
             Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref b_configCheckboxNeedTechColonists, false);
             configCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
-            addSpace(ref drawpos, 32f);
+            AddSpace(ref drawpos, 32f);
 
             if (previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)
             {
-                drawText(canvas, "configCheckboxNeedTechColonists_CappedAt".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref drawpos, false, Color.red);
+                DrawText(canvas, "configCheckboxNeedTechColonists_CappedAt".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref drawpos, false, Color.red);
             }
-            
 
 
-            addSpace(ref drawpos, 50f);
-            drawText(canvas, "configResultingTechLvl".Translate() + " " + ((TechLevel)Math.Min(Math.Max((int)TechLevel.Animal, Math.Min((int)TechLevel.Transcendent, Math.Max((int)tempOverridableLevel, Math.Max((int)previewTechLevels[0], (int)previewTechLevels[1])))), (int)((b_configCheckboxNeedTechColonists) ? previewTechLevels[2] : TechLevel.Transcendent))).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
-            addSpace(ref drawpos, 30f);
-            drawText(canvas, "availableTechLvls".Translate(),ref drawpos);
+            AddSpace(ref drawpos, 50f);
+            DrawText(canvas, "configResultingTechLvl".Translate() + " " + Rules.GetNewTechLevel().ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
-            addSpace(ref drawpos, 10f);
+            AddSpace(ref drawpos, 30f);
+            DrawText(canvas, "availableTechLvls".Translate(), ref drawpos);
+
+            AddSpace(ref drawpos, 10f);
             string[] techLevels = Enum.GetNames(typeof(TechLevel));
             for (int i = 0; i < techLevels.Length; i++)
-	        {
-                drawText(canvas, techLevels[i].ToString().TranslateOrDefault(null, "TA_TL_") + " = " + i, ref drawpos);
-	        }
+            {
+                DrawText(canvas, techLevels[i].ToString().TranslateOrDefault(null, "TA_TL_") + " = " + i, ref drawpos);
+            }
         }
 
-        private void addSpace(ref float drawpos, float amount = 0f)
+        private void AddSpace(ref float drawpos, float amount = 0f)
         {
-            drawpos += (amount!=0f)?amount:10f;
+            drawpos += (amount != 0f) ? amount : 10f;
         }
 
         public override void WindowUpdate()
         {
             base.WindowUpdate();
-            if (last_Conditionvalue_A != Conditionvalue_A || last_Conditionvalue_B != Conditionvalue_B || last_baseTechlvlCfg != baseTechlvlCfg ||last_configCheckboxNeedTechColonists != configCheckboxNeedTechColonists)
+            if ((last_Conditionvalue_A != Conditionvalue_A) || (last_Conditionvalue_B != Conditionvalue_B) || (last_baseTechlvlCfg != baseTechlvlCfg) || (last_configCheckboxNeedTechColonists != configCheckboxNeedTechColonists))
             {
                 last_Conditionvalue_A = Conditionvalue_A;
                 last_Conditionvalue_B = Conditionvalue_B;
                 last_baseTechlvlCfg = baseTechlvlCfg;
                 last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
                 settingsChanged = true;
-                previewTechLevels = GHXXTechAdvancing._ResearchManager.RecalculateTechlevel(true);
+                LogOutput.WriteLogMessage(Errorlevel.Information,"Settings changed.");
+                previewTechLevels = GetTechlevelPreview();
             }
 
         }
 
-        private void drawText(Rect canvas, string Text, ref float drawpos, bool increaseDrawpos = true, Color? color = null)
+        private TechLevel[] GetTechlevelPreview()
+        {
+            return new[] { Rules.RuleA(), Rules.RuleB(), Rules.GetLowTechTL() };
+        }
+
+        private void DrawText(Rect canvas, string Text, ref float drawpos, bool increaseDrawpos = true, Color? color = null)
         {
             Color defaultcolor = GUI.contentColor;
             if (color != null)
@@ -145,8 +147,8 @@ namespace TechAdvancing
                 GUI.contentColor = (Color)color;
             }
 
-            var descHeight = Verse.Text.CalcSize(Text).y;  //Verse.Text.CalcHeight(descTR, Listing.ColumnSpacing);
-            Rect drawCanvas = new Rect(canvas.x, canvas.y+ drawpos, canvas.width, descHeight);
+            var descHeight = Verse.Text.CalcSize(Text).y;
+            Rect drawCanvas = new Rect(canvas.x, canvas.y + drawpos, canvas.width, descHeight);
             GUI.Label(drawCanvas, Text);
             if (increaseDrawpos)
             {
@@ -164,7 +166,8 @@ namespace TechAdvancing
             base.PostClose();
             if (settingsChanged)
             {
-                GHXXTechAdvancing._ResearchManager.RecalculateTechlevel();
+                TechAdvancing._ResearchManager.RecalculateTechlevel();
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Saving data.");
                 ExposeData(TA_Expose_Mode.Save);
             }
             this.forcePause = false;
@@ -186,8 +189,7 @@ namespace TechAdvancing
             ExposeData(TA_Expose_Mode.Load);
             this.forcePause = true;
             settingsChanged = false;
-            previewTechLevels = GHXXTechAdvancing._ResearchManager.RecalculateTechlevel(true);
-            previewTechLevels[2] = (_ResearchManager.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals;
+            previewTechLevels = GetTechlevelPreview();
         }
 
         public override Vector2 InitialSize
@@ -198,7 +200,7 @@ namespace TechAdvancing
             }
         }
 
-        public TechAdvancing_Config_Tab() 
+        public TechAdvancing_Config_Tab()
         {
             this.forcePause = true;
             this.doCloseX = true;
@@ -210,105 +212,38 @@ namespace TechAdvancing
 
         public static void ExposeData(TA_Expose_Mode mode)
         {
-            if (!MapComponent_TA_Expose.isValueSaved("Conditionvalue_A"))
+            MapCompSaveHandler.TA_ExposeData("Conditionvalue_A", ref Conditionvalue_A, mode);
+            MapCompSaveHandler.TA_ExposeData("Conditionvalue_B", ref Conditionvalue_B, mode);
+            MapCompSaveHandler.TA_ExposeData("baseTechlvlCfg", ref baseTechlvlCfg, mode);
+            MapCompSaveHandler.TA_ExposeData("configCheckboxNeedTechColonists", ref configCheckboxNeedTechColonists, mode);
+
+            if (!MapCompSaveHandler.IsValueSaved("Conditionvalue_A"))
             {
-                MapComponent_TA_Expose.TA_ExposeData("Conditionvalue_A", ref Conditionvalue_A, TA_Expose_Mode.Save);
-                LogOutput.writeLogMessage(Errorlevel.Information, "Value 'Conditionvalue_A' was added to the save file. This message shouldn't appear more than once per value and world.");
+                MapCompSaveHandler.TA_ExposeData("Conditionvalue_A", ref Conditionvalue_A, TA_Expose_Mode.Save);
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'Conditionvalue_A' was added to the save file. This message shouldn't appear more than once per value and world.");
             }
-            if (!MapComponent_TA_Expose.isValueSaved("Conditionvalue_B"))
+            if (!MapCompSaveHandler.IsValueSaved("Conditionvalue_B"))
             {
-                MapComponent_TA_Expose.TA_ExposeData("Conditionvalue_B", ref Conditionvalue_B, TA_Expose_Mode.Save);
-                LogOutput.writeLogMessage(Errorlevel.Information, "Value 'Conditionvalue_B' was added to the save file. This message shouldn't appear more than once per value and world.");
+                MapCompSaveHandler.TA_ExposeData("Conditionvalue_B", ref Conditionvalue_B, TA_Expose_Mode.Save);
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'Conditionvalue_B' was added to the save file. This message shouldn't appear more than once per value and world.");
             }
-            if (!MapComponent_TA_Expose.isValueSaved("baseTechlvlCfg"))
+            if (!MapCompSaveHandler.IsValueSaved("baseTechlvlCfg"))
             {
-                MapComponent_TA_Expose.TA_ExposeData("baseTechlvlCfg", ref baseTechlvlCfg, TA_Expose_Mode.Save);
-                LogOutput.writeLogMessage(Errorlevel.Information, "Value 'baseTechlvlCfg' was added to the save file. This message shouldn't appear more than once per value and world.");
+                MapCompSaveHandler.TA_ExposeData("baseTechlvlCfg", ref baseTechlvlCfg, TA_Expose_Mode.Save);
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'baseTechlvlCfg' was added to the save file. This message shouldn't appear more than once per value and world.");
             }
-            if (!MapComponent_TA_Expose.isValueSaved("configCheckboxNeedTechColonists"))
+            if (!MapCompSaveHandler.IsValueSaved("configCheckboxNeedTechColonists"))
             {
-                MapComponent_TA_Expose.TA_ExposeData("configCheckboxNeedTechColonists", ref configCheckboxNeedTechColonists, TA_Expose_Mode.Save);
-                LogOutput.writeLogMessage(Errorlevel.Information, "Value 'configCheckboxNeedTechColonists' was added to the save file. This message shouldn't appear more than once per value and world.");
+                MapCompSaveHandler.TA_ExposeData("configCheckboxNeedTechColonists", ref configCheckboxNeedTechColonists, TA_Expose_Mode.Save);
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'configCheckboxNeedTechColonists' was added to the save file. This message shouldn't appear more than once per value and world.");
             }
-            MapComponent_TA_Expose.TA_ExposeData("Conditionvalue_A", ref Conditionvalue_A, mode);
-            MapComponent_TA_Expose.TA_ExposeData("Conditionvalue_B", ref Conditionvalue_B, mode);
-            MapComponent_TA_Expose.TA_ExposeData("baseTechlvlCfg", ref baseTechlvlCfg, mode);
-            MapComponent_TA_Expose.TA_ExposeData("configCheckboxNeedTechColonists", ref configCheckboxNeedTechColonists, mode);
+
             last_Conditionvalue_A = Conditionvalue_A;
             last_Conditionvalue_B = Conditionvalue_B;
             last_baseTechlvlCfg = baseTechlvlCfg;
             last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
-            //Scribe_Deep.LookDeep(ref Conditionvalue_A, "Conditionvalue_A",true);
-            //Scribe_Deep.LookDeep(ref Conditionvalue_B, "Conditionvalue_B",true); 
-            //Log.Message("Data Exposed! values= A:B "+ Conditionvalue_A +" : " +Conditionvalue_B+" Mode: " + mode.ToString());
-            
+
         }
 
     }
-
-    class SetupHarmony
-    {
-        public static void Setup()
-        {
-            var harmony = HarmonyInstance.Create("com.ghxx.rimworld.techadvancing");
-            //var original = typeof(RimWorld.MainTabWindow_Research).GetMethod("DrawLeftRect");
-            //var prefix = typeof(TA_Research_Menu_Patch).GetMethod("Prefix");
-            
-            //harmony.Patch(original,new HarmonyMethod(prefix), new HarmonyMethod());
-
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
-        }
-    }
-    [HarmonyPatch(typeof(RimWorld.MainTabWindow_Research))]
-    [HarmonyPatch("DrawLeftRect")]
-    [HarmonyPatch(new Type[] {typeof(Rect)})]
-    class TA_Research_Menu_Patch
-    {
-        static void Prefix(Rect leftOutRect)
-        {
-            Rect TA_Cfgrect = new Rect(0f, 0f, 180f, 20f);
-            TA_Cfgrect.x = (leftOutRect.width - TA_Cfgrect.width) / 2f;
-            TA_Cfgrect.y = leftOutRect.height - 20f ;
-
-            if (Widgets.ButtonText(TA_Cfgrect, "TAcfgmenulabel".Translate(), true, false, true))
-            {
-                SoundDef.Named("ResearchStart").PlayOneShotOnCamera();
-                Find.WindowStack.Add((Window) new TechAdvancing_Config_Tab());
-            }
-        }
-    }
-
-    [HarmonyPatch(typeof(Verse.Pawn))]
-    [HarmonyPatch("Kill")]
-    [HarmonyPatch(new Type[] { typeof(DamageInfo?) })]
-    class TA_OnKill_Event
-    {
-        static void Postfix(Pawn __instance,DamageInfo? dinfo)
-        {
-            GHXXTechAdvancing.Event.onKill(__instance);
-        }
-    }
-    
-    [HarmonyPatch(typeof(Verse.Pawn))]
-    [HarmonyPatch("SetFaction")]
-    [HarmonyPatch(new Type[] { typeof(Faction),typeof(Pawn) })]
-    class TA_OnNewPawn_Event
-    {
-        static void Prefix(Pawn __instance, Faction newFaction, Pawn recruiter = null)
-        {
-            GHXXTechAdvancing.Event.onNewPawn(__instance);
-        }
-    }
-
-    [HarmonyPatch(typeof(Verse.Pawn))]
-    [HarmonyPatch("SetFaction")]
-    [HarmonyPatch(new Type[] { typeof(Faction), typeof(Pawn) })]
-    class TA_PostOnNewPawn_Event
-    {
-        static void Postfix(Faction newFaction, Pawn recruiter = null)
-        {
-            GHXXTechAdvancing.Event.postOnNewPawn();
-        }
-    }
-
 }

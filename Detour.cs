@@ -10,15 +10,13 @@ namespace TechAdvancing
 {
     class Detour
     {
-        public static void detour(MethodInfo source, MethodInfo target)
+        public static void DoDetour(MethodInfo source, MethodInfo target)
         {
-            //Log.Message("GHXX Techadvancing: Attempting detour: " + source.Name + " -- TO -> " + target.Name);
-            MethodInfo methodToReplace = target;
-            if (LogOutput.DebugMode_TA_enabled) { LogOutput.writeLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }
-            //typeof(Target).GetMethod("targetMethod" + funcNum, BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-            MethodInfo methodToInject = source;
+            if (LogOutput.DebugMode_TA_enabled) { LogOutput.WriteLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }            
 
-            //typeof(Injection).GetMethod("injectionMethod" + funcNum, BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+            MethodInfo methodToReplace = target;
+            MethodInfo methodToInject = source;            
+
             RuntimeHelpers.PrepareMethod(methodToReplace.MethodHandle);
             RuntimeHelpers.PrepareMethod(methodToInject.MethodHandle);
 
@@ -53,11 +51,11 @@ namespace TechAdvancing
                 {
                     // 32-bit systems use 32-bit relative offset and jump
                     // 5 byte destructive
-                    
+
                     // Get function pointers
                     int Source_Base = source.MethodHandle.GetFunctionPointer().ToInt32();
                     int Destination_Base = target.MethodHandle.GetFunctionPointer().ToInt32();
-                    
+
                     // Native source address
                     byte* Pointer_Raw_Source = (byte*)Source_Base;
 
@@ -74,8 +72,6 @@ namespace TechAdvancing
 
 
             }
-            //Log.Message("GHXX Techadvancing: Detour complete: " + source.Name + " -- TO -> " + target.Name);
-            //return true;
         }
     }
 }

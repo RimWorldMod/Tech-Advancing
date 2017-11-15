@@ -8,14 +8,24 @@ using Verse;
 
 namespace TechAdvancing
 {
+    /// <summary>
+    /// Class for writing log messages easily.
+    /// </summary>
     class LogOutput
     {
-
+#if DEBUG 
+        public static readonly bool DebugMode_TA_enabled = true;
+#else
         public static readonly bool DebugMode_TA_enabled = false;
-
-        public static void writeLogMessage(Errorlevel level, string message)
+#endif
+        /// <summary>
+        /// Sends a new colored log message.
+        /// </summary>
+        /// <param name="level">The severity level.</param>
+        /// <param name="message">The message to write.</param>
+        public static void WriteLogMessage(Errorlevel level, string message)
         {
-            if((level == Errorlevel.Debug && DebugMode_TA_enabled)|| level == Errorlevel.Information)
+            if ((level == Errorlevel.Debug && DebugMode_TA_enabled) || level == Errorlevel.Information)
             {
                 Log.Message("[Tech Advancing] [" + level.ToString() + "] " + message);
             }
@@ -25,13 +35,16 @@ namespace TechAdvancing
             }
             else if (level == Errorlevel.Error || level == Errorlevel.Critical)
             {
-                Log.Warning("[Tech Advancing] [" + level.ToString() + "] " + message);
+                Log.Error("[Tech Advancing] [" + level.ToString() + "] " + message);
             }
         }
 
 
     }
 
+    /// <summary>
+    /// Represents the available severity levels.
+    /// </summary>
     public enum Errorlevel
     {
         Debug,
