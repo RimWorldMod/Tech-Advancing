@@ -17,6 +17,9 @@ namespace TechAdvancing
         }
 
         private static Dictionary<int, int> Configvalues = new Dictionary<int, int>();
+        /// <summary>
+        /// Stores all the pawns that joined along with their old Faction
+        /// </summary>
         public static Dictionary<Pawn, Faction> ColonyPeople = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
 
         public static bool IsValueSaved(string key) { return Configvalues.ContainsKey(GetInt(key)); }
