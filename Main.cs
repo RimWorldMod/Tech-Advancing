@@ -208,6 +208,7 @@ namespace TechAdvancing
                         )
                     {
                         Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitle".Translate(), "newTechLevelMedievalCapRemLetterContents".Translate(_ResearchManager.isTribe ? "configTribe".Translate() : "configColony".Translate()), LetterDefOf.Good);
+                        TechAdvancing._ResearchManager.RecalculateTechlevel(false);
                     }
                 }
                 else

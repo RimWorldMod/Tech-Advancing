@@ -23,7 +23,7 @@ namespace TechAdvancing
         {
             if (TechAdvancing_Config_Tab.b_configCheckboxNeedTechColonists)
             {
-                return (TechLevel)(Math.Min((int)GetRuleTechlevel(), (int)TechAdvancing_Config_Tab.maxTechLevelForTribals));
+                return (TechLevel)(Math.Min((int)GetRuleTechlevel(), (int)GetLowTechTL()));
             }
             return GetRuleTechlevel();
         }
@@ -44,7 +44,14 @@ namespace TechAdvancing
         /// <returns></returns>
         internal static TechLevel GetLowTechTL()
         {
-            return TechAdvancing_Config_Tab.b_configCheckboxNeedTechColonists ? TechAdvancing_Config_Tab.maxTechLevelForTribals : TechLevel.Transcendent;
+            if (!TechAdvancing_Config_Tab.b_configCheckboxNeedTechColonists)    // if the limit is not enabled at all
+            {
+                return TechLevel.Transcendent;
+            }
+            else
+            {
+                return (TechAdvancing.MapCompSaveHandler.ColonyPeople.Any(x => x.Value?.def?.techLevel >= TechLevel.Industrial)) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals;
+            }
         }
 
         internal static TechLevel RuleA()

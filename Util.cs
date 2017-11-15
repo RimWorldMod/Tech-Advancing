@@ -72,7 +72,7 @@ namespace TechAdvancing
             //}
             //   LogOutput.writeLogMessage(Errorlevel.Warning,"done");
 
-            return RimWorld.PawnsFinder.AllMaps_FreeColonists.Any(x => hightechkinds.Contains(x.kindDef.defName.ToLowerInvariant()) || ((int?)((MapCompSaveHandler.ColonyPeople?.ContainsKey(x) == true) ? MapCompSaveHandler.ColonyPeople[x] : null)?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial);
+            return MapCompSaveHandler.ColonyPeople.Any(x => x.Value?.def?.techLevel >= TechLevel.Industrial) || RimWorld.PawnsFinder.AllMaps_FreeColonists.Any(x => hightechkinds.Contains(x.kindDef.defName.ToLowerInvariant()));
         }
 
         internal static TechLevel GetHighestTechlevel(params TechLevel[] t)
