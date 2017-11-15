@@ -25,7 +25,7 @@ namespace TechAdvancing
         /// <param name="message">The message to write.</param>
         public static void WriteLogMessage(Errorlevel level, string message)
         {
-            if((level == Errorlevel.Debug && DebugMode_TA_enabled)|| level == Errorlevel.Information)
+            if ((level == Errorlevel.Debug && DebugMode_TA_enabled) || level == Errorlevel.Information)
             {
                 Log.Message("[Tech Advancing] [" + level.ToString() + "] " + message);
             }

@@ -77,7 +77,7 @@ namespace TechAdvancing
 
         internal static TechLevel GetHighestTechlevel(params TechLevel[] t)
         {
-            var max = t.Select(x=>(int)x).Max();
+            var max = t.Select(x => (int)x).Max();
             return (max > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : (TechLevel)max;
         }
     }

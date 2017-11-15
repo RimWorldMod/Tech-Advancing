@@ -14,7 +14,6 @@ namespace TechAdvancing
 {
     class TechAdvancing_Config_Tab : Window
     {
-
         public static int Conditionvalue_A = 1;
         public static int Conditionvalue_B = 0;
         internal static int last_Conditionvalue_A = 1;
@@ -43,7 +42,7 @@ namespace TechAdvancing
             // zooming in seems to cause Text.Font to start at Tiny, make sure it's set to Small for our panels.
             Text.Font = GameFont.Small;
             float drawpos = 0;
-            // delegate actual content to the specific manager.
+
             DrawText(canvas, description, ref drawpos);
             AddSpace(ref drawpos, 10f);
             if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 20, drawpos, 100f, 60f), "configRadioBtnNeolithic".Translate(), baseTechlvlCfg == 0)) //translation default: Neolithic / Tribal
@@ -77,7 +76,7 @@ namespace TechAdvancing
             AddSpace(ref drawpos, 20f);
             DrawText(canvas, descriptionB2 + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
             Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
-            //Widgets.TextFieldNumeric(new Rect(canvas.x, canvas.y + drawpos, canvas.width, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
+
             AddSpace(ref drawpos, 10f);
             DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
             //GUI.TextArea(contentCanvasA, "Conditionvalue_A");
@@ -150,7 +149,7 @@ namespace TechAdvancing
                 GUI.contentColor = (Color)color;
             }
 
-            var descHeight = Verse.Text.CalcSize(Text).y;  //Verse.Text.CalcHeight(descTR, Listing.ColumnSpacing);
+            var descHeight = Verse.Text.CalcSize(Text).y;
             Rect drawCanvas = new Rect(canvas.x, canvas.y + drawpos, canvas.width, descHeight);
             GUI.Label(drawCanvas, Text);
             if (increaseDrawpos)
@@ -245,9 +244,6 @@ namespace TechAdvancing
             last_Conditionvalue_B = Conditionvalue_B;
             last_baseTechlvlCfg = baseTechlvlCfg;
             last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
-            //Scribe_Deep.LookDeep(ref Conditionvalue_A, "Conditionvalue_A",true);
-            //Scribe_Deep.LookDeep(ref Conditionvalue_B, "Conditionvalue_B",true); 
-            //Log.Message("Data Exposed! values= A:B "+ Conditionvalue_A +" : " +Conditionvalue_B+" Mode: " + mode.ToString());
 
         }
 

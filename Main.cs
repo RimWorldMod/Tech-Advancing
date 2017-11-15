@@ -38,13 +38,9 @@ namespace TechAdvancing
     /// </summary>
     internal static class _ResearchManager  // TODO use Harmony for this.
     {
-        private static TechLevel highestProjTechsOverHalf = TechLevel.Undefined;
-        private static TechLevel lowestProjectLvlNotResearched = TechLevel.Undefined;
-
         public static TechLevel factionDefault = TechLevel.Undefined;
         public static bool isTribe = true;
         private static bool firstNotificationHidden = false;
-        private static TechLevel suggestedTechLevel = TechLevel.Undefined;
         private static int[][] researchProjectsArray = new int[][] { new int[2], new int[2], new int[2],
             new int[2], new int[2], new int[2], new int[2], new int[2]}; // Techlevel --> Researched | Total
                                                                          //   .. ....  . . .. . . . .. .. . 
@@ -52,7 +48,6 @@ namespace TechAdvancing
 
         public static string facName = "";
         public static bool firstpass = true;
-        private static bool isInceased = false;
         internal static void _ReapplyAllMods(this ResearchManager _this)    //new ReaookyAllMods Method
         {
             if (firstpass || facName != Faction.OfPlayer.def.defName)
@@ -86,8 +81,6 @@ namespace TechAdvancing
                 researchProjectStoreFinished.Add((TechLevel)i, 0);
             }
 
-            lowestProjectLvlNotResearched = TechLevel.Transcendent; //set it to something high.
-
             foreach (var researchProjectDef in DefDatabase<ResearchProjectDef>.AllDefs)
             {
                 //skip the research if it contains the disabled-tag:
@@ -114,7 +107,7 @@ namespace TechAdvancing
                 #endregion
 
                 if (researchProjectDef.tags?.Contains("ta-ignore") != true)
-                { 
+                {
 
                     researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                     if (researchProjectDef.IsFinished)
@@ -122,37 +115,11 @@ namespace TechAdvancing
                         researchProjectStoreFinished[researchProjectDef.techLevel]++;  //finished projects for techlevel
                         researchProjectDef.ReapplyAllMods();    // TODO always run it?
                     }
-
-                    if (!researchProjectDef.IsFinished && researchProjectDef.techLevel != TechLevel.Undefined)
-                    {
-                        if (lowestProjectLvlNotResearched > researchProjectDef.techLevel)
-                            lowestProjectLvlNotResearched = researchProjectDef.techLevel;
-                    }
                 }
             }
 
             TechAdvancing.Rules.researchProjectStoreTotal = researchProjectStoreTotal;
             TechAdvancing.Rules.researchProjectStoreFinished = researchProjectStoreFinished;
-
-            // player researched all techs of techlevel X and below. the techlevel rises to X+1
-            // techlevelRuleA = (TechLevel)Math.Max((int)lowestProjectLvlNotResearched + TechAdvancing_Config_Tab.Conditionvalue_A - 1, (int)TechAdvancing_Config_Tab.baseFactionTechLevel);
-
-            // techlevelRuleA = (TechLevel)Util.Clamp(0, (int)techlevelRuleA, (int)TechLevel.Transcendent);
-
-            //player researched more than 50% of the techlevel Y then the techlevel rises to Y
-            //int highestProjTechsOverHalf = 0;
-            //for (int i = 0; i < researchProjectStoreTotal.Count; i++)
-            //{
-            //    if (researchProjectStoreTotal[(TechLevel)i] != 0)
-            //    {
-            //        if ((float)researchProjectStoreFinished[(TechLevel)i] / (float)researchProjectStoreFinished[(TechLevel)i] > 0.5f)
-            //            highestProjTechsOverHalf = i;
-
-            //    }
-            //}
-
-            //techlevelRuleB = (TechLevel)Util.Clamp((int)TechAdvancing.TechAdvancing_Config_Tab.baseFactionTechLevel, highestProjTechsOverHalf + TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
-            //techlevelResult = (TechLevel)(Math.Max((int)techlevelRuleA, (int)techlevelRuleB));
 
             TechLevel newLevel = TechAdvancing.Rules.GetNewTechLevel();
 
@@ -194,17 +161,6 @@ namespace TechAdvancing
 
         internal static void RecalculateTechlevel(bool showIncreaseMsg = true)
         {
-            //try
-            //{
-            //TechLevel suggestedTechLevel1 = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)lowestProjectLvlNotResearched + (int)TechAdvancing_Config_Tab.Conditionvalue_A - 1, (int)TechLevel.Transcendent);
-            //TechLevel suggestedTechLevel2 = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)highestProjTechsOverHalf + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
-
-            //if (!returnyes)
-            //{
-            //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : TECHLEVEL INCREASED TO " + suggestedTechLevel.ToString());
-            //Log.Error("2 Setting techlevel to "+(TechLevel)(((int)suggestedTechLevel2 >(int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel2));
-            //TechLevel unclampedTL = (TechLevel)Util.Clamp((int)TechAdvancing.TechAdvancing_Config_Tab.baseFactionTechLevel, (int)Math.Max((int)suggestedTechLevel1, (int)suggestedTechLevel2), (int)TechLevel.Transcendent);
-            
             TechLevel baseNewTL = Rules.GetNewTechLevel();
             if (TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
             {
@@ -215,24 +171,10 @@ namespace TechAdvancing
                 Faction.OfPlayer.def.techLevel = baseNewTL;
             }
 
-            // ((int)suggestedTechLevel2 > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : suggestedTechLevel2;
             if (showIncreaseMsg) //used to supress the first update message| Treat as always false
             {
                 Messages.Message("ConfigEditTechlevelChange".Translate() + " " + (TechLevel)Faction.OfPlayer.def.techLevel + ".", MessageSound.Benefit);
             }
-            //TRANSLATION: OLD:"Due to editing how Tech Advancing affects your game, your technology level has been changed to"
-            //  Log.Message("GHXX TECHLEVEL ADVANCER - DEBUG : SUCCESS.  New tech lvl: " + Faction.OfPlayer.def.techLevel.ToString());
-            //}
-            //else
-            //{
-            //    return new TechLevel[] { suggestedTechLevel1, suggestedTechLevel2, (Util.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals };
-            //}
-            //}
-            //catch (Exception)
-            //{
-
-            //}
-            //return null;
         }
     }
 
@@ -253,6 +195,7 @@ namespace TechAdvancing
             }
             TechAdvancing._ResearchManager.RecalculateTechlevel(false);
         }
+
         public static void OnNewPawn(Pawn oldPawn)  //event for new pawn in the colony
         {
             if (((int?)oldPawn?.Faction?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial)
