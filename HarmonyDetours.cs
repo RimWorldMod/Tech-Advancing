@@ -11,14 +11,24 @@ using Verse.Sound;
 
 namespace TechAdvancing
 {
+    /// <summary>
+    /// Class storing all the detours and the detour call.
+    /// </summary>
     class HarmonyDetours
     {
+        /// <summary>
+        /// Method for performing all the detours via Harmony.
+        /// </summary>
         public static void Setup()
         {
             var harmony = HarmonyInstance.Create("com.ghxx.rimworld.techadvancing");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
+
+    /// <summary>
+    /// Prefix for adding the button below the progressbar of the research window. The button is used for opening the config screen.
+    /// </summary>
     [HarmonyPatch(typeof(RimWorld.MainTabWindow_Research))]
     [HarmonyPatch("DrawLeftRect")]
     [HarmonyPatch(new Type[] { typeof(Rect) })]
@@ -38,6 +48,9 @@ namespace TechAdvancing
         }
     }
 
+    /// <summary>
+    /// Patch for having a method called when a pawn dies.
+    /// </summary>
     [HarmonyPatch(typeof(Verse.Pawn))]
     [HarmonyPatch("Kill")]
     [HarmonyPatch(new Type[] { typeof(DamageInfo?) })]
@@ -49,6 +62,9 @@ namespace TechAdvancing
         }
     }
 
+    /// <summary>
+    /// Patch for getting notified about faction changes. E.g.: when a pawn joins the colony.
+    /// </summary>
     [HarmonyPatch(typeof(Verse.Pawn))]
     [HarmonyPatch("SetFaction")]
     [HarmonyPatch(new Type[] { typeof(Faction), typeof(Pawn) })]
@@ -60,6 +76,9 @@ namespace TechAdvancing
         }
     }
 
+    /// <summary>
+    /// Postfix Patch for getting to know the new faction.
+    /// </summary>
     [HarmonyPatch(typeof(Verse.Pawn))]
     [HarmonyPatch("SetFaction")]
     [HarmonyPatch(new Type[] { typeof(Faction), typeof(Pawn) })]

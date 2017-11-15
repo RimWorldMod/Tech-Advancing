@@ -53,7 +53,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\RimWorld_ExampleProjectDLL\Source-DLLs\UnityEngine.dll</HintPath>
+      <HintPath>.\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
