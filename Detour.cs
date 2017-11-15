@@ -12,9 +12,10 @@ namespace TechAdvancing
     {
         public static void DoDetour(MethodInfo source, MethodInfo target)
         {
+            if (LogOutput.DebugMode_TA_enabled) { LogOutput.WriteLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }            
+
             MethodInfo methodToReplace = target;
-            if (LogOutput.DebugMode_TA_enabled) { LogOutput.WriteLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }
-            MethodInfo methodToInject = source;
+            MethodInfo methodToInject = source;            
 
             RuntimeHelpers.PrepareMethod(methodToReplace.MethodHandle);
             RuntimeHelpers.PrepareMethod(methodToInject.MethodHandle);
