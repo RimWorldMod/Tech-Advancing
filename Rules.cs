@@ -57,8 +57,8 @@ namespace TechAdvancing
         internal static TechLevel RuleA()
         {
             var notResearched = researchProjectStoreTotal.Except(researchProjectStoreFinished);
-            int min = notResearched.Where(x => x.Value > 0).Min(x => (int)x.Key);
-            return (TechLevel)(TechLevel)Util.Clamp(0, min - 1 + TechAdvancing_Config_Tab.Conditionvalue_A, (int)TechLevel.Transcendent);
+            int min = notResearched.Where(x => x.Value > 0).Select(x => (int)x.Key).DefaultIfEmpty(0).Min();
+            return (TechLevel)Util.Clamp(0, min - 1 + TechAdvancing_Config_Tab.Conditionvalue_A, (int)TechLevel.Transcendent);
         }
 
         internal static TechLevel RuleB()
