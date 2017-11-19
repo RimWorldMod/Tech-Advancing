@@ -14,7 +14,7 @@ namespace TechAdvancing
         public void FixedUpdate()
         {
             if (Current.ProgramState != ProgramState.Playing)            
-                return;            
+                return;
 
             foreach (var map in Find.Maps.Where(m => m.GetComponent<MapCompSaveHandler>() == null))
             {

@@ -128,7 +128,7 @@ namespace TechAdvancing
                 if (firstNotificationHidden) //hiding the notification on world start
                 {
                     if (Faction.OfPlayer.def.techLevel < newLevel)
-                        Find.LetterStack.ReceiveLetter("newTechLevelLetterTitle".Translate(), "newTechLevelLetterContents".Translate(isTribe ? "configTribe".Translate() : "configColony".Translate()) + " " + newLevel.ToString() + ".", LetterDefOf.Good);
+                        Find.LetterStack.ReceiveLetter("newTechLevelLetterTitle".Translate(), "newTechLevelLetterContents".Translate(isTribe ? "configTribe".Translate() : "configColony".Translate()) + " " + newLevel.ToString() + ".", LetterDefOf.PositiveEvent);
                 }
                 else
                 {
@@ -173,7 +173,7 @@ namespace TechAdvancing
 
             if (showIncreaseMsg) //used to supress the first update message| Treat as always false
             {
-                Messages.Message("ConfigEditTechlevelChange".Translate() + " " + (TechLevel)Faction.OfPlayer.def.techLevel + ".", MessageSound.Benefit);
+                Messages.Message("ConfigEditTechlevelChange".Translate() + " " + (TechLevel)Faction.OfPlayer.def.techLevel + ".", MessageTypeDefOf.PositiveEvent);
             }
         }
     }
@@ -190,7 +190,7 @@ namespace TechAdvancing
                     TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1         // and the limit is enabled
                     )
                 {
-                    Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitleRev".Translate(), "newTechLevelMedievalCapRemLetterContentsRev".Translate(), LetterDefOf.BadNonUrgent);
+                    Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitleRev".Translate(), "newTechLevelMedievalCapRemLetterContentsRev".Translate(), LetterDefOf.NegativeEvent);
                 }
             }
             TechAdvancing._ResearchManager.RecalculateTechlevel(false);
@@ -207,7 +207,7 @@ namespace TechAdvancing
                         TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1         // and the limit is enabled
                         )
                     {
-                        Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitle".Translate(), "newTechLevelMedievalCapRemLetterContents".Translate(_ResearchManager.isTribe ? "configTribe".Translate() : "configColony".Translate()), LetterDefOf.Good);
+                        Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitle".Translate(), "newTechLevelMedievalCapRemLetterContents".Translate(_ResearchManager.isTribe ? "configTribe".Translate() : "configColony".Translate()), LetterDefOf.PositiveEvent);
                         TechAdvancing._ResearchManager.RecalculateTechlevel(false);
                     }
                 }

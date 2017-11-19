@@ -53,10 +53,10 @@ namespace TechAdvancing
     /// </summary>
     [HarmonyPatch(typeof(Verse.Pawn))]
     [HarmonyPatch("Kill")]
-    [HarmonyPatch(new Type[] { typeof(DamageInfo?) })]
+    [HarmonyPatch(new Type[] { typeof(DamageInfo?), typeof(Hediff) })]
     class TA_OnKill_Event
     {
-        static void Postfix(Pawn __instance, DamageInfo? dinfo)
+        static void Postfix(Pawn __instance, DamageInfo? dinfo, Hediff exactCulprit = null)
         {
             TechAdvancing.Event.OnKill(__instance);
         }
