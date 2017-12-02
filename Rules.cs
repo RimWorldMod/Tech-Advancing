@@ -67,7 +67,7 @@ namespace TechAdvancing
 
             foreach (var tl in researchProjectStoreTotal.Where(x => x.Value > 0))
             {
-                if ((float)researchProjectStoreFinished[tl.Key] / (float)tl.Value > 0.5f)   // TODO allow configuring?
+                if ((float)researchProjectStoreFinished[tl.Key] / (float)tl.Value > (TechAdvancing_Config_Tab.Conditionvalue_B_s / 100f))
                 {
                     result = (int)tl.Key;
                 }

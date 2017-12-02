@@ -16,14 +16,18 @@ namespace TechAdvancing
     {
         public static int Conditionvalue_A = 1;
         public static int Conditionvalue_B = 0;
-        internal static int last_Conditionvalue_A = 1;
-        internal static int last_Conditionvalue_B = 0;
+        public static int Conditionvalue_B_s = 0;
         public const int Conditionvalue_A_Default = 1;
         public const int Conditionvalue_B_Default = 0;
+        public const int Conditionvalue_B_s_Default = 50;
+        internal static int last_Conditionvalue_A = Conditionvalue_A_Default;
+        internal static int last_Conditionvalue_B = Conditionvalue_B_Default;
+        internal static int last_Conditionvalue_B_s = Conditionvalue_B_s_Default;
         TechLevel[] previewTechLevels = { TechLevel.Undefined, TechLevel.Undefined, TechLevel.Undefined };
         public readonly string description = "configHeader".Translate();           //translation default:You can edit the rules here:
         private readonly string descriptionA2 = "configRuleAdesc".Translate();     //Rule A: \nIf the Player researched all techs of the techlevel X and below, the techlevel rises to X +
         private readonly string descriptionB2 = "configRuleBdesc".Translate();     //Rule B: \nIf the Player researched more than 50% of the techs of the techlevel Y and below, the techlevel rises to Y +
+        private readonly string descriptionB2_s = "configRuleBSliderdesc".Translate();     //Description for the Slider thats used to change the threshold of the rule B
         private readonly string descriptionA2_calc = "configRuleAdesc".Translate();
         private readonly string descriptionB2_calc = "configRuleBdesc".Translate();
         private bool settingsChanged = false;
@@ -74,11 +78,19 @@ namespace TechAdvancing
             DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
             AddSpace(ref drawpos, 20f);
-            DrawText(canvas, descriptionB2 + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
+            DrawText(canvas, descriptionB2.Replace("50", Conditionvalue_B_s.ToString()) + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
             Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
 
             AddSpace(ref drawpos, 10f);
             DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            AddSpace(ref drawpos, 20f);
+
+
+            DrawText(canvas, descriptionB2_s + " (" + "configWordDefault".Translate() + Conditionvalue_B_s_Default + ")", ref drawpos);
+            AddSpace(ref drawpos,10f);
+            Conditionvalue_B_s = (int)Widgets.HorizontalSlider(new Rect(canvas.x, canvas.y + drawpos, 500, 15), Conditionvalue_B_s, 1, 100, true, "50%", "1%", "100%", 1);
+            DrawText(new Rect(canvas.x+530, canvas.y-5, canvas.width, canvas.height), $"{Conditionvalue_B_s}%", ref drawpos);
+
             AddSpace(ref drawpos, 20f);
 
             //if (b_configCheckboxNeedTechColonists != (configCheckboxNeedTechColonists == 1))
@@ -121,14 +133,17 @@ namespace TechAdvancing
         public override void WindowUpdate()
         {
             base.WindowUpdate();
-            if ((last_Conditionvalue_A != Conditionvalue_A) || (last_Conditionvalue_B != Conditionvalue_B) || (last_baseTechlvlCfg != baseTechlvlCfg) || (last_configCheckboxNeedTechColonists != configCheckboxNeedTechColonists))
+            if ((last_Conditionvalue_A != Conditionvalue_A) || (last_Conditionvalue_B != Conditionvalue_B) || (last_baseTechlvlCfg != baseTechlvlCfg) || (last_configCheckboxNeedTechColonists != configCheckboxNeedTechColonists)
+                || last_Conditionvalue_B_s != Conditionvalue_B_s
+            )
             {
                 last_Conditionvalue_A = Conditionvalue_A;
                 last_Conditionvalue_B = Conditionvalue_B;
+                last_Conditionvalue_B_s = Conditionvalue_B_s;
                 last_baseTechlvlCfg = baseTechlvlCfg;
                 last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
                 settingsChanged = true;
-                LogOutput.WriteLogMessage(Errorlevel.Information,"Settings changed.");
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Settings changed.");
                 previewTechLevels = GetTechlevelPreview();
             }
 
@@ -214,6 +229,7 @@ namespace TechAdvancing
         {
             MapCompSaveHandler.TA_ExposeData("Conditionvalue_A", ref Conditionvalue_A, mode);
             MapCompSaveHandler.TA_ExposeData("Conditionvalue_B", ref Conditionvalue_B, mode);
+            MapCompSaveHandler.TA_ExposeData("Conditionvalue_B_s", ref Conditionvalue_B_s, mode);
             MapCompSaveHandler.TA_ExposeData("baseTechlvlCfg", ref baseTechlvlCfg, mode);
             MapCompSaveHandler.TA_ExposeData("configCheckboxNeedTechColonists", ref configCheckboxNeedTechColonists, mode);
 
@@ -226,6 +242,11 @@ namespace TechAdvancing
             {
                 MapCompSaveHandler.TA_ExposeData("Conditionvalue_B", ref Conditionvalue_B, TA_Expose_Mode.Save);
                 LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'Conditionvalue_B' was added to the save file. This message shouldn't appear more than once per value and world.");
+            }
+            if (!MapCompSaveHandler.IsValueSaved("Conditionvalue_B_s"))
+            {
+                MapCompSaveHandler.TA_ExposeData("Conditionvalue_B_s", ref Conditionvalue_B_s, TA_Expose_Mode.Save);
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'Conditionvalue_B_s' was added to the save file. This message shouldn't appear more than once per value and world.");
             }
             if (!MapCompSaveHandler.IsValueSaved("baseTechlvlCfg"))
             {
@@ -240,6 +261,7 @@ namespace TechAdvancing
 
             last_Conditionvalue_A = Conditionvalue_A;
             last_Conditionvalue_B = Conditionvalue_B;
+            last_Conditionvalue_B_s = Conditionvalue_B_s;
             last_baseTechlvlCfg = baseTechlvlCfg;
             last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
 

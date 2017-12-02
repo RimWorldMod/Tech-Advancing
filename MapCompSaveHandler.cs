@@ -91,6 +91,7 @@ namespace TechAdvancing
     {
         Conditionvalue_A,
         Conditionvalue_B,
+        Conditionvalue_B_s,
         baseTechlvlCfg,
         configCheckboxNeedTechColonists,
     }
