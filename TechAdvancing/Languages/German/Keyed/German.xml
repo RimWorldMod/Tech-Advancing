@@ -10,6 +10,7 @@
   <configHeader>Du kannst hier die Regeln für Tech Advancing ändern:</configHeader>
   <configRuleAdesc>Regel A: \nWenn der Spieler alle Projekte mit dem Technologielevel X und darunter fertiggestellt hat dann ändert sich das Level zu X+</configRuleAdesc>
   <configRuleBdesc>Regel B: \nWenn der Spieler mehr als 50% der Projekte mit dem Technologielevel Y fertiggestellt hat dann wird das Level zu Y+</configRuleBdesc>
+  <configRuleBSliderdesc>Dieser Schieber kontrolliert die Schwelle für die Regel B.</configRuleBSliderdesc>
   <configRadioBtnNeolithic>Steinzeitlich / Stamm</configRadioBtnNeolithic>
   <configRadioBtnAutoDetect>Automatisch (Standard)</configRadioBtnAutoDetect>
   <configRadioBtnIndustrial>Industriell / Kolonie</configRadioBtnIndustrial>
