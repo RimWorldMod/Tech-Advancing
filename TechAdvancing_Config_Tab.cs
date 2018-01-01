@@ -16,7 +16,7 @@ namespace TechAdvancing
     {
         public static int Conditionvalue_A = 1;
         public static int Conditionvalue_B = 0;
-        public static int Conditionvalue_B_s = 0;
+        public static int Conditionvalue_B_s = 50;  // Default slider val
         public const int Conditionvalue_A_Default = 1;
         public const int Conditionvalue_B_Default = 0;
         public const int Conditionvalue_B_s_Default = 50;
