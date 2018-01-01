@@ -45,18 +45,24 @@ namespace TechAdvancing
             new int[2], new int[2], new int[2], new int[2], new int[2]}; // Techlevel --> Researched | Total
                                                                          //   .. ....  . . .. . . . .. .. . 
 
-
+        public static DateTime startedAt = DateTime.Now;
         public static string facName = "";
         public static bool firstpass = true;
         internal static void _ReapplyAllMods(this ResearchManager _this)    //new ReaookyAllMods Method
         {
+            if (Faction.OfPlayerSilentFail?.def?.techLevel == null || Faction.OfPlayer.def.techLevel == TechLevel.Undefined)       // if some mod does something funky again....
+                return;
+
+
             if (firstpass || facName != Faction.OfPlayer.def.defName)
             {
+                startedAt = DateTime.Now;
                 facName = Faction.OfPlayer.def.defName;
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "Lvl:" + Faction.OfPlayer.def.techLevel.ToString());
                 try
                 {
-                    factionDefault = Faction.OfPlayer.def.techLevel;        //store the default value for the techlevel because we will modify it later and we need the one from right now
-                    TechAdvancing_Config_Tab.baseFactionTechLevel = factionDefault;
+                    GetAndReloadTL();        //store the default value for the techlevel because we will modify it later and we need the one from right now
+
                     isTribe = factionDefault == TechLevel.Neolithic;
                     LoadCfgValues();
                     firstpass = false;
@@ -125,7 +131,7 @@ namespace TechAdvancing
 
             if (newLevel != TechLevel.Undefined)
             {
-                if (firstNotificationHidden) //hiding the notification on world start
+                if (firstNotificationHidden && DateTime.Now.Subtract(TimeSpan.FromSeconds(5)) > startedAt) //hiding the notification on world start
                 {
                     if (Faction.OfPlayer.def.techLevel < newLevel)
                         Find.LetterStack.ReceiveLetter("newTechLevelLetterTitle".Translate(), "newTechLevelLetterContents".Translate(isTribe ? "configTribe".Translate() : "configColony".Translate()) + " " + newLevel.ToString() + ".", LetterDefOf.PositiveEvent);
@@ -159,8 +165,29 @@ namespace TechAdvancing
             }
         }
 
+        internal static TechLevel GetAndReloadTL()
+        {
+            if (Faction.OfPlayer.def.techLevel > TechLevel.Undefined && _ResearchManager.factionDefault == TechLevel.Undefined)
+            {
+                _ResearchManager.factionDefault = Faction.OfPlayer.def.techLevel;
+                TechAdvancing_Config_Tab.baseFactionTechLevel = Faction.OfPlayer.def.techLevel;
+            }
+            if (Faction.OfPlayer.def.techLevel == TechLevel.Undefined)
+            {
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "Called without valid TL");
+#if DEBUG
+                throw new InvalidOperationException("If you see this message please report it immediately. Thanks! (0x1)");
+#endif
+            }
+            return Faction.OfPlayer.def.techLevel;
+        }
+
         internal static void RecalculateTechlevel(bool showIncreaseMsg = true)
         {
+            if (Faction.OfPlayerSilentFail?.def?.techLevel == null || Faction.OfPlayer.def.techLevel == TechLevel.Undefined)   // if some mod does something funky again....
+                return;
+
+            GetAndReloadTL();
             TechLevel baseNewTL = Rules.GetNewTechLevel();
             if (TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
             {
