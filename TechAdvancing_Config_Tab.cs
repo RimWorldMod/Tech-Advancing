@@ -211,7 +211,7 @@ namespace TechAdvancing
         {
             get
             {
-                return new Vector2(950f, 700f);
+                return new Vector2(950f, 775f);
             }
         }
 
