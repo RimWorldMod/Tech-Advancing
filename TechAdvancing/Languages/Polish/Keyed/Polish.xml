@@ -12,7 +12,7 @@
 	<configRuleBdesc>Zasada B: Jeśli gracz zbadał ponad 50% badań Y, technologia wzrasta do Y +</configRuleBdesc>
 	<configRuleBSliderdesc>Ten suwak kontroluje próg dla Zasady B.</configRuleBSliderdesc>
 	<configRadioBtnNeolithic>Neolityczny / Plemie</configRadioBtnNeolithic>
-	<configRadioBtnAutoDetect>Autowykrywanie (domyślne)</configRadioBtnAutoDetct>
+	<configRadioBtnAutoDetect>Autowykrywanie (domyślne)</configRadioBtnAutoDetect>
 	<configRadioBtnIndustrial>Industrialny / Kolonia</configRadioBtnIndustrial>
 	<configBaseTechLvl>Poziom podstawowy</configBaseTechLvl>
 	<configTribe>Plemię</configTribe>
@@ -24,7 +24,7 @@
 	<configWordDefault>Domyślny:</configWordDefault>
 	<configExpectedTechLvl>Oczekiwany poziom technologii dla tej reguły:</configExpectedTechLvl>
 	<configResultingTechLvl>Otrzymany poziom technologii:</configResultingTechLvl>
-	<configCheckboxNeedTechColonists>Jeśli ta opcj
+	<configCheckboxNeedTechColonists>Jeśli ta opcja jest włączona, nie będziesz mógł podnieść swojego poziomu zaawansowania technicznego wyżej niż '{0}' jeśli Twoja kolonia to sami członkowie prymitywnych plemion.</configCheckboxNeedTechColonists>
 	<configCheckboxNeedTechColonists_CappedAt>W rezultacie poziom Twojej technologii jest ograniczony do '{0}' dopóki kolonia nie pozyska osoby pochodzącej spoza prymitywnego plemienia.</configCheckboxNeedTechColonists_CappedAt>
 	
 	<newTechLevelMedievalCapRemLetterTitle>Zaawansowane poziomy technologiczne odblokowane.</newTechLevelMedievalCapRemLetterTitle>
@@ -44,6 +44,6 @@
 	<TA_TL_Neolithic>Neolityczny</TA_TL_Neolithic>
 	<TA_TL_Animal>Zwierzęcy</TA_TL_Animal>
 	<TA_TL_Undefined>Niezdefiniowany</TA_TL_Undefined>
-
+	
 	
 </LanguageData>
