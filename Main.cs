@@ -58,7 +58,6 @@ namespace TechAdvancing
             {
                 startedAt = DateTime.Now;
                 facName = Faction.OfPlayer.def.defName;
-                LogOutput.WriteLogMessage(Errorlevel.Warning, "Lvl:" + Faction.OfPlayer.def.techLevel.ToString());
                 try
                 {
                     GetAndReloadTL();        //store the default value for the techlevel because we will modify it later and we need the one from right now
