@@ -75,14 +75,14 @@ namespace TechAdvancing
             string bufferB = null;
             Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionA2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_A, ref bufferA, -100, 100);
             AddSpace(ref drawpos, 10f);
-            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
             AddSpace(ref drawpos, 20f);
             DrawText(canvas, descriptionB2.Replace("50", Conditionvalue_B_s.ToString()) + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
             Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
 
             AddSpace(ref drawpos, 10f);
-            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Transcendent, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
             AddSpace(ref drawpos, 20f);
 
 
@@ -95,7 +95,7 @@ namespace TechAdvancing
 
             //if (b_configCheckboxNeedTechColonists != (configCheckboxNeedTechColonists == 1))
             //{
-            //    previewTechLevels[2] = (Util.ColonyHasHiTechPeople()) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals;
+            //    previewTechLevels[2] = (Util.ColonyHasHiTechPeople()) ? TechLevel.Archotech : TechAdvancing_Config_Tab.maxTechLevelForTribals;
             //}
 
             b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
@@ -219,7 +219,7 @@ namespace TechAdvancing
         {
             this.forcePause = true;
             this.doCloseX = true;
-            this.closeOnEscapeKey = true;
+            //this.closeOnEscapeKey = true;
             this.doCloseButton = true;
             this.closeOnClickedOutside = true;
             this.absorbInputAroundWindow = true;

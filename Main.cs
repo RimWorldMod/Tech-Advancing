@@ -111,15 +111,18 @@ namespace TechAdvancing
                 */
                 #endregion
 
-                if (researchProjectDef.tags?.Contains("ta-ignore") != true)
+                if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") != true)
                 {
-
                     researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                     if (researchProjectDef.IsFinished)
                     {   // TODO filter out undefined later
                         researchProjectStoreFinished[researchProjectDef.techLevel]++;  //finished projects for techlevel
                         researchProjectDef.ReapplyAllMods();    // TODO always run it?
                     }
+                }
+                else
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, "Found ta-ignore tag in:" + researchProjectDef.defName);
                 }
             }
 

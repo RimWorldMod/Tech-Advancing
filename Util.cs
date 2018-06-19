@@ -57,7 +57,7 @@ namespace TechAdvancing
 
         internal static bool ColonyHasHiTechPeople()
         {
-            FactionDef[] hitechfactions = new FactionDef[] { FactionDefOf.Mechanoid, FactionDefOf.Outlander, FactionDefOf.Spacer, FactionDefOf.PlayerColony };
+            FactionDef[] hitechfactions = new FactionDef[] { FactionDefOf.Mechanoid, FactionDefOf.Ancients, FactionDefOf.PlayerColony };
             string[] hightechkinds = new string[] { "colonist" };
 
             //Debug
@@ -78,7 +78,7 @@ namespace TechAdvancing
         internal static TechLevel GetHighestTechlevel(params TechLevel[] t)
         {
             var max = t.Select(x => (int)x).Max();
-            return (max > (int)TechLevel.Transcendent) ? TechLevel.Transcendent : (TechLevel)max;
+            return (max > (int)TechLevel.Archotech) ? TechLevel.Archotech : (TechLevel)max;
         }
     }
 }

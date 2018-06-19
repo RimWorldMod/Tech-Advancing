@@ -46,11 +46,11 @@ namespace TechAdvancing
         {
             if (!TechAdvancing_Config_Tab.b_configCheckboxNeedTechColonists)    // if the limit is not enabled at all
             {
-                return TechLevel.Transcendent;
+                return TechLevel.Archotech;
             }
             else
             {
-                return (TechAdvancing.MapCompSaveHandler.ColonyPeople.Any(x => x.Value?.def?.techLevel >= TechLevel.Industrial)) ? TechLevel.Transcendent : TechAdvancing_Config_Tab.maxTechLevelForTribals;
+                return (TechAdvancing.MapCompSaveHandler.ColonyPeople.Any(x => x.Value?.def?.techLevel >= TechLevel.Industrial)) ? TechLevel.Archotech : TechAdvancing_Config_Tab.maxTechLevelForTribals;
             }
         }
 
@@ -58,7 +58,7 @@ namespace TechAdvancing
         {
             var notResearched = researchProjectStoreTotal.Except(researchProjectStoreFinished);
             int min = notResearched.Where(x => x.Value > 0).Select(x => (int)x.Key).DefaultIfEmpty(0).Min();
-            return (TechLevel)Util.Clamp(0, min - 1 + TechAdvancing_Config_Tab.Conditionvalue_A, (int)TechLevel.Transcendent);
+            return (TechLevel)Util.Clamp(0, min - 1 + TechAdvancing_Config_Tab.Conditionvalue_A, (int)TechLevel.Archotech);
         }
 
         internal static TechLevel RuleB()
@@ -72,7 +72,7 @@ namespace TechAdvancing
                     result = (int)tl.Key;
                 }
             }
-            return (TechLevel)Util.Clamp(0, result + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Transcendent);
+            return (TechLevel)Util.Clamp(0, result + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Archotech);
         }
     }
 }
