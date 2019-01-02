@@ -48,7 +48,7 @@ namespace TechAdvancing
         public static DateTime startedAt = DateTime.Now;
         public static string facName = "";
         public static bool firstpass = true;
-        internal static void _ReapplyAllMods(this ResearchManager _this)    //new ReaookyAllMods Method
+        internal static void _ReapplyAllMods(this ResearchManager _this)    //new ReapplyAllMods Method
         {
             if (Faction.OfPlayerSilentFail?.def?.techLevel == null || Faction.OfPlayer.def.techLevel == TechLevel.Undefined)       // if some mod does something funky again....
                 return;
