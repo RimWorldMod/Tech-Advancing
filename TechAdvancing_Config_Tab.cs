@@ -40,6 +40,9 @@ namespace TechAdvancing
         public static int configCheckboxNeedTechColonists = 0; //bool for selecting if we need colonists instead of tribals if we want to advance past medival tech
         public static int last_configCheckboxNeedTechColonists = 0;
         public static bool b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
+        public static int configCheckboxDisableCostMultiplicatorCap = 0;
+        public static int last_configCheckboxDisableCostMultiplicatorCap = 0;
+        public static bool b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
 
         public override void DoWindowContents(Rect canvas)
         {
@@ -109,12 +112,16 @@ namespace TechAdvancing
                 DrawText(canvas, "configCheckboxNeedTechColonists_CappedAt".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref drawpos, false, Color.red);
             }
 
-
-
-            AddSpace(ref drawpos, 50f);
+            
+            AddSpace(ref drawpos, 30f);
             DrawText(canvas, "configResultingTechLvl".Translate() + " " + Rules.GetNewTechLevel().ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
-            AddSpace(ref drawpos, 30f);
+            b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
+
+            Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate(), ref b_configCheckboxDisableCostMultiplicatorCap, false);
+            configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
+
+            AddSpace(ref drawpos, 50f);
             DrawText(canvas, "availableTechLvls".Translate(), ref drawpos);
 
             AddSpace(ref drawpos, 10f);
@@ -134,7 +141,7 @@ namespace TechAdvancing
         {
             base.WindowUpdate();
             if ((last_Conditionvalue_A != Conditionvalue_A) || (last_Conditionvalue_B != Conditionvalue_B) || (last_baseTechlvlCfg != baseTechlvlCfg) || (last_configCheckboxNeedTechColonists != configCheckboxNeedTechColonists)
-                || last_Conditionvalue_B_s != Conditionvalue_B_s
+                || last_Conditionvalue_B_s != Conditionvalue_B_s || last_configCheckboxDisableCostMultiplicatorCap != configCheckboxDisableCostMultiplicatorCap
             )
             {
                 last_Conditionvalue_A = Conditionvalue_A;
@@ -142,6 +149,7 @@ namespace TechAdvancing
                 last_Conditionvalue_B_s = Conditionvalue_B_s;
                 last_baseTechlvlCfg = baseTechlvlCfg;
                 last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
+                last_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap;
                 settingsChanged = true;
                 LogOutput.WriteLogMessage(Errorlevel.Information, "Settings changed.");
                 previewTechLevels = GetTechlevelPreview();
@@ -232,6 +240,7 @@ namespace TechAdvancing
             MapCompSaveHandler.TA_ExposeData("Conditionvalue_B_s", ref Conditionvalue_B_s, mode);
             MapCompSaveHandler.TA_ExposeData("baseTechlvlCfg", ref baseTechlvlCfg, mode);
             MapCompSaveHandler.TA_ExposeData("configCheckboxNeedTechColonists", ref configCheckboxNeedTechColonists, mode);
+            MapCompSaveHandler.TA_ExposeData("configCheckboxDisableCostMultiplicatorCap", ref configCheckboxDisableCostMultiplicatorCap, mode);
 
             if (!MapCompSaveHandler.IsValueSaved("Conditionvalue_A"))
             {
@@ -258,12 +267,18 @@ namespace TechAdvancing
                 MapCompSaveHandler.TA_ExposeData("configCheckboxNeedTechColonists", ref configCheckboxNeedTechColonists, TA_Expose_Mode.Save);
                 LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'configCheckboxNeedTechColonists' was added to the save file. This message shouldn't appear more than once per value and world.");
             }
+            if (!MapCompSaveHandler.IsValueSaved("configCheckboxDisableCostMultiplicatorCap"))
+            {
+                MapCompSaveHandler.TA_ExposeData("configCheckboxDisableCostMultiplicatorCap", ref configCheckboxNeedTechColonists, TA_Expose_Mode.Save);
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'configCheckboxDisableCostMultiplicatorCap' was added to the save file. This message shouldn't appear more than once per value and world.");
+            }
 
             last_Conditionvalue_A = Conditionvalue_A;
             last_Conditionvalue_B = Conditionvalue_B;
             last_Conditionvalue_B_s = Conditionvalue_B_s;
             last_baseTechlvlCfg = baseTechlvlCfg;
             last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
+            last_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap;
 
         }
 

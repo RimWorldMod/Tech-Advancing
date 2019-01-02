@@ -98,5 +98,6 @@ namespace TechAdvancing
         Conditionvalue_B_s,
         baseTechlvlCfg,
         configCheckboxNeedTechColonists,
+        configCheckboxDisableCostMultiplicatorCap
     }
 }

@@ -1,10 +1,7 @@
 ﻿using Harmony;
 using RimWorld;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
@@ -34,6 +31,7 @@ namespace TechAdvancing
     [HarmonyPatch(new Type[] { typeof(Rect) })]
     class TA_Research_Menu_Patch
     {
+        static ResearchProjectDef selectedProject = null;
         static void Prefix(Rect leftOutRect)
         {
             Rect TA_Cfgrect = new Rect(0f, 0f, 180f, 20f);
@@ -45,6 +43,28 @@ namespace TechAdvancing
                 SoundDef.Named("ResearchStart").PlayOneShotOnCamera();
                 Find.WindowStack.Add((Window)new TechAdvancing_Config_Tab());
             }
+        }
+    }
+
+    /// <summary>
+    /// Replace research cost calc method to be able to remove cost cap, like in A18
+    /// </summary>
+    [HarmonyPatch(typeof(Verse.ResearchProjectDef))]
+    [HarmonyPatch("CostFactor")]
+    [HarmonyPatch(typeof(TechLevel))]
+    class TA_ReplaceResearchProjectDef
+    {
+        static void Postfix(Verse.ResearchProjectDef __instance,ref float __result,TechLevel researcherTechLevel)
+        {
+            TechLevel TA_POSTFIXED_techLevel = TechAdvancing_Config_Tab.configCheckboxDisableCostMultiplicatorCap == 1 ? __instance.techLevel : (TechLevel)Mathf.Min((int)__instance.techLevel, 4);
+
+            //TechLevel techLevel = (TechLevel)Mathf.Min((int)__instance.techLevel, 4);
+            if ((int)researcherTechLevel >= (int)TA_POSTFIXED_techLevel)
+            {
+                __result = 1f;
+            }
+            int num = TA_POSTFIXED_techLevel - researcherTechLevel;
+            __result = 1f + (float)num * 0.5f;
         }
     }
 
