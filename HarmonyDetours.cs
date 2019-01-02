@@ -63,8 +63,11 @@ namespace TechAdvancing
             {
                 __result = 1f;
             }
-            int num = TA_POSTFIXED_techLevel - researcherTechLevel;
-            __result = 1f + (float)num * 0.5f;
+            else
+            {
+                int num = TA_POSTFIXED_techLevel - researcherTechLevel;
+                __result = 1f + (float)num * 0.5f;
+            }
         }
     }
 
