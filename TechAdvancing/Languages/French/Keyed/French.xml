@@ -4,7 +4,7 @@
 <newTechLevelLetterTitle>Nouveau niveau de technologie</newTechLevelLetterTitle>
 <newTechLevelLetterContents>Félicitations, un chercheur vient de terminer une recherche qui a rendu votre {0} plus intelligente. Votre nouveau niveau de technologie est</newTechLevelLetterContents>
 <ConfigEditTechlevelChange>En raison des changements de l'impact de Tech Advancing sur votre partie, votre niveau de technologie a été modifié en</ConfigEditTechlevelChange>
-<configHeaderVous pouvez modifier les paramètres ici:</configHeader>
+<configHeaderVous> pouvez modifier les paramètres ici:</configHeader>
 <configRuleAdesc>Règle A: \nSi le Joueur a fini toutes les recherches d'un niveau de technologie X et en dessous, le niveau de technologie s'élève à X +</configRuleAdesc>
 <configRuleBdesc>Règle B: \nSi le Joueur a fini plus de 50% des recherches d'un niveau de technologie Y, le niveau de technologie s'élève à Y +</configRuleBdesc>
 <configRuleBSliderdesc>Ce curseur contrôle le seuil pour la règle B</configRuleBSliderdesc>
