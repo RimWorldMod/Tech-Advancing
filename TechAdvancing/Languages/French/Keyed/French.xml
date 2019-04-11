@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
--<LanguageData>
+<LanguageData>
 <TAcfgmenulabel>Techadvancing config</TAcfgmenulabel>
 <newTechLevelLetterTitle>Nouveau niveau de technologie</newTechLevelLetterTitle>
 <newTechLevelLetterContents>Félicitations, un chercheur vient de terminer une recherche qui a rendu votre {0} plus intelligente. Votre nouveau niveau de technologie est</newTechLevelLetterContents>
