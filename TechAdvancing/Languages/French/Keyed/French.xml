@@ -14,12 +14,12 @@
 <configBaseTechLvl>Niveau de technologie de base</configBaseTechLvl>
 <configTribe>Tribu</configTribe>
 <configColony>Colonie</configColony>
-<configSetToTribe>Régler sur Tribu</configSetToTribe>
-<configSetToColony>Régler sur Colonie</configSetToColony>
+<configSetToTribe>Réglé sur Tribu</configSetToTribe>
+<configSetToColony>Réglé sur Colonie</configSetToColony>
 <configNeolithic>Néolithique</configNeolithic>
 <configIndustrial>Industriel</configIndustrial>
 <configWordDefault>défaut:</configWordDefault>
-<configExpectedTechLvl>Niveau de technologie attendu pour ces paramètres:</configExpectedTechLvl>
+<configExpectedTechLvl>Niveau de technologie attendu pour cette règle:</configExpectedTechLvl>
 <configResultingTechLvl>Niveau de technologie produit:</configResultingTechLvl>
 <configCheckboxNeedTechColonists>Si cette option est activée, vous ne pourrez pas faire avancer votre niveau de technologie \nau-delà de '{0}' si vous n'avez que des membres tribaux dans votre colonie/tribu.</configCheckboxNeedTechColonists>
 <configCheckboxNeedTechColonists_CappedAt>En conséquence, votre niveau technique est bloqué à '{0}' jusqu'à ce que votre colonie/tribu gagne un personnage non tribal.</configCheckboxNeedTechColonists_CappedAt>
@@ -34,7 +34,7 @@
 <TA_TL_Ultra>Ultra</TA_TL_Ultra>
 <TA_TL_Spacer>Spatial</TA_TL_Spacer>
 <TA_TL_Industrial>Industriel</TA_TL_Industrial>
-<TA_TL_Medieval>Médieval</TA_TL_Medieval>
+<TA_TL_Medieval>Médiéval</TA_TL_Medieval>
 <TA_TL_Neolithic>Néolithique</TA_TL_Neolithic>
 <TA_TL_Animal>Animal</TA_TL_Animal>
 <TA_TL_Undefined>Indéfini</TA_TL_Undefined>
