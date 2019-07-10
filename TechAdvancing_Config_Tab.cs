@@ -1,22 +1,19 @@
-﻿using RimWorld;
+﻿using Multiplayer.API;
+using RimWorld;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Verse;
 using UnityEngine;
-using TechAdvancing;
-using Harmony;
-using Verse.Sound;
-using System.Reflection;
+using Verse;
 
 namespace TechAdvancing
 {
     class TechAdvancing_Config_Tab : Window
     {
         public static int Conditionvalue_A = 1;
+
         public static int Conditionvalue_B = 0;
+
         public static int Conditionvalue_B_s = 50;  // Default slider val
+
         public const int Conditionvalue_A_Default = 1;
         public const int Conditionvalue_B_Default = 0;
         public const int Conditionvalue_B_s_Default = 50;
@@ -33,13 +30,16 @@ namespace TechAdvancing
         private bool settingsChanged = false;
         // private static float _iconSize = 30f;
         // private static float _margin = 6f;
+
         public static int baseTechlvlCfg = 1; //0=neolithic ; 1= auto ; 2=colony
         public static int last_baseTechlvlCfg = 1; //default for auto
         public static TechLevel baseFactionTechLevel = TechLevel.Undefined;
         public const TechLevel maxTechLevelForTribals = TechLevel.Medieval;
+
         public static int configCheckboxNeedTechColonists = 0; //bool for selecting if we need colonists instead of tribals if we want to advance past medival tech
         public static int last_configCheckboxNeedTechColonists = 0;
         public static bool b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
+
         public static int configCheckboxDisableCostMultiplicatorCap = 0;
         public static int last_configCheckboxDisableCostMultiplicatorCap = 0;
         public static bool b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
@@ -50,7 +50,7 @@ namespace TechAdvancing
             Text.Font = GameFont.Small;
             float drawpos = 0;
 
-            DrawText(canvas, description, ref drawpos);
+            DrawText(canvas, this.description, ref drawpos);
             AddSpace(ref drawpos, 10f);
             if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 20, drawpos, 100f, 60f), "configRadioBtnNeolithic".Translate(), baseTechlvlCfg == 0)) //translation default: Neolithic / Tribal
             {
@@ -73,26 +73,26 @@ namespace TechAdvancing
             {
                 baseFactionTechLevel = (baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
             }
-            DrawText(canvas, descriptionA2 + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")", ref drawpos);
+            DrawText(canvas, this.descriptionA2 + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")", ref drawpos);
             string bufferA = null;
             string bufferB = null;
-            Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionA2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_A, ref bufferA, -100, 100);
+            Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(this.descriptionA2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_A, ref bufferA, -100, 100);
             AddSpace(ref drawpos, 10f);
-            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)this.previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
             AddSpace(ref drawpos, 20f);
-            DrawText(canvas, descriptionB2.Replace("50", Conditionvalue_B_s.ToString()) + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
-            Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
+            DrawText(canvas, this.descriptionB2.Replace("50", Conditionvalue_B_s.ToString()) + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
+            Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(this.descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
 
             AddSpace(ref drawpos, 10f);
-            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)this.previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
             AddSpace(ref drawpos, 20f);
 
 
-            DrawText(canvas, descriptionB2_s + " (" + "configWordDefault".Translate() + Conditionvalue_B_s_Default + ")", ref drawpos);
-            AddSpace(ref drawpos,10f);
+            DrawText(canvas, this.descriptionB2_s + " (" + "configWordDefault".Translate() + Conditionvalue_B_s_Default + ")", ref drawpos);
+            AddSpace(ref drawpos, 10f);
             Conditionvalue_B_s = (int)Widgets.HorizontalSlider(new Rect(canvas.x, canvas.y + drawpos, 500, 15), Conditionvalue_B_s, 1, 100, true, "50%", "1%", "100%", 1);
-            DrawText(new Rect(canvas.x+530, canvas.y-5, canvas.width, canvas.height), $"{Conditionvalue_B_s}%", ref drawpos);
+            DrawText(new Rect(canvas.x + 530, canvas.y - 5, canvas.width, canvas.height), $"{Conditionvalue_B_s}%", ref drawpos);
 
             AddSpace(ref drawpos, 20f);
 
@@ -107,12 +107,12 @@ namespace TechAdvancing
             configCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
             AddSpace(ref drawpos, 32f);
 
-            if (previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)
+            if (this.previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)
             {
                 DrawText(canvas, "configCheckboxNeedTechColonists_CappedAt".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref drawpos, false, Color.red);
             }
 
-            
+
             AddSpace(ref drawpos, 30f);
             DrawText(canvas, "configResultingTechLvl".Translate() + " " + Rules.GetNewTechLevel().ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
@@ -150,9 +150,9 @@ namespace TechAdvancing
                 last_baseTechlvlCfg = baseTechlvlCfg;
                 last_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists;
                 last_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap;
-                settingsChanged = true;
+                this.settingsChanged = true;
                 LogOutput.WriteLogMessage(Errorlevel.Information, "Settings changed.");
-                previewTechLevels = GetTechlevelPreview();
+                this.previewTechLevels = GetTechlevelPreview();
             }
 
         }
@@ -184,14 +184,29 @@ namespace TechAdvancing
             }
         }
 
+        [SyncMethod]
+        public void CloseVariableSync(int conditionvalue_A_param, int conditionvalue_B_param, int conditionvalue_B_s_param, int baseTechlvlCfg_param, int configCheckboxNeedTechColonists_param, int configCheckboxDisableCostMultiplicatorCap_param)
+        {
+            // run anyway since it doesnt matter if MP is enabled or not.
+
+            Conditionvalue_A = conditionvalue_A_param;
+            Conditionvalue_B = conditionvalue_B_param;
+            Conditionvalue_B_s = conditionvalue_B_s_param;
+            baseTechlvlCfg = baseTechlvlCfg_param;
+            configCheckboxNeedTechColonists = configCheckboxNeedTechColonists_param;
+            configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap_param;
+
+            TechAdvancing._ResearchManager.RecalculateTechlevel();
+            LogOutput.WriteLogMessage(Errorlevel.Information, "Saving data.");
+            ExposeData(TA_Expose_Mode.Save);
+        }
+
         public override void PostClose()
         {
             base.PostClose();
-            if (settingsChanged)
+            if (this.settingsChanged)
             {
-                TechAdvancing._ResearchManager.RecalculateTechlevel();
-                LogOutput.WriteLogMessage(Errorlevel.Information, "Saving data.");
-                ExposeData(TA_Expose_Mode.Save);
+                CloseVariableSync(Conditionvalue_A, Conditionvalue_B, Conditionvalue_B_s, baseTechlvlCfg, configCheckboxNeedTechColonists, configCheckboxDisableCostMultiplicatorCap);
             }
             this.forcePause = false;
         }
@@ -211,8 +226,8 @@ namespace TechAdvancing
             base.PreOpen();
             ExposeData(TA_Expose_Mode.Load);
             this.forcePause = true;
-            settingsChanged = false;
-            previewTechLevels = GetTechlevelPreview();
+            this.settingsChanged = false;
+            this.previewTechLevels = GetTechlevelPreview();
         }
 
         public override Vector2 InitialSize

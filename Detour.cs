@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using Verse;
 
 namespace TechAdvancing
 {
@@ -12,10 +8,10 @@ namespace TechAdvancing
     {
         public static void DoDetour(MethodInfo source, MethodInfo target)
         {
-            if (LogOutput.DebugMode_TA_enabled) { LogOutput.WriteLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }            
+            if (LogOutput.DebugMode_TA_enabled) { LogOutput.WriteLogMessage(Errorlevel.Warning, "DEBUG MODE ACTIVATED"); }
 
             MethodInfo methodToReplace = target;
-            MethodInfo methodToInject = source;            
+            MethodInfo methodToInject = source;
 
             RuntimeHelpers.PrepareMethod(methodToReplace.MethodHandle);
             RuntimeHelpers.PrepareMethod(methodToInject.MethodHandle);

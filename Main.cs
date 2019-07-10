@@ -1,14 +1,12 @@
 ﻿
+using Multiplayer.API;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using TechAdvancing;
+using System.Reflection;
 using UnityEngine;
 using Verse;
-using RimWorld;
-using System.Reflection;
-using System.IO;
 
 namespace TechAdvancing
 {
@@ -29,8 +27,12 @@ namespace TechAdvancing
             UnityEngine.Object.DontDestroyOnLoad(initializer);
 
             HarmonyDetours.Setup();
-        }
 
+            if (MP.enabled)
+            {
+                MP.RegisterAll();
+            }
+        }
     }
 
     /// <summary>

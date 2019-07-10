@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using Harmony;
-using RimWorld;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
 
@@ -13,9 +10,9 @@ namespace TechAdvancing
         private static void DrawText(Rect canvas, string Text, ref float drawpos, bool increaseDrawpos = true)
         {
             var descHeight = Verse.Text.CalcSize(Text).y;  //Verse.Text.CalcHeight(descTR, Listing.ColumnSpacing);
-            Rect drawCanvas = new Rect(canvas.x+200, canvas.y + drawpos, canvas.width, descHeight);
+            Rect drawCanvas = new Rect(canvas.x + 200, canvas.y + drawpos, canvas.width, descHeight);
             GUI.Label(drawCanvas, Text);
-            
+
             if (increaseDrawpos)
             {
                 drawpos += drawCanvas.height;
@@ -45,7 +42,7 @@ namespace TechAdvancing
             else
             {
                 GUI.contentColor = Color.red;
-                DrawText(rect,"TAcfgunavailable".Translate(),ref drawpos,true);
+                DrawText(rect, "TAcfgunavailable".Translate(), ref drawpos, true);
                 GUI.contentColor = defaultGuiColor;
             }
         }
@@ -53,7 +50,7 @@ namespace TechAdvancing
 
     public class SettingController : Mod
     {
-     
+
         public SettingController(ModContentPack content)
             : base(content)
         {
@@ -63,9 +60,9 @@ namespace TechAdvancing
         public override string SettingsCategory() { return "TAcfgmenulabel".Translate(); }
         public override void DoSettingsWindowContents(Rect inRect) { Settings.DoSettingsWindowContents(inRect); }
 
-  
+
     }
-    
+
 
 
 }

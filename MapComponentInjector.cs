@@ -1,9 +1,7 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using Verse;
-using System.Linq;
-using Object = UnityEngine.Object;
-using RimWorld;
 
 namespace TechAdvancing
 {
@@ -13,7 +11,7 @@ namespace TechAdvancing
 
         public void FixedUpdate()
         {
-            if (Current.ProgramState != ProgramState.Playing)            
+            if (Current.ProgramState != ProgramState.Playing)
                 return;
 
             foreach (var map in Find.Maps.Where(m => m.GetComponent<MapCompSaveHandler>() == null))
