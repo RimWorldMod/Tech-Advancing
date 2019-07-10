@@ -89,6 +89,7 @@
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(TargetDir)0Harmony.dll" "$(ProjectDir)TechAdvancing\Assemblies\" /Y
 XCOPY "$(TargetDir)TechAdvancing.dll" "$(ProjectDir)TechAdvancing\Assemblies\" /Y
+XCOPY "$(TargetDir)0MultiplayerAPI.dll" "$(ProjectDir)TechAdvancing\Assemblies\" /Y
 
 RD "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\TechAdvancing\" /S /Q 
 XCOPY "$(ProjectDir)TechAdvancing" "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\TechAdvancing\" /Y /E /S /I</PostBuildEvent>

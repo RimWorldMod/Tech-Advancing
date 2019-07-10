@@ -185,7 +185,7 @@ namespace TechAdvancing
         }
 
         [SyncMethod]
-        public void CloseVariableSync(int conditionvalue_A_param, int conditionvalue_B_param, int conditionvalue_B_s_param, int baseTechlvlCfg_param, int configCheckboxNeedTechColonists_param, int configCheckboxDisableCostMultiplicatorCap_param)
+        public static void CloseVariableSync(int conditionvalue_A_param, int conditionvalue_B_param, int conditionvalue_B_s_param, int baseTechlvlCfg_param, int configCheckboxNeedTechColonists_param, int configCheckboxDisableCostMultiplicatorCap_param)
         {
             // run anyway since it doesnt matter if MP is enabled or not.
 
