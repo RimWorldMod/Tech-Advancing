@@ -284,7 +284,7 @@ namespace TechAdvancing
             }
             if (!MapCompSaveHandler.IsValueSaved("configCheckboxDisableCostMultiplicatorCap"))
             {
-                MapCompSaveHandler.TA_ExposeData("configCheckboxDisableCostMultiplicatorCap", ref configCheckboxNeedTechColonists, TA_Expose_Mode.Save);
+                MapCompSaveHandler.TA_ExposeData("configCheckboxDisableCostMultiplicatorCap", ref configCheckboxDisableCostMultiplicatorCap, TA_Expose_Mode.Save);
                 LogOutput.WriteLogMessage(Errorlevel.Information, "Value 'configCheckboxDisableCostMultiplicatorCap' was added to the save file. This message shouldn't appear more than once per value and world.");
             }
 
