@@ -54,19 +54,21 @@ namespace TechAdvancing
     [HarmonyPatch(typeof(TechLevel))]
     class TA_ReplaceResearchProjectDef
     {
-        static void Postfix(Verse.ResearchProjectDef __instance,ref float __result,TechLevel researcherTechLevel)
+        static void Postfix(Verse.ResearchProjectDef __instance, ref float __result, TechLevel researcherTechLevel)
         {
-            TechLevel TA_POSTFIXED_techLevel = TechAdvancing_Config_Tab.configCheckboxDisableCostMultiplicatorCap == 1 ? __instance.techLevel : (TechLevel)Mathf.Min((int)__instance.techLevel, 4);
-
-            //TechLevel techLevel = (TechLevel)Mathf.Min((int)__instance.techLevel, 4);
-            if ((int)researcherTechLevel >= (int)TA_POSTFIXED_techLevel)
+            if (researcherTechLevel >= __instance.techLevel)
             {
                 __result = 1f;
             }
             else
             {
-                int num = TA_POSTFIXED_techLevel - researcherTechLevel;
-                __result = 1f + (float)num * 0.5f;
+                int num = __instance.techLevel - researcherTechLevel;
+                __result = 1f + num * 0.5f;
+
+                if (TechAdvancing_Config_Tab.configCheckboxDisableCostMultiplicatorCap == 0)
+                {
+                    __result = Mathf.Min(__result, 2);
+                }
             }
         }
     }
