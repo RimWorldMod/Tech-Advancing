@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigTabValueSavedAttribute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HarmonyDetours.cs" />
     <Compile Include="LogOutput.cs" />

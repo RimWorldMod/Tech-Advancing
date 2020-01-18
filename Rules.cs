@@ -57,7 +57,7 @@ namespace TechAdvancing
         {
             var notResearched = researchProjectStoreTotal.Except(researchProjectStoreFinished);
             int min = notResearched.Where(x => x.Value > 0).Select(x => (int)x.Key).DefaultIfEmpty(0).Min();
-            return (TechLevel)Util.Clamp(0, min - 1 + TechAdvancing_Config_Tab.Conditionvalue_A, (int)TechLevel.Archotech);
+            return (TechLevel)Util.Clamp(0, min - 1 + TechAdvancing_Config_Tab.conditionvalue_A, (int)TechLevel.Archotech);
         }
 
         internal static TechLevel RuleB()
@@ -66,12 +66,12 @@ namespace TechAdvancing
 
             foreach (var tl in researchProjectStoreTotal.Where(x => x.Value > 0))
             {
-                if ((float)researchProjectStoreFinished[tl.Key] / (float)tl.Value > (TechAdvancing_Config_Tab.Conditionvalue_B_s / 100f))
+                if ((float)researchProjectStoreFinished[tl.Key] / (float)tl.Value > (TechAdvancing_Config_Tab.conditionvalue_B_s / 100f))
                 {
                     result = (int)tl.Key;
                 }
             }
-            return (TechLevel)Util.Clamp(0, result + (int)TechAdvancing_Config_Tab.Conditionvalue_B, (int)TechLevel.Archotech);
+            return (TechLevel)Util.Clamp(0, result + (int)TechAdvancing_Config_Tab.conditionvalue_B, (int)TechLevel.Archotech);
         }
     }
 }

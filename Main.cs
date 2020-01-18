@@ -69,7 +69,7 @@ namespace TechAdvancing
                     firstpass = false;
 
                     //Debug
-                    LogOutput.WriteLogMessage(Errorlevel.Debug, "Con A val= " + TechAdvancing_Config_Tab.Conditionvalue_A + "|||Con B Val= " + TechAdvancing_Config_Tab.Conditionvalue_B);
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, "Con A val= " + TechAdvancing_Config_Tab.conditionvalue_A + "|||Con B Val= " + TechAdvancing_Config_Tab.conditionvalue_B);
 
                 }
                 catch (Exception ex)
@@ -159,8 +159,8 @@ namespace TechAdvancing
 
         private static void LoadCfgValues() //could be improved using just vanilla loading  // TODO obsolete?
         {
-            Scribe_Deep.Look(ref TechAdvancing_Config_Tab.Conditionvalue_A, "Conditionvalue_A");
-            Scribe_Deep.Look(ref TechAdvancing_Config_Tab.Conditionvalue_B, "Conditionvalue_B");
+            Scribe_Deep.Look(ref TechAdvancing_Config_Tab.conditionvalue_A, "Conditionvalue_A");
+            Scribe_Deep.Look(ref TechAdvancing_Config_Tab.conditionvalue_B, "Conditionvalue_B");
             Scribe_Deep.Look(ref TechAdvancing_Config_Tab.baseTechlvlCfg, "baseTechlvlCfg");
             Scribe_Deep.Look(ref TechAdvancing_Config_Tab.configCheckboxNeedTechColonists, "configCheckboxNeedTechColonists");
             if (TechAdvancing_Config_Tab.baseTechlvlCfg != 1)
