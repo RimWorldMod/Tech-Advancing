@@ -36,7 +36,7 @@ namespace TechAdvancing
             {
                 if (Widgets.ButtonText(TA_Cfgrect, "TAcfgmenulabel".Translate(), true, false, true))
                 {
-                    Find.WindowStack.Add((Window)new TechAdvancing_Config_Tab());
+                    Find.WindowStack.Add(new TechAdvancing_Config_Tab());
                 }
             }
             else
