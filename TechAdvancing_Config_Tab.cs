@@ -44,97 +44,155 @@ namespace TechAdvancing
         public static int last_configCheckboxDisableCostMultiplicatorCap = 0;
         public static bool b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
 
+        string menuButtonSelected = null;
         public override void DoWindowContents(Rect canvas)
         {
             // zooming in seems to cause Text.Font to start at Tiny, make sure it's set to Small for our panels.
             Text.Font = GameFont.Small;
             float drawpos = 0;
 
-            DrawText(canvas, this.description, ref drawpos);
-            AddSpace(ref drawpos, 10f);
-            if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 20, drawpos, 100f, 60f), "configRadioBtnNeolithic".Translate(), baseTechlvlCfg == 0)) //translation default: Neolithic / Tribal
+            // --- start of menu selection code --- //
+            string[] buttonTexts = new[] { "config_menu_button_main", "config_menu_button_research_project_settings" };
+            if (this.menuButtonSelected == null)
             {
-                baseTechlvlCfg = 0;
+                this.menuButtonSelected = buttonTexts[0];
             }
-            if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 200f, drawpos, 100f, 60f), "configRadioBtnAutoDetect".Translate(), baseTechlvlCfg == 1)) //translation default: Auto-Detect (default)
+            Log.Message($"Currently selected: {this.menuButtonSelected}");
+            float buttonDrawposX = 0;
+            for (int i = 0; i < buttonTexts.Length; i++)
             {
-                baseTechlvlCfg = 1;
+                var name = buttonTexts[i];
+                var buttoNText = name.Translate();
+                var isActive = this.menuButtonSelected != name;
+                var clicked = Widgets.ButtonText(GetButtonRect(ref buttonDrawposX, drawpos, 20, buttoNText), buttoNText, isActive, isActive, isActive ? Color.white : Color.grey, active: isActive);
+                if (clicked)
+                {
+                    this.menuButtonSelected = name;
+                    Log.Message($"Clicked: {buttoNText}");
+                }
             }
-
-            if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 400f, drawpos, 100f, 60f), "configRadioBtnIndustrial".Translate(), baseTechlvlCfg == 2)) //translation default: Industrial / Colony
-            {
-                baseTechlvlCfg = 2;
-            }
-            AddSpace(ref drawpos, 70f);
-            DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((baseTechlvlCfg == 1) ? ((_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((baseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((baseTechlvlCfg == 1) ? _ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((baseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
-            AddSpace(ref drawpos, 20f);
-            baseFactionTechLevel = _ResearchManager.factionDefault;
-            if (baseTechlvlCfg != 1)
-            {
-                baseFactionTechLevel = (baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
-            }
-            DrawText(canvas, this.descriptionA2 + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")", ref drawpos);
-            string bufferA = null;
-            string bufferB = null;
-            Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(this.descriptionA2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_A, ref bufferA, -100, 100);
-            AddSpace(ref drawpos, 10f);
-            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)this.previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
-
-            AddSpace(ref drawpos, 20f);
-            DrawText(canvas, this.descriptionB2.Replace("50", Conditionvalue_B_s.ToString()) + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
-            Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(this.descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
-
-            AddSpace(ref drawpos, 10f);
-            DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)this.previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
-            AddSpace(ref drawpos, 20f);
-
-
-            DrawText(canvas, this.descriptionB2_s + " (" + "configWordDefault".Translate() + Conditionvalue_B_s_Default + ")", ref drawpos);
-            AddSpace(ref drawpos, 10f);
-            Conditionvalue_B_s = (int)Widgets.HorizontalSlider(new Rect(canvas.x, canvas.y + drawpos, 500, 15), Conditionvalue_B_s, 1, 100, true, "50%", "1%", "100%", 1);
-            DrawText(new Rect(canvas.x + 530, canvas.y - 5, canvas.width, canvas.height), $"{Conditionvalue_B_s}%", ref drawpos);
-
-            AddSpace(ref drawpos, 20f);
-
-            //if (b_configCheckboxNeedTechColonists != (configCheckboxNeedTechColonists == 1))
-            //{
-            //    previewTechLevels[2] = (Util.ColonyHasHiTechPeople()) ? TechLevel.Archotech : TechAdvancing_Config_Tab.maxTechLevelForTribals;
-            //}
-
-            b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
-
-            Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref b_configCheckboxNeedTechColonists, false);
-            configCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
-            AddSpace(ref drawpos, 32f);
-
-            if (this.previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)
-            {
-                DrawText(canvas, "configCheckboxNeedTechColonists_CappedAt".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref drawpos, false, Color.red);
-            }
-
 
             AddSpace(ref drawpos, 30f);
-            DrawText(canvas, "configResultingTechLvl".Translate() + " " + Rules.GetNewTechLevel().ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
 
-            b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
+            // --- end of menu selection code --- //
 
-            Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate(), ref b_configCheckboxDisableCostMultiplicatorCap, false);
-            configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
+            var pageIndex = Array.IndexOf(buttonTexts, this.menuButtonSelected);
 
-            AddSpace(ref drawpos, 50f);
-            DrawText(canvas, "availableTechLvls".Translate(), ref drawpos);
-
-            AddSpace(ref drawpos, 10f);
-            string[] techLevels = Enum.GetNames(typeof(TechLevel));
-            for (int i = 0; i < techLevels.Length; i++)
+            switch (pageIndex)
             {
-                DrawText(canvas, techLevels[i].ToString().TranslateOrDefault(null, "TA_TL_") + " = " + i, ref drawpos);
+                case 0:
+                    {
+                        DrawText(canvas, this.description, ref drawpos);
+                        AddSpace(ref drawpos, 5f);
+                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 20, drawpos, 100f, 60f), "configRadioBtnNeolithic".Translate(), baseTechlvlCfg == 0)) //translation default: Neolithic / Tribal
+                        {
+                            baseTechlvlCfg = 0;
+                        }
+                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 200f, drawpos, 100f, 60f), "configRadioBtnAutoDetect".Translate(), baseTechlvlCfg == 1)) //translation default: Auto-Detect (default)
+                        {
+                            baseTechlvlCfg = 1;
+                        }
+
+                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 400f, drawpos, 100f, 60f), "configRadioBtnIndustrial".Translate(), baseTechlvlCfg == 2)) //translation default: Industrial / Colony
+                        {
+                            baseTechlvlCfg = 2;
+                        }
+                        AddSpace(ref drawpos, 70f);
+                        DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((baseTechlvlCfg == 1) ? ((_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((baseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((baseTechlvlCfg == 1) ? _ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((baseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
+                        AddSpace(ref drawpos, 20f);
+                        baseFactionTechLevel = _ResearchManager.factionDefault;
+                        if (baseTechlvlCfg != 1)
+                        {
+                            baseFactionTechLevel = (baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
+                        }
+                        DrawText(canvas, this.descriptionA2 + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")", ref drawpos);
+                        string bufferA = null;
+                        string bufferB = null;
+                        Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(this.descriptionA2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_A_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_A, ref bufferA, -100, 100);
+                        AddSpace(ref drawpos, 10f);
+                        DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)this.previewTechLevels[0])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+
+                        AddSpace(ref drawpos, 20f);
+                        DrawText(canvas, this.descriptionB2.Replace("50", Conditionvalue_B_s.ToString()) + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")", ref drawpos);
+                        Widgets.TextFieldNumeric(new Rect(canvas.x + Verse.Text.CalcSize(this.descriptionB2_calc + " (" + "configWordDefault".Translate() + Conditionvalue_B_Default + ")").x - 25f, canvas.y + drawpos - 22f, 50f, Verse.Text.CalcSize("Text").y), ref Conditionvalue_B, ref bufferB, -100, 100);
+
+                        AddSpace(ref drawpos, 10f);
+                        DrawText(canvas, "configExpectedTechLvl".Translate() + " " + ((TechLevel)Math.Min((int)TechLevel.Archotech, (int)this.previewTechLevels[1])).ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+                        AddSpace(ref drawpos, 20f);
+
+
+                        DrawText(canvas, this.descriptionB2_s + " (" + "configWordDefault".Translate() + Conditionvalue_B_s_Default + ")", ref drawpos);
+                        AddSpace(ref drawpos, 10f);
+                        Conditionvalue_B_s = (int)Widgets.HorizontalSlider(new Rect(canvas.x, canvas.y + drawpos, 500, 15), Conditionvalue_B_s, 1, 100, true, "50%", "1%", "100%", 1);
+                        DrawText(new Rect(canvas.x + 530, canvas.y - 5, canvas.width, canvas.height), $"{Conditionvalue_B_s}%", ref drawpos);
+
+                        AddSpace(ref drawpos, 20f);
+
+                        //if (b_configCheckboxNeedTechColonists != (configCheckboxNeedTechColonists == 1))
+                        //{
+                        //    previewTechLevels[2] = (Util.ColonyHasHiTechPeople()) ? TechLevel.Archotech : TechAdvancing_Config_Tab.maxTechLevelForTribals;
+                        //}
+
+                        b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
+
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref b_configCheckboxNeedTechColonists, false);
+                        configCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
+                        AddSpace(ref drawpos, 32f);
+
+                        if (this.previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)
+                        {
+                            DrawText(canvas, "configCheckboxNeedTechColonists_CappedAt".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref drawpos, false, Color.red);
+                        }
+
+
+                        AddSpace(ref drawpos, 30f);
+                        DrawText(canvas, "configResultingTechLvl".Translate() + " " + Rules.GetNewTechLevel().ToString().TranslateOrDefault(null, "TA_TL_"), ref drawpos);
+
+                        b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
+
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate(), ref b_configCheckboxDisableCostMultiplicatorCap, false);
+                        configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
+
+                        AddSpace(ref drawpos, 50f);
+                        DrawText(canvas, "availableTechLvls".Translate(), ref drawpos);
+
+                        AddSpace(ref drawpos, 10f);
+                        string[] techLevels = Enum.GetNames(typeof(TechLevel));
+                        for (int i = 0; i < techLevels.Length; i++)
+                        {
+                            DrawText(canvas, techLevels[i].ToString().TranslateOrDefault(null, "TA_TL_") + " = " + i, ref drawpos);
+                        }
+                    }
+                    break;
+
+                case 1:
+                    {
+                        DrawText(canvas, "Second page woooo!", ref drawpos);
+                    }
+                    break;
+
+                default:
+                    {
+                        DrawText(canvas, "ERROR: Bad Tab Page. Please report this.", ref drawpos, color: Color.red);
+                    }
+                    break;
             }
         }
 
         private void AddSpace(ref float drawpos, float amount = 0f)
         {
             drawpos += (amount != 0f) ? amount : 10f;
+        }
+
+        private Rect GetButtonRect(ref float drawPosX, float drawPosY, float height, string text)
+        {
+            int btnSpacer = 2;
+            int btnTextMargin = 4;
+
+            var btnWidth = Text.CalcSize(text).x + btnTextMargin * 2;
+            var rect = new Rect(drawPosX, drawPosY, btnWidth, height);
+            drawPosX += btnWidth + btnSpacer;
+            return rect;
         }
 
         public override void WindowUpdate()
@@ -228,13 +286,14 @@ namespace TechAdvancing
             this.forcePause = true;
             this.settingsChanged = false;
             this.previewTechLevels = GetTechlevelPreview();
+            this.menuButtonSelected = null; // reset the last clicked button for selecting pages. This will show the normal view.
         }
 
         public override Vector2 InitialSize
         {
             get
             {
-                return new Vector2(950f, 775f);
+                return new Vector2(950f, 800f);
             }
         }
 
