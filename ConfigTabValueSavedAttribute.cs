@@ -2,7 +2,7 @@
 
 namespace TechAdvancing
 {
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class ConfigTabValueSavedAttribute : Attribute
     {
         public string SaveName { get; }
