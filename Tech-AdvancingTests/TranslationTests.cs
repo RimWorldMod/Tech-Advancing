@@ -5,6 +5,9 @@ using System.Xml;
 
 namespace TechAdvancingTests
 {
+    /// <summary>
+    /// THIS ENTIRE PROJECT IS LITERALLY JUST FOR CHECKING TRANSLATIONS AND OTHER STUFF THATS NOT RELATED TO THE MAIN PROJECT. DO NOT REFERENCE IT BECAUSE IT WILL BREAK CI!
+    /// </summary>
     [TestClass]
     public class TranslationTests
     {
