@@ -9,7 +9,7 @@ using Verse;
 
 namespace TechAdvancing
 {
-    class TechAdvancing_Config_Tab : Window
+    public class TechAdvancing_Config_Tab : Window
     {
         public const int conditionvalue_A_Default = 1;
         public const int conditionvalue_B_Default = 0;
