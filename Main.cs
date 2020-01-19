@@ -37,6 +37,8 @@ namespace TechAdvancing
                 if (projDef == null)
                 {
                     projDef = new ResearchProjectDef() { defName = name, label = $"{"configWordTechlevel".Translate()}: " + $"TA_TL_{tl.ToString()}".Translate() };
+                    projDef.prerequisites = new List<ResearchProjectDef>() { projDef }; // add a circulating dependency chain to hide it
+
                     DefDatabase<ResearchProjectDef>.Add(projDef);
                 }
                 ResearchPrereqBlockers.Add(tl, projDef);
