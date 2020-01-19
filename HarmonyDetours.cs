@@ -31,17 +31,24 @@ namespace TechAdvancing
     [HarmonyPatch(new Type[] { typeof(Rect) })]
     class TA_Research_Menu_Patch
     {
-        static ResearchProjectDef selectedProject = null;
-        static void Prefix(RimWorld.MainTabWindow_Research __instance, Rect leftOutRect)
+        static void Prefix(RimWorld.MainTabWindow_Research __instance, ref string __state, Rect leftOutRect)
         {
+            __state = null;
             // code for locking down researches if configured like that
-            var TA_selectedProject = (ResearchProjectDef) Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
+            var TA_selectedProject = (ResearchProjectDef)Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
 
-            //if (TA_selectedProject != null && TechAdvancing.TechAdvancing_Config_Tab.B_configBlockMoreAdvancedResearches && TA_selectedProject.techLevel > Faction.OfPlayer.def.techLevel)
-            //{
-            //    Widgets.ButtonText()
+            if (TA_selectedProject != null && TechAdvancing.TechAdvancing_Config_Tab.b_configBlockMoreAdvancedResearches && TA_selectedProject.techLevel > Faction.OfPlayer.def.techLevel)
+            {
+                var TA_projLabel = "Techlevel: " + TA_selectedProject.techLevel.ToString();
+                if (TA_selectedProject.prerequisites == null)
+                    TA_selectedProject.prerequisites = new System.Collections.Generic.List<ResearchProjectDef>();
 
-            //}
+
+                if (!TA_selectedProject.prerequisites.Any(x => x.label == TA_projLabel))
+                    TA_selectedProject.prerequisites.Add(new ResearchProjectDef() { label = TA_projLabel });
+
+                __state = TA_projLabel; // write down the state to remove it after
+            }
 
 
             // --------------------------------------------------------
@@ -54,6 +61,15 @@ namespace TechAdvancing
             {
                 SoundDef.Named("ResearchStart").PlayOneShotOnCamera();
                 Find.WindowStack.Add((Window)new TechAdvancing_Config_Tab());
+            }
+        }
+
+        static void Postfix(RimWorld.MainTabWindow_Research __instance, string __state, Rect leftOutRect)
+        {
+            if (__state != null)
+            {
+                var TA_selectedProject = (ResearchProjectDef)Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
+                TA_selectedProject.prerequisites.RemoveAll(x => x.label == __state);
             }
         }
     }

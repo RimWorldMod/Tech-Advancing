@@ -16,12 +16,15 @@ namespace TechAdvancing
         public const int conditionvalue_B_s_Default = 50;  // Default slider val
 
         [ConfigTabValueSaved("Conditionvalue_A")]
+        public static int Conditionvalue_A { get => conditionvalue_A; set => conditionvalue_A = value; }
         public static int conditionvalue_A = conditionvalue_A_Default;
 
         [ConfigTabValueSaved("Conditionvalue_B")]
+        public static int Conditionvalue_B { get => conditionvalue_B; set => conditionvalue_B = value; }
         public static int conditionvalue_B = conditionvalue_B_Default;
 
         [ConfigTabValueSaved("Conditionvalue_B_s")]
+        public static int Conditionvalue_B_s { get => conditionvalue_B_s; set => conditionvalue_B_s = value; }
         public static int conditionvalue_B_s = conditionvalue_B_s_Default;
 
         TechLevel[] previewTechLevels = { TechLevel.Undefined, TechLevel.Undefined, TechLevel.Undefined };
@@ -36,21 +39,21 @@ namespace TechAdvancing
         // private static float _margin = 6f;
 
         [ConfigTabValueSaved("baseTechlvlCfg")]
-        public static int baseTechlvlCfg = 1; //0=neolithic ; 1= auto ; 2=colony
+        public static int baseTechlvlCfg { get; set; } = 1; //0=neolithic ; 1= auto ; 2=colony
         public static TechLevel baseFactionTechLevel = TechLevel.Undefined;
         public const TechLevel maxTechLevelForTribals = TechLevel.Medieval;
 
         [ConfigTabValueSaved("configCheckboxNeedTechColonists")]
-        public static int configCheckboxNeedTechColonists = 0; //bool for selecting if we need colonists instead of tribals if we want to advance past medival tech
-        public static bool b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
+        public static int configCheckboxNeedTechColonists { get => b_configCheckboxNeedTechColonists ? 1 : 0; set => b_configCheckboxNeedTechColonists = value == 1; }
+        public static bool b_configCheckboxNeedTechColonists = false;  //bool for selecting if we need colonists instead of tribals if we want to advance past medival tech
 
         [ConfigTabValueSaved("configCheckboxDisableCostMultiplicatorCap")]
-        public static int configCheckboxDisableCostMultiplicatorCap = 0;
-        public static bool b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
+        public static int configCheckboxDisableCostMultiplicatorCap { get => b_configCheckboxDisableCostMultiplicatorCap ? 1 : 0; set => b_configCheckboxDisableCostMultiplicatorCap = value == 1; }
+        public static bool b_configCheckboxDisableCostMultiplicatorCap = false;
 
         [ConfigTabValueSaved("configBlockMoreAdvancedResearches")]
-        public static int configBlockMoreAdvancedResearches = 0;
-        public static bool B_configBlockMoreAdvancedResearches { get => configBlockMoreAdvancedResearches == 1; set => configBlockMoreAdvancedResearches = value ? 1 : 0; }
+        public static int ConfigBlockMoreAdvancedResearches { get => b_configBlockMoreAdvancedResearches ? 1 : 0; set => b_configBlockMoreAdvancedResearches = value == 1; }
+        public static bool b_configBlockMoreAdvancedResearches = false;
 
         private static readonly Dictionary<string, object> oldCfgValues = new Dictionary<string, object>();
 
@@ -63,12 +66,13 @@ namespace TechAdvancing
                 oldCfgValues.Add(name, value);
         }
 
-        private static List<FieldInfo> GetSaveableFields()
+        private static List<PropertyInfo> GetSaveableProperties()
         {
-            return typeof(TechAdvancing_Config_Tab).GetFields().Where(x => x.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false).Length > 0).ToList();
+            return typeof(TechAdvancing_Config_Tab).GetProperties().Where(x => x.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false).Length > 0).ToList();
         }
 
         string menuButtonSelected = null;
+
         public override void DoWindowContents(Rect canvas)
         {
             // zooming in seems to cause Text.Font to start at Tiny, make sure it's set to Small for our panels.
@@ -81,18 +85,18 @@ namespace TechAdvancing
             {
                 this.menuButtonSelected = buttonTexts[0];
             }
-            Log.Message($"Currently selected: {this.menuButtonSelected}");
+            //  Log.Message($"Currently selected: {this.menuButtonSelected}");
             float buttonDrawposX = 0;
             for (int i = 0; i < buttonTexts.Length; i++)
             {
                 var name = buttonTexts[i];
-                var buttoNText = name.Translate();
+                var buttonText = name.Translate();
                 var isActive = this.menuButtonSelected != name;
-                var clicked = Widgets.ButtonText(GetButtonRect(ref buttonDrawposX, drawpos, 20, buttoNText), buttoNText, isActive, isActive, isActive ? Color.white : Color.grey, active: isActive);
+                var clicked = Widgets.ButtonText(GetButtonRect(ref buttonDrawposX, drawpos, 20, buttonText), buttonText, isActive, isActive, isActive ? Color.white : Color.grey, active: isActive);
                 if (clicked)
                 {
                     this.menuButtonSelected = name;
-                    Log.Message($"Clicked: {buttoNText}");
+                    LogOutput.WriteLogMessage(Errorlevel.Information, $"Clicked: {buttonText}");
                 }
             }
 
@@ -181,6 +185,11 @@ namespace TechAdvancing
 
                         Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate(), ref b_configCheckboxDisableCostMultiplicatorCap, false);
                         configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
+
+                        AddSpace(ref drawpos, 30f);
+
+
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configBlockMoreAdvancedResearches".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configBlockMoreAdvancedResearches".Translate(), ref b_configBlockMoreAdvancedResearches, false);
                     }
                     break;
 
@@ -224,13 +233,13 @@ namespace TechAdvancing
         public override void WindowUpdate()
         {
             base.WindowUpdate();
-            var fields = GetSaveableFields();
-            var dirty = fields.Any(x => !x.GetValue(null).Equals(GetOldCfgValue(((ConfigTabValueSavedAttribute)x.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false)[0]).SaveName)));
+            var fields = GetSaveableProperties();
+            var dirty = fields.Any(x => !x.GetValue(null, null).Equals(GetOldCfgValue(((ConfigTabValueSavedAttribute)x.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false)[0]).SaveName)));
             if (dirty)
             {
                 foreach (var field in fields)
                 {
-                    var val = field.GetValue(null); // get current value
+                    var val = field.GetValue(null, null); // get current value
                     var varSaveName = field.TryGetAttribute<ConfigTabValueSavedAttribute>().SaveName; // get save name                                       
                     var lastVal = GetOldCfgValue(varSaveName); // get last value
 
@@ -280,7 +289,7 @@ namespace TechAdvancing
         {
             // run anyway since it doesnt matter if MP is enabled or not.
 
-            var fields = GetSaveableFields();
+            var fields = GetSaveableProperties();
             if (fields.Count != newFields.Length)
             {
                 throw new InvalidOperationException("Error while syncing variables. There was a mismatch in the amount of variables that got passed. Make sure you are running the latest version of tech advancing!");
@@ -288,7 +297,7 @@ namespace TechAdvancing
 
             for (int i = 0; i < fields.Count; i++)
             {
-                fields[i].SetValue(null, newFields[i]);
+                fields[i].SetValue(null, newFields[i], null);
             }
 
             TechAdvancing._ResearchManager.RecalculateTechlevel();
@@ -301,9 +310,9 @@ namespace TechAdvancing
             base.PostClose();
             if (this.settingsChanged)
             {
-                var fields = GetSaveableFields();
+                var fields = GetSaveableProperties();
 
-                CloseVariableSync(fields.Select(x => (int)x.GetValue(null)).ToArray());
+                CloseVariableSync(fields.Select(x => (int)x.GetValue(null, null)).ToArray());
             }
             this.forcePause = false;
         }
@@ -347,15 +356,15 @@ namespace TechAdvancing
 
         public static void ExposeData(TA_Expose_Mode mode)
         {
-            foreach (var value in GetSaveableFields())
+            foreach (var value in GetSaveableProperties())
             {
                 var attribute = (ConfigTabValueSavedAttribute)value.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false)[0];
 
-                var refVal = (int)value.GetValue(null);
+                var refVal = (int)value.GetValue(null, null);
                 var oldRefVal = refVal;
                 MapCompSaveHandler.TA_ExposeData(attribute.SaveName, ref refVal, mode);
                 if (oldRefVal != refVal) // if the value was changed by the method
-                    value.SetValue(null, refVal);
+                    value.SetValue(null, refVal, null);
 
                 if (!MapCompSaveHandler.IsValueSaved(attribute.SaveName))
                 {
