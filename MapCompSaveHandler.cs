@@ -1,10 +1,8 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using RimWorld;
 using Verse;
-using TechAdvancing;
 
 namespace TechAdvancing
 {
@@ -16,46 +14,43 @@ namespace TechAdvancing
 
         }
 
-        private static Dictionary<int, int> Configvalues = new Dictionary<int, int>();
+        private static Dictionary<string, int> Configvalues = new Dictionary<string, int>();
         /// <summary>
         /// Stores all the pawns that joined along with their old Faction
         /// </summary>
         public static Dictionary<Pawn, Faction> ColonyPeople = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
 
-        public static bool IsValueSaved(string key) { return Configvalues.ContainsKey(GetInt(key)); }
+        public static bool IsValueSaved(string key) { return Configvalues.ContainsKey(key); }
 
         public static void TA_ExposeData(string key, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
         {
-            bool accessWasValid = false;
             if (mode == TA_Expose_Mode.Save)
             {
                 LogOutput.WriteLogMessage(Errorlevel.Debug, "Adding " + key + " : " + value + "to save dictionary");
-                if (Configvalues.ContainsKey(GetInt(key)))
+                if (Configvalues.ContainsKey(key))
                 {
-                    Configvalues.Remove(GetInt(key));
+                    Configvalues.Remove(key);
                 }
-                Configvalues.Add(GetInt(key), value);
+                Configvalues.Add(key, value);
             }
             else if (mode == TA_Expose_Mode.Load)
             {
-                accessWasValid = Configvalues.TryGetValue(GetInt(key), out int tempval);
-                if (accessWasValid)
+                if (Configvalues.TryGetValue(key, out int tempval))
                 {
                     value = tempval;
                 }
+                else if (Configvalues.TryGetValue(Enum.GetNames(typeof(TA_Expose_Name)).Contains(key) ? ((int)Enum.Parse(typeof(TA_Expose_Name), key)).ToString() : key, out tempval)) // TODO remove backwards compatability fallback
+                {
+                    value = tempval;
+                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + key + " was loaded via fallback.");
+                }
                 else
                 {
-                    //TA_Expose_Numbers.Add(getInt(key),)
-                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + GetInt(key) + " could not be loaded. This usually happens when updating to the new config-system. Try saving and reloading the map.");
+                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + key + " could not be loaded. This usually happens when updating to the new config-system. Try saving and reloading the map.");
                 }
 
-                LogOutput.WriteLogMessage(Errorlevel.Debug, "Loaded " + key + " : " + value + "from save dictionary. Success: " + accessWasValid);
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Successfully loaded " + key + " : " + value + "from save dictionary.");
             }
-        }
-
-        private static int GetInt(string key)
-        {
-            return (int)Enum.Parse(typeof(TA_Expose_Name), key);
         }
 
         public override void ExposeData()
@@ -91,7 +86,7 @@ namespace TechAdvancing
         Load
     }
 
-    public enum TA_Expose_Name
+    public enum TA_Expose_Name // TODO Remove soon
     {
         Conditionvalue_A,
         Conditionvalue_B,

@@ -52,6 +52,17 @@ namespace TechAdvancing
         public static int configBlockMoreAdvancedResearches = 0;
         public static bool B_configBlockMoreAdvancedResearches { get => configBlockMoreAdvancedResearches == 1; set => configBlockMoreAdvancedResearches = value ? 1 : 0; }
 
+        private static readonly Dictionary<string, object> oldCfgValues = new Dictionary<string, object>();
+
+        private static object GetOldCfgValue(string name) => oldCfgValues.TryGetValue(name, out object val) ? val : null;
+        private static void SetOldCfgValue(string name, object value)
+        {
+            if (oldCfgValues.ContainsKey(name))
+                oldCfgValues[name] = value;
+            else
+                oldCfgValues.Add(name, value);
+        }
+
         private static List<FieldInfo> GetSaveableFields()
         {
             return typeof(TechAdvancing_Config_Tab).GetFields().Where(x => x.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false).Length > 0).ToList();
@@ -214,19 +225,27 @@ namespace TechAdvancing
         {
             base.WindowUpdate();
             var fields = GetSaveableFields();
-            var dirty = fields.Any(x => x.GetValue(null) != ((ConfigTabValueSavedAttribute)x.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false)[0]).LastValue);
+            var dirty = fields.Any(x => !x.GetValue(null).Equals(GetOldCfgValue(((ConfigTabValueSavedAttribute)x.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false)[0]).SaveName)));
             if (dirty)
             {
                 foreach (var field in fields)
                 {
-                    ((ConfigTabValueSavedAttribute)field.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false)[0]).LastValue = field.GetValue(null); // set lastvalue
+                    var val = field.GetValue(null); // get current value
+                    var varSaveName = field.TryGetAttribute<ConfigTabValueSavedAttribute>().SaveName; // get save name                                       
+                    var lastVal = GetOldCfgValue(varSaveName); // get last value
+
+                    if (!Equals(val, lastVal))
+                    {
+                        LogOutput.WriteLogMessage(Errorlevel.Debug, field.Name + $" differs: newVal: {val} ; lastval: {lastVal}");
+                    }
+
+                    SetOldCfgValue(varSaveName, val);
                 }
 
                 this.settingsChanged = true;
                 LogOutput.WriteLogMessage(Errorlevel.Information, "Settings changed.");
                 this.previewTechLevels = GetTechlevelPreview();
             }
-
         }
 
         private TechLevel[] GetTechlevelPreview()
@@ -344,7 +363,7 @@ namespace TechAdvancing
                     LogOutput.WriteLogMessage(Errorlevel.Information, $"Added new value called '{attribute.SaveName}' was added to the save file. This message shouldn't appear more than once per value and world.");
                 }
 
-                attribute.LastValue = refVal;
+                SetOldCfgValue(attribute.SaveName, refVal);
             }
         }
     }
