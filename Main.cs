@@ -65,6 +65,7 @@ namespace TechAdvancing
                     GetAndReloadTL();        //store the default value for the techlevel because we will modify it later and we need the one from right now
 
                     isTribe = factionDefault == TechLevel.Neolithic;
+                    LoadCfgValues();
                     firstpass = false;
 
                     //Debug
@@ -154,6 +155,16 @@ namespace TechAdvancing
             player researched more than 50% of the techlevel Y then the techlevel rises to Y
             **/
             RecalculateTechlevel(false);
+        }
+
+        private static void LoadCfgValues() //could be improved using just vanilla loading  // TODO obsolete?
+        {
+            TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
+
+            if (TechAdvancing_Config_Tab.baseTechlvlCfg != 1)
+            {
+                TechAdvancing_Config_Tab.baseFactionTechLevel = (TechAdvancing_Config_Tab.baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
+            }
         }
 
         internal static TechLevel GetAndReloadTL()
