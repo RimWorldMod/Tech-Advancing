@@ -129,19 +129,20 @@ namespace TechAdvancing
                 */
                 #endregion
 
-                if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") != true)
+                if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") != true && !Injector_GHXXTechAdvancing.ResearchPrereqBlockers.ContainsValue(researchProjectDef))
                 {
                     researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                     if (researchProjectDef.IsFinished)
                     {   // TODO filter out undefined later
                         researchProjectStoreFinished[researchProjectDef.techLevel]++;  //finished projects for techlevel
-                        researchProjectDef.ReapplyAllMods();    // TODO always run it?
                     }
                 }
                 else
                 {
                     LogOutput.WriteLogMessage(Errorlevel.Debug, "Found ta-ignore tag in:" + researchProjectDef.defName);
                 }
+
+                researchProjectDef.ReapplyAllMods();    // TODO should move this over to harmony
             }
 
             TechAdvancing.Rules.researchProjectStoreTotal = researchProjectStoreTotal;
