@@ -76,6 +76,9 @@ namespace TechAdvancing
             {
                 ColonyPeople = new Dictionary<Pawn, Faction>();
             }
+
+            Injector_GHXXTechAdvancing.GenerateResearchBlockerPrereqs();
+
             LogOutput.WriteLogMessage(Errorlevel.Information, "Loading finished.");
         }
     }

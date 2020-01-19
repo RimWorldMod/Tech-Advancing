@@ -30,17 +30,7 @@ namespace TechAdvancing
 
             HarmonyDetours.Setup();
 
-            foreach (TechLevel tl in Enum.GetValues(typeof(TechLevel)))
-            {
-                var name = Constants.TAResearchProjDefNameFromTechLvl(tl);
-                var projDef = DefDatabase<ResearchProjectDef>.GetNamed(name, false);
-                if (projDef == null)
-                {
-                    projDef = new ResearchProjectDef() { defName = name, label = $"{"configWordTechlevel".Translate()}: " + $"TA_TL_{tl.ToString()}".Translate() };
-                    DefDatabase<ResearchProjectDef>.Add(projDef);
-                }
-                ResearchPrereqBlockers.Add(tl, projDef);
-            }
+            GenerateResearchBlockerPrereqs();
 
             if (MP.enabled)
             {
@@ -48,6 +38,23 @@ namespace TechAdvancing
             }
 
 
+        }
+
+        public static void GenerateResearchBlockerPrereqs()
+        {
+            foreach (TechLevel tl in Enum.GetValues(typeof(TechLevel)))
+            {
+                var name = Constants.TAResearchProjDefNameFromTechLvl(tl);
+                var projDef = DefDatabase<ResearchProjectDef>.GetNamed(name);
+                projDef.label = $"{"configWordTechlevel".Translate()}: " + $"TA_TL_{tl.ToString()}".Translate();
+
+                if (!ResearchPrereqBlockers.ContainsKey(tl))
+                    ResearchPrereqBlockers.Add(tl, projDef);
+                else
+                    ResearchPrereqBlockers[tl] = projDef;
+
+                Log.Message("Added " + tl.ToString());
+            }
         }
     }
 

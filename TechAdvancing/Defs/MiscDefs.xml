@@ -3,4 +3,37 @@
 	<ResearchProjectTagDef>
 		<defName>ta-ignore</defName>
 	</ResearchProjectTagDef>
+	
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_0</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_1</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_2</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_3</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_4</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_5</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_6</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
+	<ResearchProjectDef>
+		<defName>TechAdvancing_PrereqBlocker_7</defName>
+		<techLevel>Medieval</techLevel>
+	</ResearchProjectDef>
 </Defs>
