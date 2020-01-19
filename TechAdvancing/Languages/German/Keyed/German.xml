@@ -45,6 +45,11 @@
   <TA_TL_Neolithic>Steinzeitlich</TA_TL_Neolithic>
   <TA_TL_Animal>Tierisch</TA_TL_Animal>
   <TA_TL_Undefined>Undefiniert</TA_TL_Undefined>
+    
   
+  <config_menu_button_main>Haupt Einstellungen</config_menu_button_main>
+  <config_menu_button_research_project_settings>Projekt Einstellungen</config_menu_button_research_project_settings>
+  
+  <configBlockMoreAdvancedResearches>Verbiete das Erforschen aller Projekte die dein aktuelles Technologielevel überschreiten.</configBlockMoreAdvancedResearches>
   
 </LanguageData>
