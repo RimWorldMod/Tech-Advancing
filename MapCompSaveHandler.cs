@@ -42,7 +42,7 @@ namespace TechAdvancing
                 else if (Configvalues.TryGetValue(Enum.GetNames(typeof(TA_Expose_Name)).Contains(key) ? ((int)Enum.Parse(typeof(TA_Expose_Name), key)).ToString() : key, out tempval)) // TODO remove backwards compatability fallback
                 {
                     value = tempval;
-                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + key + " was loaded via fallback.");
+                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + key + " was loaded via fallback. (A new save system is in place. But this message shouldnt appear anymore after saving)");
                 }
                 else
                 {
