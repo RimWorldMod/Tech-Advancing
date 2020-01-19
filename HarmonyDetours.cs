@@ -32,8 +32,20 @@ namespace TechAdvancing
     class TA_Research_Menu_Patch
     {
         static ResearchProjectDef selectedProject = null;
-        static void Prefix(Rect leftOutRect)
+        static void Prefix(RimWorld.MainTabWindow_Research __instance, Rect leftOutRect)
         {
+            // code for locking down researches if configured like that
+            var TA_selectedProject = (ResearchProjectDef) Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
+
+            //if (TA_selectedProject != null && TechAdvancing.TechAdvancing_Config_Tab.B_configBlockMoreAdvancedResearches && TA_selectedProject.techLevel > Faction.OfPlayer.def.techLevel)
+            //{
+            //    Widgets.ButtonText()
+
+            //}
+
+
+            // --------------------------------------------------------
+
             Rect TA_Cfgrect = new Rect(0f, 0f, 180f, 20f);
             TA_Cfgrect.x = (leftOutRect.width - TA_Cfgrect.width) / 2f;
             TA_Cfgrect.y = leftOutRect.height - 20f;
