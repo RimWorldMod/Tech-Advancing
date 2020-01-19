@@ -31,23 +31,34 @@ namespace TechAdvancing
     [HarmonyPatch(new Type[] { typeof(Rect) })]
     class TA_Research_Menu_Patch
     {
-        static void Prefix(RimWorld.MainTabWindow_Research __instance, ref string __state, Rect leftOutRect)
+        static void Prefix(RimWorld.MainTabWindow_Research __instance, Rect leftOutRect)
         {
-            __state = null;
             // code for locking down researches if configured like that
             var TA_selectedProject = (ResearchProjectDef)Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
 
-            if (TA_selectedProject != null && TechAdvancing.TechAdvancing_Config_Tab.b_configBlockMoreAdvancedResearches && TA_selectedProject.techLevel > Faction.OfPlayer.def.techLevel)
+            if (TA_selectedProject != null)
             {
                 var TA_projLabel = "Techlevel: " + TA_selectedProject.techLevel.ToString();
+
+                // clear prereqs
+
                 if (TA_selectedProject.prerequisites == null)
                     TA_selectedProject.prerequisites = new System.Collections.Generic.List<ResearchProjectDef>();
 
+                var blockDef = Injector_GHXXTechAdvancing.ResearchPrereqBlockers[TA_selectedProject.techLevel];
 
-                if (!TA_selectedProject.prerequisites.Any(x => x.label == TA_projLabel))
-                    TA_selectedProject.prerequisites.Add(new ResearchProjectDef() { label = TA_projLabel });
+                var TA_prereqBlockDefName = Constants.TAResearchProjDefNameFromTechLvl(TA_selectedProject.techLevel);
+                if (TA_selectedProject.prerequisites.Any(x => x.defName == blockDef.defName))
+                {
+                    TA_selectedProject.prerequisites.RemoveAll(x => x.defName == blockDef.defName);
+                }
+                // --
 
-                __state = TA_projLabel; // write down the state to remove it after
+                // add blockers back if the research should be blocked
+                if (TechAdvancing.TechAdvancing_Config_Tab.b_configBlockMoreAdvancedResearches && TA_selectedProject.techLevel > Faction.OfPlayer.def.techLevel)
+                {                    
+                    TA_selectedProject.prerequisites.Add(blockDef);
+                }
             }
 
 
@@ -61,15 +72,6 @@ namespace TechAdvancing
             {
                 SoundDef.Named("ResearchStart").PlayOneShotOnCamera();
                 Find.WindowStack.Add((Window)new TechAdvancing_Config_Tab());
-            }
-        }
-
-        static void Postfix(RimWorld.MainTabWindow_Research __instance, string __state, Rect leftOutRect)
-        {
-            if (__state != null)
-            {
-                var TA_selectedProject = (ResearchProjectDef)Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
-                TA_selectedProject.prerequisites.RemoveAll(x => x.label == __state);
             }
         }
     }

@@ -51,5 +51,7 @@
   <config_menu_button_research_project_settings>Projekt Einstellungen</config_menu_button_research_project_settings>
   
   <configBlockMoreAdvancedResearches>Verbiete das Erforschen aller Projekte die dein aktuelles Technologielevel überschreiten.</configBlockMoreAdvancedResearches>
+  <configWordTechlevel>Technologielevel</configWordTechlevel>
+  
   
 </LanguageData>

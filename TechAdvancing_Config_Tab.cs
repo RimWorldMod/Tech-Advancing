@@ -183,13 +183,13 @@ namespace TechAdvancing
                     {
                         b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
 
-                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate(), ref b_configCheckboxDisableCostMultiplicatorCap, false);
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate() + "\n", ref b_configCheckboxDisableCostMultiplicatorCap, false);
                         configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
 
-                        AddSpace(ref drawpos, 30f);
+                        AddSpace(ref drawpos, 40f);
 
 
-                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configBlockMoreAdvancedResearches".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configBlockMoreAdvancedResearches".Translate(), ref b_configBlockMoreAdvancedResearches, false);
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configBlockMoreAdvancedResearches".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configBlockMoreAdvancedResearches".Translate() + "\n", ref b_configBlockMoreAdvancedResearches, false);
                     }
                     break;
 

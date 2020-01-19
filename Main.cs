@@ -14,6 +14,8 @@ namespace TechAdvancing
     [StaticConstructorOnStartup]
     public class Injector_GHXXTechAdvancing
     {
+        internal static Dictionary<TechLevel, ResearchProjectDef> ResearchPrereqBlockers = new Dictionary<TechLevel, ResearchProjectDef>();
+
         static Injector_GHXXTechAdvancing()     //Detour the method that gets run when a research gets finished. Old school detour. Could be replaced with harmony
         {
             MethodInfo source = typeof(ResearchManager).GetMethod("ReapplyAllMods", BindingFlags.Instance | BindingFlags.Public);
@@ -28,10 +30,24 @@ namespace TechAdvancing
 
             HarmonyDetours.Setup();
 
+            foreach (TechLevel tl in Enum.GetValues(typeof(TechLevel)))
+            {
+                var name = Constants.TAResearchProjDefNameFromTechLvl(tl);
+                var projDef = DefDatabase<ResearchProjectDef>.GetNamed(name, false);
+                if (projDef == null)
+                {
+                    projDef = new ResearchProjectDef() { defName = name, label = $"{"configWordTechlevel".Translate()}: " + $"TA_TL_{tl.ToString()}".Translate() };
+                    DefDatabase<ResearchProjectDef>.Add(projDef);
+                }
+                ResearchPrereqBlockers.Add(tl, projDef);
+            }
+
             if (MP.enabled)
             {
                 MP.RegisterAll();
             }
+
+
         }
     }
 

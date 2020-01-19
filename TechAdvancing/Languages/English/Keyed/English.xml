@@ -51,5 +51,7 @@
   <config_menu_button_research_project_settings>Project Settings</config_menu_button_research_project_settings>
   
   <configBlockMoreAdvancedResearches>Disallow researching any projects that are more advanced than your faction.</configBlockMoreAdvancedResearches>
+  <configWordTechlevel>Techlevel</configWordTechlevel>
+  
   
 </LanguageData>
