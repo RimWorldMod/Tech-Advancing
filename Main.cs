@@ -49,20 +49,53 @@ namespace TechAdvancing
 
                     //projDef.prerequisites = new List<ResearchProjectDef>() { projDef }; // add a circulating dependency chain to hide it
 
+                    // max techlvl as int
+                    //var maxTlInt = Enum.GetValues(typeof(TechLevel)).Cast<int>().Max();
+
+                    //projDef.prerequisites.Add(ResearchPrereqBlockers[(TechLevel)(((int)tl - 1 + maxTlInt + 1) % maxTlInt)]);
+
                     DefDatabase<ResearchProjectDef>.Add(projDef);
                 }
+
+                for (int i = 0; i < ResearchPrereqBlockers.Count; i++)
+                {
+                    var proj = ResearchPrereqBlockers[(TechLevel)i];
+                    var refTl = (i + 0) % ResearchPrereqBlockers.Count;
+                    ResearchPrereqBlockers[(TechLevel)refTl].prerequisites = new List<ResearchProjectDef>() { proj };
+
+                    var projDefDummy = DefDatabase<ResearchProjectDef>.GetNamed(name, false);
+
+                    if (projDefDummy == null)
+                    {
+                        projDefDummy = new ResearchProjectDef()
+                        {
+                            defName = name,
+                            label = $"{"configWordTechlevel".Translate()}:DUMMY: " + $"TA_TL_{tl.ToString()}".Translate(),
+                            techLevel = tl,
+                            baseCost = 10000,
+                            researchViewX = 0,
+                            researchViewY = 0,
+                            description = ""
+                        };
+
+                        projDefDummy.prerequisites = new List<ResearchProjectDef>() { proj };
+                        DefDatabase<ResearchProjectDef>.Add(projDefDummy);
+                    }
+                }
+
                 ResearchPrereqBlockers.Add(tl, projDef);
             }
 
-            //// flush ResearchPal's cache:
-            //var researchPal_Tree_Class = Type.GetType("ResearchPal.Tree, ResearchTree", false);
-            //if (researchPal_Tree_Class != null)
-            //{
-            //    LogOutput.WriteLogMessage(Errorlevel.Information, "Flushing ResarchPal's node cache.");
-            //    var fieldInfo = Harmony.AccessTools.Field(researchPal_Tree_Class, "_nodes");
-            //    fieldInfo.SetValue(null, null);
-            //}
-            //// -------------------------
+            // TODO Check if needed
+            // flush ResearchPal's cache: 
+            var researchPal_Tree_Class = Type.GetType("ResearchPal.Tree, ResearchTree", false);
+            if (researchPal_Tree_Class != null)
+            {
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Flushing ResarchPal's node cache.");
+                var fieldInfo = Harmony.AccessTools.Field(researchPal_Tree_Class, "_nodes");
+                fieldInfo.SetValue(null, null);
+            }
+            // -------------------------
 
             if (MP.enabled)
             {

@@ -1,7 +1,6 @@
 ﻿using Harmony;
 using RimWorld;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -34,6 +33,7 @@ namespace TechAdvancing
     {
         static void Prefix(RimWorld.MainTabWindow_Research __instance, Rect leftOutRect)
         {
+            /*
             // code for locking down researches if configured like that
             var TA_selectedProject = (ResearchProjectDef)Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
 
@@ -72,6 +72,7 @@ namespace TechAdvancing
 
 
             // --------------------------------------------------------
+            */
 
             Rect TA_Cfgrect = new Rect(0f, 0f, 180f, 20f);
             TA_Cfgrect.x = (leftOutRect.width - TA_Cfgrect.width) / 2f;

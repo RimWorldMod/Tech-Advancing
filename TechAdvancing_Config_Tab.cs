@@ -325,6 +325,7 @@ namespace TechAdvancing
         public override void PreClose()
         {
             base.PreClose();
+            UpdateBlockingResearches();
         }
 
         public override void PreOpen()
@@ -373,6 +374,48 @@ namespace TechAdvancing
                 }
 
                 SetOldCfgValue(attribute.SaveName, refVal);
+            }
+        }
+
+        internal static void UpdateBlockingResearches()
+        {
+            ResetBlockingResearches();
+
+            foreach (var currentProject in DefDatabase<ResearchProjectDef>.AllDefsListForReading)
+            {
+                if (currentProject.prerequisites == null)
+                    currentProject.prerequisites = new List<ResearchProjectDef>();
+
+                var TA_blockDef = Injector_GHXXTechAdvancing.ResearchPrereqBlockers[currentProject.techLevel];
+
+                var TA_prereqBlockDefName = Constants.TAResearchProjDefNameFromTechLvl(currentProject.techLevel);
+                if (currentProject.prerequisites.Any(x => x.defName == TA_blockDef.defName))
+                {
+                    currentProject.prerequisites.RemoveAll(x => x.defName == TA_blockDef.defName);
+                }
+                // --
+
+                // add blockers back if the research should be blocked
+                if (TechAdvancing.TechAdvancing_Config_Tab.b_configBlockMoreAdvancedResearches && currentProject.techLevel > Faction.OfPlayer.def.techLevel)
+                {
+                    currentProject.prerequisites.Add(TA_blockDef);
+                }
+            }
+        }
+
+        private static void ResetBlockingResearches()
+        {
+            foreach (TechLevel techLevel in Enum.GetValues(typeof(TechLevel)))
+            {
+                var TA_blockDef = Injector_GHXXTechAdvancing.ResearchPrereqBlockers[techLevel];
+
+                if (TA_blockDef.ProgressPercent > 0.5f)
+                {
+                    // reset progress if this was finished (via debug insta finish)
+                    var TA_progress = Harmony.AccessTools.Field(typeof(ResearchManager), "progress");
+                    var TA_dict = (Dictionary<ResearchProjectDef, float>)TA_progress.GetValue(Find.ResearchManager);
+                    TA_dict[TA_blockDef] = 0;
+                }
             }
         }
     }
