@@ -37,5 +37,8 @@
 <TA_TL_Medieval>Médiéval</TA_TL_Medieval>
 <TA_TL_Neolithic>Néolithique</TA_TL_Neolithic>
 <TA_TL_Animal>Animal</TA_TL_Animal>
-<TA_TL_Undefined>Indéfini</TA_TL_Undefined>
+<TA_TL_Undefined>Indéfini</TA_TL_Undefined><config_menu_button_main>Paramètres principaux</config_menu_button_main>
+<config_menu_button_research_project_settings>Paramètres des projets</config_menu_button_research_project_settings>
+<configBlockMoreAdvancedResearches>Refuser de rechercher des projets plus avancés que votre faction.</configBlockMoreAdvancedResearches>
+<configWordTechlevel>Niveau technologique</configWordTechlevel>
 </LanguageData>
