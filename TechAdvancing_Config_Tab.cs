@@ -51,9 +51,6 @@ namespace TechAdvancing
         public static int configCheckboxDisableCostMultiplicatorCap { get => b_configCheckboxDisableCostMultiplicatorCap ? 1 : 0; set => b_configCheckboxDisableCostMultiplicatorCap = value == 1; }
         public static bool b_configCheckboxDisableCostMultiplicatorCap = false;
 
-        [ConfigTabValueSaved("configBlockMoreAdvancedResearches")]
-        public static int ConfigBlockMoreAdvancedResearches { get => b_configBlockMoreAdvancedResearches ? 1 : 0; set => b_configBlockMoreAdvancedResearches = value == 1; }
-        public static bool b_configBlockMoreAdvancedResearches = false;
 
         private static readonly Dictionary<string, object> oldCfgValues = new Dictionary<string, object>();
 
@@ -187,9 +184,6 @@ namespace TechAdvancing
                         configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
 
                         AddSpace(ref drawpos, 40f);
-
-
-                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configBlockMoreAdvancedResearches".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configBlockMoreAdvancedResearches".Translate() + "\n", ref b_configBlockMoreAdvancedResearches, false);
                     }
                     break;
 
@@ -341,7 +335,7 @@ namespace TechAdvancing
         {
             get
             {
-                return new Vector2(950f, 800f);
+                return new Vector2(950f, 820f);
             }
         }
 

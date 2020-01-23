@@ -28,48 +28,12 @@ namespace TechAdvancing
             initializer.AddComponent<MapComponentInjector>();
             UnityEngine.Object.DontDestroyOnLoad(initializer);
 
-            HarmonyDetours.Setup();
-
-            foreach (TechLevel tl in Enum.GetValues(typeof(TechLevel)))
-            {
-                var name = Constants.TAResearchProjDefNameFromTechLvl(tl);
-                var projDef = DefDatabase<ResearchProjectDef>.GetNamed(name, false);
-                if (projDef == null)
-                {
-                    projDef = new ResearchProjectDef()
-                    {
-                        defName = name,
-                        label = $"{"configWordTechlevel".Translate()}: " + $"TA_TL_{tl.ToString()}".Translate(),
-                        techLevel = tl,
-                        baseCost = 10000,
-                        researchViewX = 0,
-                        researchViewY = 0,
-                        description = ""
-                    };
-
-                    //projDef.prerequisites = new List<ResearchProjectDef>() { projDef }; // add a circulating dependency chain to hide it
-
-                    DefDatabase<ResearchProjectDef>.Add(projDef);
-                }
-                ResearchPrereqBlockers.Add(tl, projDef);
-            }
-
-            //// flush ResearchPal's cache:
-            //var researchPal_Tree_Class = Type.GetType("ResearchPal.Tree, ResearchTree", false);
-            //if (researchPal_Tree_Class != null)
-            //{
-            //    LogOutput.WriteLogMessage(Errorlevel.Information, "Flushing ResarchPal's node cache.");
-            //    var fieldInfo = Harmony.AccessTools.Field(researchPal_Tree_Class, "_nodes");
-            //    fieldInfo.SetValue(null, null);
-            //}
-            //// -------------------------
+            HarmonyDetours.Setup();           
 
             if (MP.enabled)
             {
                 MP.RegisterAll();
             }
-
-
         }
     }
 

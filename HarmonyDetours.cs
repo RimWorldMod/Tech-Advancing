@@ -33,46 +33,8 @@ namespace TechAdvancing
     class TA_Research_Menu_Patch
     {
         static void Prefix(RimWorld.MainTabWindow_Research __instance, Rect leftOutRect)
-        {
-            // code for locking down researches if configured like that
-            var TA_selectedProject = (ResearchProjectDef)Harmony.AccessTools.Field(typeof(RimWorld.MainTabWindow_Research), "selectedProject").GetValue(__instance);
-
-            if (TA_selectedProject != null)
-            {
-                var TA_projLabel = "Techlevel: " + TA_selectedProject.techLevel.ToString();
-
-                // clear prereqs
-
-                if (TA_selectedProject.prerequisites == null)
-                    TA_selectedProject.prerequisites = new System.Collections.Generic.List<ResearchProjectDef>();
-
-                var TA_blockDef = Injector_GHXXTechAdvancing.ResearchPrereqBlockers[TA_selectedProject.techLevel];
-
-                if (TA_blockDef.IsFinished)
-                {
-                    // reset progress if this was finished (via debug insta finish)
-                    var TA_progress = Harmony.AccessTools.Field(typeof(ResearchManager), "progress");
-                    var TA_dict = (Dictionary<ResearchProjectDef, float>)TA_progress.GetValue(Find.ResearchManager);
-                    TA_dict[TA_blockDef] = 0;
-                }
-
-                var TA_prereqBlockDefName = Constants.TAResearchProjDefNameFromTechLvl(TA_selectedProject.techLevel);
-                if (TA_selectedProject.prerequisites.Any(x => x.defName == TA_blockDef.defName))
-                {
-                    TA_selectedProject.prerequisites.RemoveAll(x => x.defName == TA_blockDef.defName);
-                }
-                // --
-
-                // add blockers back if the research should be blocked
-                if (TechAdvancing.TechAdvancing_Config_Tab.b_configBlockMoreAdvancedResearches && TA_selectedProject.techLevel > Faction.OfPlayer.def.techLevel)
-                {
-                    TA_selectedProject.prerequisites.Add(TA_blockDef);
-                }
-            }
-
-
-            // --------------------------------------------------------
-
+        {          
+            // code for adding the techadvancing config button to the (vanilla) research screen
             Rect TA_Cfgrect = new Rect(0f, 0f, 180f, 20f);
             TA_Cfgrect.x = (leftOutRect.width - TA_Cfgrect.width) / 2f;
             TA_Cfgrect.y = leftOutRect.height - 20f;
