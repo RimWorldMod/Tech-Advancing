@@ -93,7 +93,7 @@ namespace TechAdvancing
                 if (clicked)
                 {
                     this.menuButtonSelected = name;
-                    LogOutput.WriteLogMessage(Errorlevel.Information, $"Clicked: {buttonText}");
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Clicked: {buttonText}");
                 }
             }
 
@@ -350,6 +350,7 @@ namespace TechAdvancing
 
         public static void ExposeData(TA_Expose_Mode mode)
         {
+            var savedNames = new List<string>();
             foreach (var value in GetSaveableProperties())
             {
                 var attribute = (ConfigTabValueSavedAttribute)value.GetCustomAttributes(typeof(ConfigTabValueSavedAttribute), false)[0];
@@ -367,6 +368,21 @@ namespace TechAdvancing
                 }
 
                 SetOldCfgValue(attribute.SaveName, refVal);
+                savedNames.Add(attribute.SaveName);
+            }
+
+            foreach (var name in MapCompSaveHandler.GetConfigValueNames)
+            {
+                if (!savedNames.Contains(name))
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Information, $"Removed value {name} as it is no longer referenced.");
+                    MapCompSaveHandler.RemoveConfigValue(name);
+
+                    if (name == "configBlockMoreAdvancedResearches") // TODO remove fallback 23.01.2020
+                    {
+                        LogOutput.WriteLogMessage(Errorlevel.Warning, "Please disregard the errors above, if any. Just save the world and reload and they will be gone :)");
+                    }
+                }
             }
         }
     }

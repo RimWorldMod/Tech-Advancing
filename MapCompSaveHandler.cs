@@ -15,12 +15,16 @@ namespace TechAdvancing
         }
 
         private static Dictionary<string, int> Configvalues = new Dictionary<string, int>();
+
+        internal static List<string> GetConfigValueNames => Configvalues.Keys.ToList();
+
         /// <summary>
         /// Stores all the pawns that joined along with their old Faction
         /// </summary>
         public static Dictionary<Pawn, Faction> ColonyPeople = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
 
         public static bool IsValueSaved(string key) { return Configvalues.ContainsKey(key); }
+        public static void RemoveConfigValue(string key) { Configvalues.Remove(key); }
 
         public static void TA_ExposeData(string key, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
         {
