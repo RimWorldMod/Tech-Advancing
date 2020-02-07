@@ -22,6 +22,5 @@ namespace TechAdvancing
 
             Destroy(this);
         }
-
     }
 }

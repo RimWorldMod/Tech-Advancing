@@ -14,8 +14,6 @@ namespace TechAdvancing
     [StaticConstructorOnStartup]
     public class Injector_GHXXTechAdvancing
     {
-        internal static Dictionary<TechLevel, ResearchProjectDef> ResearchPrereqBlockers = new Dictionary<TechLevel, ResearchProjectDef>();
-
         static Injector_GHXXTechAdvancing()     //Detour the method that gets run when a research gets finished. Old school detour. Could be replaced with harmony
         {
             MethodInfo source = typeof(ResearchManager).GetMethod("ReapplyAllMods", BindingFlags.Instance | BindingFlags.Public);
@@ -28,7 +26,7 @@ namespace TechAdvancing
             initializer.AddComponent<MapComponentInjector>();
             UnityEngine.Object.DontDestroyOnLoad(initializer);
 
-            HarmonyDetours.Setup();           
+            HarmonyDetours.Setup();
 
             if (MP.enabled)
             {
@@ -45,9 +43,6 @@ namespace TechAdvancing
         public static TechLevel factionDefault = TechLevel.Undefined;
         public static bool isTribe = true;
         private static bool firstNotificationHidden = false;
-        private static int[][] researchProjectsArray = new int[][] { new int[2], new int[2], new int[2],
-            new int[2], new int[2], new int[2], new int[2], new int[2]}; // Techlevel --> Researched | Total
-                                                                         //   .. ....  . . .. . . . .. .. . 
 
         public static DateTime startedAt = DateTime.Now;
         public static string facName = "";
@@ -115,7 +110,7 @@ namespace TechAdvancing
                 */
                 #endregion
 
-                if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") != true && !Injector_GHXXTechAdvancing.ResearchPrereqBlockers.ContainsValue(researchProjectDef))
+                if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") != true)
                 {
                     researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                     if (researchProjectDef.IsFinished)
@@ -180,9 +175,6 @@ namespace TechAdvancing
             if (Faction.OfPlayer.def.techLevel == TechLevel.Undefined)
             {
                 LogOutput.WriteLogMessage(Errorlevel.Warning, "Called without valid TL");
-#if DEBUG
-                throw new InvalidOperationException("If you see this message please report it immediately. Thanks! (0x1)");
-#endif
             }
             return Faction.OfPlayer.def.techLevel;
         }

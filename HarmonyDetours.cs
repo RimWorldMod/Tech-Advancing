@@ -1,7 +1,7 @@
 ﻿using Harmony;
 using RimWorld;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -32,8 +32,9 @@ namespace TechAdvancing
     [HarmonyPatch(new Type[] { typeof(Rect) })]
     class TA_Research_Menu_Patch
     {
-        static void Prefix(RimWorld.MainTabWindow_Research __instance, Rect leftOutRect)
-        {          
+        [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
+        static void Prefix(Rect leftOutRect)
+        {
             // code for adding the techadvancing config button to the (vanilla) research screen
             Rect TA_Cfgrect = new Rect(0f, 0f, 180f, 20f);
             TA_Cfgrect.x = (leftOutRect.width - TA_Cfgrect.width) / 2f;
@@ -55,6 +56,7 @@ namespace TechAdvancing
     [HarmonyPatch(typeof(TechLevel))]
     class TA_ReplaceResearchProjectDef
     {
+        [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         static void Postfix(Verse.ResearchProjectDef __instance, ref float __result, TechLevel researcherTechLevel)
         {
             if (researcherTechLevel >= __instance.techLevel)
@@ -82,6 +84,7 @@ namespace TechAdvancing
     [HarmonyPatch(new Type[] { typeof(DamageInfo?), typeof(Hediff) })]
     class TA_OnKill_Event
     {
+        [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         static void Postfix(Pawn __instance, DamageInfo? dinfo, Hediff exactCulprit = null)
         {
             TechAdvancing.Event.OnKill(__instance);
@@ -96,6 +99,7 @@ namespace TechAdvancing
     [HarmonyPatch(new Type[] { typeof(Faction), typeof(Pawn) })]
     class TA_OnNewPawn_Event
     {
+        [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         static void Prefix(Pawn __instance, Faction newFaction, Pawn recruiter = null)
         {
             TechAdvancing.Event.OnNewPawn(__instance);
@@ -110,6 +114,7 @@ namespace TechAdvancing
     [HarmonyPatch(new Type[] { typeof(Faction), typeof(Pawn) })]
     class TA_PostOnNewPawn_Event
     {
+        [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         static void Postfix(Faction newFaction, Pawn recruiter = null)
         {
             TechAdvancing.Event.PostOnNewPawn();

@@ -6,7 +6,6 @@ namespace TechAdvancing
 {
     public class Settings : ModSettings
     {
-
         private static void DrawText(Rect canvas, string Text, ref float drawpos, bool increaseDrawpos = true)
         {
             var descHeight = Verse.Text.CalcSize(Text).y;  //Verse.Text.CalcHeight(descTR, Listing.ColumnSpacing);
@@ -62,7 +61,4 @@ namespace TechAdvancing
 
 
     }
-
-
-
 }
