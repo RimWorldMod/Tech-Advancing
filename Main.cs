@@ -114,8 +114,9 @@ namespace TechAdvancing
                 {
                     researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                     if (researchProjectDef.IsFinished)
-                    {   // TODO filter out undefined later
+                    {
                         researchProjectStoreFinished[researchProjectDef.techLevel]++;  //finished projects for techlevel
+                        researchProjectDef.ReapplyAllMods();
                     }
                 }
                 else
@@ -123,7 +124,8 @@ namespace TechAdvancing
                     LogOutput.WriteLogMessage(Errorlevel.Debug, "Found ta-ignore tag in:" + researchProjectDef.defName);
                 }
 
-                researchProjectDef.ReapplyAllMods();    // TODO should move this over to harmony
+                if (researchProjectDef.IsFinished)
+                    researchProjectDef.ReapplyAllMods();
             }
 
             TechAdvancing.Rules.researchProjectStoreTotal = researchProjectStoreTotal;
