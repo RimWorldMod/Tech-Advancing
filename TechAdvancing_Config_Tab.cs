@@ -123,9 +123,9 @@ namespace TechAdvancing
                             baseTechlvlCfg = 2;
                         }
                         AddSpace(ref drawpos, 70f);
-                        DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((baseTechlvlCfg == 1) ? ((_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((baseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((baseTechlvlCfg == 1) ? _ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((baseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
+                        DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((baseTechlvlCfg == 1) ? ((TA_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((baseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((baseTechlvlCfg == 1) ? TA_ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((baseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
                         AddSpace(ref drawpos, 20f);
-                        baseFactionTechLevel = _ResearchManager.factionDefault;
+                        baseFactionTechLevel = TA_ResearchManager.factionDefault;
                         if (baseTechlvlCfg != 1)
                         {
                             baseFactionTechLevel = (baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
@@ -294,7 +294,7 @@ namespace TechAdvancing
                 fields[i].SetValue(null, newFields[i], null);
             }
 
-            TechAdvancing._ResearchManager.RecalculateTechlevel();
+            TechAdvancing.TA_ResearchManager.RecalculateTechlevel();
             LogOutput.WriteLogMessage(Errorlevel.Information, "Saving data.");
             ExposeData(TA_Expose_Mode.Save);
         }
