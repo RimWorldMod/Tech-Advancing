@@ -7,8 +7,6 @@ namespace TechAdvancing
 {
     class MapComponentInjector : MonoBehaviour
     {
-        private static Type TA_Storage = typeof(MapCompSaveHandler);
-
         public void FixedUpdate()
         {
             if (Current.ProgramState != ProgramState.Playing)

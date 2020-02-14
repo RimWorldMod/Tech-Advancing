@@ -8,11 +8,11 @@ namespace TechAdvancing
 {
 
     [StaticConstructorOnStartup]
-    public class Injector_GHXXTechAdvancing
+    public class TechAdvancingStartupClass
     {
-        static Injector_GHXXTechAdvancing()     // Initialize the mod
+        static TechAdvancingStartupClass()     // Initialize the mod
         {
-            GameObject initializer = new GameObject("GHXXTAMapComponentInjector");
+            GameObject initializer = new GameObject("TechAdvancingStartupObject");
 
             initializer.AddComponent<MapComponentInjector>();
             UnityEngine.Object.DontDestroyOnLoad(initializer);
