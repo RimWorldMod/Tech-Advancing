@@ -73,6 +73,12 @@ namespace TechAdvancing
                 {
                     __result = Mathf.Min(__result, 2);
                 }
+
+
+                if (TechAdvancing_Config_Tab.configCheckboxMakeHigherResearchesSuperExpensive == 1)
+                {
+                    __result *= (float)(10 * Math.Pow(2, num));
+                }
             }
         }
     }

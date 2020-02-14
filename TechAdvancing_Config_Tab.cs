@@ -51,6 +51,10 @@ namespace TechAdvancing
         public static int configCheckboxDisableCostMultiplicatorCap { get => b_configCheckboxDisableCostMultiplicatorCap ? 1 : 0; set => b_configCheckboxDisableCostMultiplicatorCap = value == 1; }
         public static bool b_configCheckboxDisableCostMultiplicatorCap = false;
 
+        [ConfigTabValueSaved("configCheckboxMakeHigherResearchesSuperExpensive")]
+        public static int configCheckboxMakeHigherResearchesSuperExpensive { get => b_configCheckboxMakeHigherResearchesSuperExpensive ? 1 : 0; set => b_configCheckboxMakeHigherResearchesSuperExpensive = value == 1; }
+        public static bool b_configCheckboxMakeHigherResearchesSuperExpensive = false;
+
 
         private static readonly Dictionary<string, object> oldCfgValues = new Dictionary<string, object>();
 
@@ -180,9 +184,15 @@ namespace TechAdvancing
                     {
                         b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
 
-                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate() + "\n", ref b_configCheckboxDisableCostMultiplicatorCap, false);
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate()).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate() + "\n", ref b_configCheckboxDisableCostMultiplicatorCap, false);
                         configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
 
+                        AddSpace(ref drawpos, 40f);
+
+
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxMakeHigherResearchesSuperExpensive".Translate()).x + 40f, 40f), "configCheckboxMakeHigherResearchesSuperExpensive".Translate() + "\n", ref b_configCheckboxMakeHigherResearchesSuperExpensive, false);
+
+                        
                         AddSpace(ref drawpos, 40f);
                     }
                     break;
