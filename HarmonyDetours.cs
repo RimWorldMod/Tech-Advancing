@@ -69,14 +69,14 @@ namespace TechAdvancing
                 int num = __instance.techLevel - researcherTechLevel;
                 __result = 1f + num * 0.5f;
 
-                if (TechAdvancing_Config_Tab.configCheckboxDisableCostMultiplicatorCap == 0)
+                if (TechAdvancing_Config_Tab.ConfigCheckboxDisableCostMultiplicatorCap == 0)
                 {
                     __result = Mathf.Min(__result, 2);
                 }
 
-                if (TechAdvancing_Config_Tab.configCheckboxMakeHigherResearchesSuperExpensive == 1)
+                if (TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensive == 1)
                 {
-                    __result *= (float)(TechAdvancing_Config_Tab.configCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num));
+                    __result *= (float)(TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num));
                 }
             }
 
@@ -93,6 +93,7 @@ namespace TechAdvancing
     class TA_OnKill_Event
     {
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameters", Justification = "Referenced at runtime by harmony")]
         static void Postfix(Pawn __instance, DamageInfo? dinfo, Hediff exactCulprit = null)
         {
             TechAdvancing.Event.OnKill(__instance);
@@ -108,6 +109,7 @@ namespace TechAdvancing
     class TA_OnNewPawn_Event
     {
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameters", Justification = "Referenced at runtime by harmony")]
         static void Prefix(Pawn __instance, Faction newFaction, Pawn recruiter = null)
         {
             TechAdvancing.Event.OnNewPawn(__instance);
@@ -123,6 +125,7 @@ namespace TechAdvancing
     class TA_PostOnNewPawn_Event
     {
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameters", Justification = "Referenced at runtime by harmony")]
         static void Postfix(Faction newFaction, Pawn recruiter = null)
         {
             TechAdvancing.Event.PostOnNewPawn();
@@ -259,9 +262,9 @@ namespace TechAdvancing
         {
             TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
 
-            if (TechAdvancing_Config_Tab.baseTechlvlCfg != 1)
+            if (TechAdvancing_Config_Tab.BaseTechlvlCfg != 1)
             {
-                TechAdvancing_Config_Tab.baseFactionTechLevel = (TechAdvancing_Config_Tab.baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
+                TechAdvancing_Config_Tab.baseFactionTechLevel = (TechAdvancing_Config_Tab.BaseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
             }
         }
 
@@ -286,7 +289,7 @@ namespace TechAdvancing
 
             GetAndReloadTL();
             TechLevel baseNewTL = Rules.GetNewTechLevel();
-            if (TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
+            if (TechAdvancing_Config_Tab.ConfigCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
             {
                 Faction.OfPlayer.def.techLevel = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)baseNewTL, (int)TechAdvancing_Config_Tab.maxTechLevelForTribals);
             }

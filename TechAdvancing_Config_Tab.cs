@@ -39,30 +39,30 @@ namespace TechAdvancing
         // private static float _margin = 6f;
 
         [ConfigTabValueSaved("baseTechlvlCfg")]
-        public static int baseTechlvlCfg { get; set; } = 1; //0=neolithic ; 1= auto ; 2=colony
+        public static int BaseTechlvlCfg { get; set; } = 1; //0=neolithic ; 1= auto ; 2=colony
         public static TechLevel baseFactionTechLevel = TechLevel.Undefined;
         public const TechLevel maxTechLevelForTribals = TechLevel.Medieval;
 
         [ConfigTabValueSaved("configCheckboxNeedTechColonists")]
-        public static int configCheckboxNeedTechColonists { get => b_configCheckboxNeedTechColonists ? 1 : 0; set => b_configCheckboxNeedTechColonists = value == 1; }
+        public static int ConfigCheckboxNeedTechColonists { get => b_configCheckboxNeedTechColonists ? 1 : 0; set => b_configCheckboxNeedTechColonists = value == 1; }
         public static bool b_configCheckboxNeedTechColonists = false;  //bool for selecting if we need colonists instead of tribals if we want to advance past medival tech
 
         [ConfigTabValueSaved("configCheckboxDisableCostMultiplicatorCap")]
-        public static int configCheckboxDisableCostMultiplicatorCap { get => b_configCheckboxDisableCostMultiplicatorCap ? 1 : 0; set => b_configCheckboxDisableCostMultiplicatorCap = value == 1; }
+        public static int ConfigCheckboxDisableCostMultiplicatorCap { get => b_configCheckboxDisableCostMultiplicatorCap ? 1 : 0; set => b_configCheckboxDisableCostMultiplicatorCap = value == 1; }
         public static bool b_configCheckboxDisableCostMultiplicatorCap = false;
 
         [ConfigTabValueSaved("configCheckboxMakeHigherResearchesSuperExpensive")]
-        public static int configCheckboxMakeHigherResearchesSuperExpensive { get => b_configCheckboxMakeHigherResearchesSuperExpensive ? 1 : 0; set => b_configCheckboxMakeHigherResearchesSuperExpensive = value == 1; }
+        public static int ConfigCheckboxMakeHigherResearchesSuperExpensive { get => b_configCheckboxMakeHigherResearchesSuperExpensive ? 1 : 0; set => b_configCheckboxMakeHigherResearchesSuperExpensive = value == 1; }
         public static bool b_configCheckboxMakeHigherResearchesSuperExpensive = false;
 
         [ConfigTabValueSaved("configCheckboxMakeHigherResearchesSuperExpensiveFac")]
-        public static int configCheckboxMakeHigherResearchesSuperExpensiveFac { get; set; } = 10;
+        public static int ConfigCheckboxMakeHigherResearchesSuperExpensiveFac { get; set; } = 10;
 
         [ConfigTabValueSaved("configChangeResearchCostFac")]
-        public static int configChangeResearchCostFac { get; set; } = 100; // 100 equals to a factor of x1
+        public static int ConfigChangeResearchCostFac { get; set; } = 100; // 100 equals to a factor of x1
         public static float ConfigChangeResearchCostFacAsFloat()
         {
-            var scaled = configChangeResearchCostFac * 0.01f;
+            var scaled = ConfigChangeResearchCostFac * 0.01f;
 
             if (scaled < 1) // e.g. 0.99
             {
@@ -139,26 +139,26 @@ namespace TechAdvancing
                     {
                         DrawText(canvas, this.description, ref drawpos);
                         AddSpace(ref drawpos, 5f);
-                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 20, drawpos, 100f, 60f), "configRadioBtnNeolithic".Translate(), baseTechlvlCfg == 0)) //translation default: Neolithic / Tribal
+                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 20, drawpos, 100f, 60f), "configRadioBtnNeolithic".Translate(), BaseTechlvlCfg == 0)) //translation default: Neolithic / Tribal
                         {
-                            baseTechlvlCfg = 0;
+                            BaseTechlvlCfg = 0;
                         }
-                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 200f, drawpos, 100f, 60f), "configRadioBtnAutoDetect".Translate(), baseTechlvlCfg == 1)) //translation default: Auto-Detect (default)
+                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 200f, drawpos, 100f, 60f), "configRadioBtnAutoDetect".Translate(), BaseTechlvlCfg == 1)) //translation default: Auto-Detect (default)
                         {
-                            baseTechlvlCfg = 1;
+                            BaseTechlvlCfg = 1;
                         }
 
-                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 400f, drawpos, 100f, 60f), "configRadioBtnIndustrial".Translate(), baseTechlvlCfg == 2)) //translation default: Industrial / Colony
+                        if (Widgets.RadioButtonLabeled(new Rect(canvas.x + 400f, drawpos, 100f, 60f), "configRadioBtnIndustrial".Translate(), BaseTechlvlCfg == 2)) //translation default: Industrial / Colony
                         {
-                            baseTechlvlCfg = 2;
+                            BaseTechlvlCfg = 2;
                         }
                         AddSpace(ref drawpos, 70f);
-                        DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((baseTechlvlCfg == 1) ? ((TA_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((baseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((baseTechlvlCfg == 1) ? TA_ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((baseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
+                        DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((BaseTechlvlCfg == 1) ? ((TA_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((BaseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((BaseTechlvlCfg == 1) ? TA_ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((BaseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
                         AddSpace(ref drawpos, 20f);
                         baseFactionTechLevel = TA_ResearchManager.factionDefault;
-                        if (baseTechlvlCfg != 1)
+                        if (BaseTechlvlCfg != 1)
                         {
-                            baseFactionTechLevel = (baseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
+                            baseFactionTechLevel = (BaseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
                         }
                         DrawText(canvas, this.descriptionA2 + " (" + "configWordDefault".Translate() + conditionvalue_A_Default + ")", ref drawpos);
                         string bufferA = null;
@@ -188,10 +188,10 @@ namespace TechAdvancing
                         //    previewTechLevels[2] = (Util.ColonyHasHiTechPeople()) ? TechLevel.Archotech : TechAdvancing_Config_Tab.maxTechLevelForTribals;
                         //}
 
-                        b_configCheckboxNeedTechColonists = configCheckboxNeedTechColonists == 1;
+                        b_configCheckboxNeedTechColonists = ConfigCheckboxNeedTechColonists == 1;
 
                         Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref b_configCheckboxNeedTechColonists, false);
-                        configCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
+                        ConfigCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
                         AddSpace(ref drawpos, 32f);
 
                         if (this.previewTechLevels[2] == maxTechLevelForTribals && b_configCheckboxNeedTechColonists)
@@ -208,10 +208,10 @@ namespace TechAdvancing
 
                 case 1:
                     {
-                        b_configCheckboxDisableCostMultiplicatorCap = configCheckboxDisableCostMultiplicatorCap == 1;
+                        b_configCheckboxDisableCostMultiplicatorCap = ConfigCheckboxDisableCostMultiplicatorCap == 1;
 
                         Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate()).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate() + "\n", ref b_configCheckboxDisableCostMultiplicatorCap, false);
-                        configCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
+                        ConfigCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
 
                         AddSpace(ref drawpos, 40f);
 
@@ -223,8 +223,8 @@ namespace TechAdvancing
                             int slider1ToCfg(float x) => x < 10 ? (int)x : (int)(x * x / 10);
                             float cfgToSlider1(float x) => x < 10 ? x : (float)Math.Sqrt(10 * x);
 
-                            configCheckboxMakeHigherResearchesSuperExpensiveFac = slider1ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider1(configCheckboxMakeHigherResearchesSuperExpensiveFac), 1, 100f,
-                                label: "configCheckboxMakeHigherResearchesSuperExpensiveFac".Translate(configCheckboxMakeHigherResearchesSuperExpensiveFac), roundTo: 1f));
+                            ConfigCheckboxMakeHigherResearchesSuperExpensiveFac = slider1ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider1(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac), 1, 100f,
+                                label: "configCheckboxMakeHigherResearchesSuperExpensiveFac".Translate(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac), roundTo: 1f));
                         }
 
                         AddSpace(ref drawpos, 40f);
@@ -243,7 +243,7 @@ namespace TechAdvancing
                             s = val.ToString();
                         }
 
-                        configChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider2(configChangeResearchCostFac), 2, 1000f,
+                        ConfigChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider2(ConfigChangeResearchCostFac), 2, 1000f,
                                 label: "configChangeResearchCostFac".Translate(s), roundTo: 1f));
                     }
                     break;

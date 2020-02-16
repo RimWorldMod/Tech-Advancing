@@ -35,7 +35,7 @@ namespace TechAdvancing
             {
                 TechAdvancing.MapCompSaveHandler.ColonyPeople.Remove(oldPawn);
                 if (TechAdvancing.MapCompSaveHandler.ColonyPeople.Count == 0 &&   // that means there was something in there before -> now the techlvl is locked
-                    TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1         // and the limit is enabled
+                    TechAdvancing_Config_Tab.ConfigCheckboxNeedTechColonists == 1         // and the limit is enabled
                     )
                 {
                     Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitleRev".Translate(), "newTechLevelMedievalCapRemLetterContentsRev".Translate(), LetterDefOf.NegativeEvent);
@@ -52,7 +52,7 @@ namespace TechAdvancing
                 {
                     TechAdvancing.MapCompSaveHandler.ColonyPeople.Add(oldPawn, oldPawn.Faction);
                     if (TechAdvancing.MapCompSaveHandler.ColonyPeople.Count == 1 &&   // that means there was nothing in there before -> now the techlvl is unlocked
-                        TechAdvancing_Config_Tab.configCheckboxNeedTechColonists == 1         // and the limit is enabled
+                        TechAdvancing_Config_Tab.ConfigCheckboxNeedTechColonists == 1         // and the limit is enabled
                         )
                     {
                         Find.LetterStack.ReceiveLetter("newTechLevelMedievalCapRemLetterTitle".Translate(), "newTechLevelMedievalCapRemLetterContents".Translate(TA_ResearchManager.isTribe ? "configTribe".Translate() : "configColony".Translate()), LetterDefOf.PositiveEvent);
