@@ -55,6 +55,32 @@ namespace TechAdvancing
         public static int configCheckboxMakeHigherResearchesSuperExpensive { get => b_configCheckboxMakeHigherResearchesSuperExpensive ? 1 : 0; set => b_configCheckboxMakeHigherResearchesSuperExpensive = value == 1; }
         public static bool b_configCheckboxMakeHigherResearchesSuperExpensive = false;
 
+        [ConfigTabValueSaved("configCheckboxMakeHigherResearchesSuperExpensiveFac")]
+        public static int configCheckboxMakeHigherResearchesSuperExpensiveFac { get; set; } = 10;
+
+        [ConfigTabValueSaved("configChangeResearchCostFac")]
+        public static int configChangeResearchCostFac { get; set; } = 100; // 100 equals to a factor of x1
+        public static float ConfigChangeResearchCostFacAsFloat()
+        {
+            var scaled = configChangeResearchCostFac * 0.01f;
+
+            if (scaled < 1) // e.g. 0.99
+            {
+                return (float)Math.Round(scaled, 3);
+            }
+            else if (scaled < 10) // e.g. 9.99
+            {
+                return (float)Math.Round(scaled, 2);
+            }
+            else if (scaled < 100) // e.g. 99.9
+            {
+                return (float)Math.Round(scaled, 1);
+            }
+            else // e.g. 100 and above
+            {
+                return (float)Math.Round(scaled, 0);
+            }
+        }
 
         private static readonly Dictionary<string, object> oldCfgValues = new Dictionary<string, object>();
 
@@ -191,9 +217,34 @@ namespace TechAdvancing
 
 
                         Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxMakeHigherResearchesSuperExpensive".Translate()).x + 40f, 40f), "configCheckboxMakeHigherResearchesSuperExpensive".Translate() + "\n", ref b_configCheckboxMakeHigherResearchesSuperExpensive, false);
-
-                        
                         AddSpace(ref drawpos, 40f);
+                        if (b_configCheckboxMakeHigherResearchesSuperExpensive)
+                        {
+                            int slider1ToCfg(float x) => x < 10 ? (int)x : (int)(x * x / 10);
+                            float cfgToSlider1(float x) => x < 10 ? x : (float)Math.Sqrt(10 * x);
+
+                            configCheckboxMakeHigherResearchesSuperExpensiveFac = slider1ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider1(configCheckboxMakeHigherResearchesSuperExpensiveFac), 1, 100f,
+                                label: "configCheckboxMakeHigherResearchesSuperExpensiveFac".Translate(configCheckboxMakeHigherResearchesSuperExpensiveFac), roundTo: 1f));
+                        }
+
+                        AddSpace(ref drawpos, 40f);
+                        int slider2ToCfg(float x) => x < 50 ? (int)(x / 2) : (int)(x * x / 100);
+                        float cfgToSlider2(float x) => x < 25 ? x * 2 : (float)(Math.Sqrt(x) * 10);
+
+                        float val = ConfigChangeResearchCostFacAsFloat();
+                        string s;
+                        if (val < 100)
+                        {
+                            var s2 = val.ToString();
+                            s = (s2 + (s2.Contains('.') ? "" : ".")).PadRight(4, '0');
+                        }
+                        else
+                        {
+                            s = val.ToString();
+                        }
+
+                        configChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider2(configChangeResearchCostFac), 2, 1000f,
+                                label: "configChangeResearchCostFac".Translate(s), roundTo: 1f));
                     }
                     break;
 
