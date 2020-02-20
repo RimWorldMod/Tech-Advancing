@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,8 @@ namespace TechAdvancing
         /// </summary>
         public static void Setup()
         {
-            var harmony = HarmonyInstance.Create("com.ghxx.rimworld.techadvancing");
+            Harmony.DEBUG = true;
+            var harmony = new Harmony("com.ghxx.rimworld.techadvancing");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
@@ -37,11 +38,11 @@ namespace TechAdvancing
         static void Prefix(Rect leftOutRect)
         {
             // code for adding the techadvancing config button to the (vanilla) research screen
-            Rect TA_Cfgrect = new Rect(0f, 0f, 180f, 20f);
-            TA_Cfgrect.x = (leftOutRect.width - TA_Cfgrect.width) / 2f;
-            TA_Cfgrect.y = leftOutRect.height - 20f;
+            Rect TA_Cfgrect = new Rect(0f, 0f, 30, 30f);
+            TA_Cfgrect.x = leftOutRect.width - TA_Cfgrect.width - 5;
+            TA_Cfgrect.y = 0;
 
-            if (Widgets.ButtonText(TA_Cfgrect, "TAcfgmenulabel".Translate(), true, false, true))
+            if (Widgets.ButtonImage(TA_Cfgrect, TechAdvancingStartupClass.ConfigButtonTexture, Color.white, Color.cyan, true))
             {
                 SoundDef.Named("ResearchStart").PlayOneShotOnCamera();
                 Find.WindowStack.Add((Window)new TechAdvancing_Config_Tab());
@@ -54,7 +55,7 @@ namespace TechAdvancing
     /// </summary>
     [HarmonyPatch(typeof(Verse.ResearchProjectDef))]
     [HarmonyPatch("CostFactor")]
-    [HarmonyPatch(typeof(TechLevel))]
+    [HarmonyPatch(new Type[] { typeof(TechLevel) })]
     class TA_ReplaceResearchProjectDef
     {
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
@@ -76,11 +77,11 @@ namespace TechAdvancing
 
                 if (TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensive == 1)
                 {
-                    __result *= (float)(TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num));
+                    __result = (float)Math.Ceiling(__result * (float)(TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num)));
                 }
             }
 
-            __result *= TechAdvancing_Config_Tab.ConfigChangeResearchCostFacAsFloat();
+            __result = (float)Math.Ceiling(__result * TechAdvancing_Config_Tab.ConfigChangeResearchCostFacAsFloat());
         }
     }
 

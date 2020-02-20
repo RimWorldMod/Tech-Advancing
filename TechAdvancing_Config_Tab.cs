@@ -153,7 +153,7 @@ namespace TechAdvancing
                             BaseTechlvlCfg = 2;
                         }
                         AddSpace(ref drawpos, 70f);
-                        DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((BaseTechlvlCfg == 1) ? ((TA_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((BaseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((BaseTechlvlCfg == 1) ? TA_ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((BaseTechlvlCfg == 0) ? "configNeolithic".Translate() : "configIndustrial".Translate())), ref drawpos);
+                        DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((BaseTechlvlCfg == 1) ? ((TA_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((BaseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((BaseTechlvlCfg == 1) ? TA_ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((BaseTechlvlCfg == 0) ? "configNeolithic".Translate().ToString() : "configIndustrial".Translate().ToString())), ref drawpos);
                         AddSpace(ref drawpos, 20f);
                         baseFactionTechLevel = TA_ResearchManager.factionDefault;
                         if (BaseTechlvlCfg != 1)
@@ -224,7 +224,7 @@ namespace TechAdvancing
                             float cfgToSlider1(float x) => x < 10 ? x : (float)Math.Sqrt(10 * x);
 
                             ConfigCheckboxMakeHigherResearchesSuperExpensiveFac = slider1ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider1(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac), 1, 100f,
-                                label: "configCheckboxMakeHigherResearchesSuperExpensiveFac".Translate(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac), roundTo: 1f));
+                                label: "configCheckboxMakeHigherResearchesSuperExpensiveFac".Translate(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac)));
                         }
 
                         AddSpace(ref drawpos, 40f);
@@ -243,7 +243,7 @@ namespace TechAdvancing
                             s = val.ToString();
                         }
 
-                        ConfigChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider2(ConfigChangeResearchCostFac), 2, 1000f,
+                        ConfigChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), (int)cfgToSlider2(ConfigChangeResearchCostFac), 2, 1000f,
                                 label: "configChangeResearchCostFac".Translate(s), roundTo: 1f));
                     }
                     break;
