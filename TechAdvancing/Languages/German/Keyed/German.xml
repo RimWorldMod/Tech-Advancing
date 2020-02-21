@@ -50,7 +50,7 @@
   <config_menu_button_main>Haupt Einstellungen</config_menu_button_main>
   <config_menu_button_research_project_settings>Projekt Einstellungen</config_menu_button_research_project_settings>
   
-  <configCheckboxMakeHigherResearchesSuperExpensive>Erhöhe die Entwicklungskosten von Projekten die dein Technologielevel überschreiten um ein vielfaches.</configCheckboxMakeHigherResearchesSuperExpensive>
+  <configCheckboxMakeHigherResearchesSuperExpensive>Erhöhe die Entwicklungskosten von Projekten die dein Technologielevel überschreiten um einen Faktor X.</configCheckboxMakeHigherResearchesSuperExpensive>
   <configCheckboxMakeHigherResearchesSuperExpensiveFac>Verwende folgenden Multiplikator für die obere Einstellung: (aktueller Faktor: x{0})</configCheckboxMakeHigherResearchesSuperExpensiveFac>
   <configChangeResearchCostFac>Vervielfache die Entwicklungskosten aller Forschungsprojekte mittels folgendem Wert: (aktueller Faktor: x{0})</configChangeResearchCostFac>
   <configWordTechlevel>Technologielevel</configWordTechlevel>
