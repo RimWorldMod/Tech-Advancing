@@ -20,7 +20,6 @@ namespace TechAdvancing
         /// </summary>
         public static void Setup()
         {
-            Harmony.DEBUG = true;
             var harmony = new Harmony("com.ghxx.rimworld.techadvancing");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
@@ -77,11 +76,13 @@ namespace TechAdvancing
 
                 if (TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensive == 1)
                 {
-                    __result = (float)Math.Ceiling(__result * (float)(TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num)));
+                    __result *= (float)(TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num));
                 }
             }
 
-            __result = (float)Math.Ceiling(__result * TechAdvancing_Config_Tab.ConfigChangeResearchCostFacAsFloat());
+            __result *= TechAdvancing_Config_Tab.ConfigChangeResearchCostFacAsFloat();
+
+            __result = (float)Math.Round(__result, 2);
         }
     }
 
