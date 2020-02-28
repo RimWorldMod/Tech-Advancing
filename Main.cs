@@ -16,7 +16,7 @@ namespace TechAdvancing
         {
             GameObject initializer = new GameObject("TechAdvancingStartupObject");
             ConfigButtonTexture = ContentFinder<Texture2D>.Get("TechAdvancingSettingsLogo", true);
-
+            
             initializer.AddComponent<MapComponentInjector>();
             UnityEngine.Object.DontDestroyOnLoad(initializer);
 

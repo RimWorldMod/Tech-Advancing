@@ -1,32 +1,33 @@
 ﻿using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
+
 namespace TechAdvancing
 {
-    public class MapCompSaveHandler : MapComponent
+    internal class WorldCompSaveHandler : WorldComponent
     {
+        private Dictionary<string, int> Configvalues = new Dictionary<string, int>();
 
-        public MapCompSaveHandler(Map map) : base(map)
-        {
-
-        }
-
-        private static Dictionary<string, int> Configvalues = new Dictionary<string, int>();
-
-        internal static List<string> GetConfigValueNames => Configvalues.Keys.ToList();
+        internal List<string> GetConfigValueNames => Configvalues.Keys.ToList();
 
         /// <summary>
         /// Stores all the pawns that joined along with their old Faction
         /// </summary>
-        public static Dictionary<Pawn, Faction> ColonyPeople = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
+        public Dictionary<Pawn, Faction> ColonyPeople = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
 
-        public static bool IsValueSaved(string key) { return Configvalues.ContainsKey(key); }
-        public static void RemoveConfigValue(string key) { Configvalues.Remove(key); }
+        public WorldCompSaveHandler(World world) : base(world)
+        {
 
-        public static void TA_ExposeData(string key, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
+        }
+
+        public bool IsValueSaved(string key) { return Configvalues.ContainsKey(key); }
+        public void RemoveConfigValue(string key) { Configvalues.Remove(key); }
+
+        public void TA_ExposeData(string key, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
         {
             if (mode == TA_Expose_Mode.Save)
             {
@@ -59,6 +60,7 @@ namespace TechAdvancing
 
         public override void ExposeData()
         {
+            TechAdvancing_Config_Tab.worldCompSaveHandler = this;
             base.ExposeData();
 
             Scribe_Collections.Look(ref Configvalues, "TA_Expose_Numbers", LookMode.Value, LookMode.Value);
@@ -82,5 +84,21 @@ namespace TechAdvancing
             }
             LogOutput.WriteLogMessage(Errorlevel.Information, "Loading finished.");
         }
+    }
+
+    public enum TA_Expose_Mode
+    {
+        Save,
+        Load
+    }
+
+    public enum TA_Expose_Name // TODO Remove soon
+    {
+        Conditionvalue_A,
+        Conditionvalue_B,
+        Conditionvalue_B_s,
+        baseTechlvlCfg,
+        configCheckboxNeedTechColonists,
+        configCheckboxDisableCostMultiplicatorCap
     }
 }

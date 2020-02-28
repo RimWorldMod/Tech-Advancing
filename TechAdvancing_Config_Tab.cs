@@ -27,6 +27,8 @@ namespace TechAdvancing
         public static int Conditionvalue_B_s { get => conditionvalue_B_s; set => conditionvalue_B_s = value; }
         public static int conditionvalue_B_s = conditionvalue_B_s_Default;
 
+        internal static WorldCompSaveHandler worldCompSaveHandler = null;
+
         TechLevel[] previewTechLevels = { TechLevel.Undefined, TechLevel.Undefined, TechLevel.Undefined };
         public readonly string description = "configHeader".Translate();           //translation default:You can edit the rules here:
         private readonly string descriptionA2 = "configRuleAdesc".Translate();     //Rule A: \nIf the Player researched all techs of the techlevel X and below, the techlevel rises to X +
@@ -411,6 +413,8 @@ namespace TechAdvancing
 
         public static void ExposeData(TA_Expose_Mode mode)
         {
+            LogOutput.WriteLogMessage(Errorlevel.Information, "Checking2...");
+
             var savedNames = new List<string>();
             foreach (var value in GetSaveableProperties())
             {
@@ -418,13 +422,13 @@ namespace TechAdvancing
 
                 var refVal = (int)value.GetValue(null, null);
                 var oldRefVal = refVal;
-                MapCompSaveHandler.TA_ExposeData(attribute.SaveName, ref refVal, mode);
+                worldCompSaveHandler.TA_ExposeData(attribute.SaveName, ref refVal, mode);
                 if (oldRefVal != refVal) // if the value was changed by the method
                     value.SetValue(null, refVal, null);
 
-                if (!MapCompSaveHandler.IsValueSaved(attribute.SaveName))
+                if (!worldCompSaveHandler.IsValueSaved(attribute.SaveName))
                 {
-                    MapCompSaveHandler.TA_ExposeData(attribute.SaveName, ref refVal, TA_Expose_Mode.Save);
+                    worldCompSaveHandler.TA_ExposeData(attribute.SaveName, ref refVal, TA_Expose_Mode.Save);
                     LogOutput.WriteLogMessage(Errorlevel.Information, $"Added new value called '{attribute.SaveName}' was added to the save file. This message shouldn't appear more than once per value and world.");
                 }
 
@@ -432,12 +436,12 @@ namespace TechAdvancing
                 savedNames.Add(attribute.SaveName);
             }
 
-            foreach (var name in MapCompSaveHandler.GetConfigValueNames)
+            foreach (var name in worldCompSaveHandler.GetConfigValueNames)
             {
                 if (!savedNames.Contains(name))
                 {
                     LogOutput.WriteLogMessage(Errorlevel.Information, $"Removed value {name} as it is no longer referenced.");
-                    MapCompSaveHandler.RemoveConfigValue(name);
+                    worldCompSaveHandler.RemoveConfigValue(name);
 
                     if (name == "configBlockMoreAdvancedResearches") // TODO remove fallback 23.01.2020
                     {

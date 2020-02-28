@@ -135,6 +135,42 @@ namespace TechAdvancing
     }
 
     /// <summary>
+    /// Postfix Patch for hooking the LoadGame method to load configs
+    /// </summary>
+    [HarmonyPatch(typeof(Verse.Game))]
+    [HarmonyPatch("LoadGame")]
+    [HarmonyPatch(new Type[] { })]
+    class TA_PostOnMapLoad_Event
+    {
+        [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameters", Justification = "Referenced at runtime by harmony")]
+        static void Postfix()
+        {
+            LogOutput.WriteLogMessage(Errorlevel.Information, "Loading config...");
+            var TA_currentWorld = Find.World;
+
+            // TODO implement upgrade code
+            // TODO cleanup. This was added on 28.Feb.2020
+            //foreach (var map in Find.Maps.Where(m => m.GetComponent<MapCompSaveHandler>() == null))
+            //{
+            //    map.components.Add(new MapCompSaveHandler(map));    //for saving data associated with a map
+            //    LogOutput.WriteLogMessage(Errorlevel.Information, "Added a MapComponent to store some information.");
+            //}
+
+            var wcsh = TA_currentWorld.GetComponent<WorldCompSaveHandler>();
+            if (wcsh == null)
+            {
+                wcsh = new WorldCompSaveHandler(TA_currentWorld);
+                TA_currentWorld.components.Add(wcsh);
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Added a WorldComponent to store some information.");
+            }
+            TechAdvancing_Config_Tab.worldCompSaveHandler = wcsh;
+            TA_ResearchManager.LoadCfgValues(); // TODO should prob replace this with something else
+
+        }
+    }
+
+    /// <summary>
     /// Postfix Patch for the research manager to do the techlevel calculation
     /// </summary>
     [HarmonyPatch(typeof(RimWorld.ResearchManager))]
@@ -260,8 +296,14 @@ namespace TechAdvancing
             RecalculateTechlevel(false);
         }
 
-        private static void LoadCfgValues() //could be improved using just vanilla loading  // TODO obsolete?
+        // TODO obsolete?
+        internal static void LoadCfgValues() //could be improved using just vanilla loading  
         {
+            if (TechAdvancing_Config_Tab.worldCompSaveHandler.world != Find.World)
+            {
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "wcsh not referencing the current world!!!");
+            }
+
             TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
 
             if (TechAdvancing_Config_Tab.BaseTechlvlCfg != 1)
