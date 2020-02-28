@@ -413,8 +413,6 @@ namespace TechAdvancing
 
         public static void ExposeData(TA_Expose_Mode mode)
         {
-            LogOutput.WriteLogMessage(Errorlevel.Information, "Checking2...");
-
             var savedNames = new List<string>();
             foreach (var value in GetSaveableProperties())
             {
