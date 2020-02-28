@@ -14,7 +14,7 @@ namespace TechAdvancing
 
         }
 
-        private static Dictionary<string, int> Configvalues = new Dictionary<string, int>();
+        public static Dictionary<string, int> Configvalues = new Dictionary<string, int>();
 
         internal static List<string> GetConfigValueNames => Configvalues.Keys.ToList();
 
@@ -75,12 +75,11 @@ namespace TechAdvancing
                 Scribe_Collections.Look(ref ColonyPeople, "TA_Expose_People", LookMode.Reference, LookMode.Reference);
                 //LogOutput.WriteLogMessage(Errorlevel.Information, "Read TA_ExposePeople");
             }
-            TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
+            //TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
             if (ColonyPeople == null)
             {
                 ColonyPeople = new Dictionary<Pawn, Faction>();
             }
-            LogOutput.WriteLogMessage(Errorlevel.Information, "Loading finished.");
         }
     }
 }

@@ -14,12 +14,8 @@ namespace TechAdvancing
 
         static TechAdvancingStartupClass()     // Initialize the mod
         {
-            GameObject initializer = new GameObject("TechAdvancingStartupObject");
             ConfigButtonTexture = ContentFinder<Texture2D>.Get("TechAdvancingSettingsLogo", true);
             
-            initializer.AddComponent<MapComponentInjector>();
-            UnityEngine.Object.DontDestroyOnLoad(initializer);
-
             HarmonyDetours.Setup();
 
             if (MP.enabled)

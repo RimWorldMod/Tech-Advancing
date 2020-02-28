@@ -3,6 +3,7 @@ using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using Verse;
@@ -149,24 +150,73 @@ namespace TechAdvancing
             LogOutput.WriteLogMessage(Errorlevel.Information, "Loading config...");
             var TA_currentWorld = Find.World;
 
-            // TODO implement upgrade code
-            // TODO cleanup. This was added on 28.Feb.2020
-            //foreach (var map in Find.Maps.Where(m => m.GetComponent<MapCompSaveHandler>() == null))
-            //{
-            //    map.components.Add(new MapCompSaveHandler(map));    //for saving data associated with a map
-            //    LogOutput.WriteLogMessage(Errorlevel.Information, "Added a MapComponent to store some information.");
-            //}
+            if (TA_currentWorld.components.Any(x => x is WorldCompSaveHandler wcshObj && wcshObj.isInitialized))
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "Found an already existing worldcomponent!!!");
+
 
             var wcsh = TA_currentWorld.GetComponent<WorldCompSaveHandler>();
-            if (wcsh == null)
+            var wcshHasData = wcsh?.GetConfigValueNames?.Any() ?? false;
+
+            if (wcsh?.isInitialized != true)
             {
-                wcsh = new WorldCompSaveHandler(TA_currentWorld);
-                TA_currentWorld.components.Add(wcsh);
-                LogOutput.WriteLogMessage(Errorlevel.Information, "Added a WorldComponent to store some information.");
+                if (wcsh == null)
+                {
+                    wcsh = new WorldCompSaveHandler(TA_currentWorld);
+
+                    TA_currentWorld.components.Add(wcsh);
+                    LogOutput.WriteLogMessage(Errorlevel.Information, "Adding a WorldComponent to store some information.");
+                }
+
+                bool needUpgrade = wcsh.GetConfigValueNames.Count == 0
+                    && Find.Maps.Any(x => x.GetComponent<MapCompSaveHandler>() is MapCompSaveHandler && MapCompSaveHandler.GetConfigValueNames.Count > 0); // TODO cleanup. This was added on 28.Feb.2020
+
+
+                if (needUpgrade)
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Warning, "Detected legacy save system! Upgrading...");
+                    wcsh.LoadValuesForUpgrade(MapCompSaveHandler.Configvalues, MapCompSaveHandler.ColonyPeople);
+
+                    int removalCount = 0;
+                    foreach (var map in Find.Maps)
+                    {
+                        while (true)
+                        {
+                            var comp = map.GetComponent<MapCompSaveHandler>();
+                            if (comp == null)
+                                break;
+                            else
+                            {
+                                if (map.components.Remove(comp))
+                                    removalCount++;
+                                else
+                                    LogOutput.WriteLogMessage(Errorlevel.Error, "Cleaning up 1 element failed.");
+                            }
+                        }
+                    }
+
+                    LogOutput.WriteLogMessage(Errorlevel.Warning, $"Removed {removalCount} old dataset(s).");
+                }
+
+                wcsh.isInitialized = true;
             }
             TechAdvancing_Config_Tab.worldCompSaveHandler = wcsh;
-            TA_ResearchManager.LoadCfgValues(); // TODO should prob replace this with something else
+            wcsh.ExposeData();
+            LoadCfgValues();
 
+        }
+        internal static void LoadCfgValues()
+        {
+            if (TechAdvancing_Config_Tab.worldCompSaveHandler.world != Find.World)
+            {
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "wcsh not referencing the current world!!!");
+            }
+
+            TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
+
+            if (TechAdvancing_Config_Tab.BaseTechlvlCfg != 1)
+            {
+                TechAdvancing_Config_Tab.baseFactionTechLevel = (TechAdvancing_Config_Tab.BaseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
+            }
         }
     }
 
@@ -201,11 +251,8 @@ namespace TechAdvancing
                     GetAndReloadTL();        //store the default value for the techlevel because we will modify it later and we need the one from right now
 
                     isTribe = factionDefault == TechLevel.Neolithic;
-                    LoadCfgValues();
+                    //LoadCfgValues();
                     firstpass = false;
-
-                    //Debug
-                    LogOutput.WriteLogMessage(Errorlevel.Debug, "Con A val= " + TechAdvancing_Config_Tab.conditionvalue_A + "|||Con B Val= " + TechAdvancing_Config_Tab.conditionvalue_B);
 
                 }
                 catch (Exception ex)
@@ -294,22 +341,6 @@ namespace TechAdvancing
             player researched more than 50% of the techlevel Y then the techlevel rises to Y
             **/
             RecalculateTechlevel(false);
-        }
-
-        // TODO obsolete?
-        internal static void LoadCfgValues() //could be improved using just vanilla loading  
-        {
-            if (TechAdvancing_Config_Tab.worldCompSaveHandler.world != Find.World)
-            {
-                LogOutput.WriteLogMessage(Errorlevel.Warning, "wcsh not referencing the current world!!!");
-            }
-
-            TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
-
-            if (TechAdvancing_Config_Tab.BaseTechlvlCfg != 1)
-            {
-                TechAdvancing_Config_Tab.baseFactionTechLevel = (TechAdvancing_Config_Tab.BaseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
-            }
         }
 
         internal static TechLevel GetAndReloadTL()
