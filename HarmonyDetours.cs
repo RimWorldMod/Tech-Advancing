@@ -151,7 +151,7 @@ namespace TechAdvancing
             var TA_currentWorld = Find.World;
 
             if (TA_currentWorld.components.Any(x => x is WorldCompSaveHandler wcshObj && wcshObj.isInitialized))
-                LogOutput.WriteLogMessage(Errorlevel.Warning, "Found an already existing worldcomponent!!!");
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "Found an already existing and initialized worldcomponent!!!");
 
 
             var wcsh = TA_currentWorld.GetComponent<WorldCompSaveHandler>();
