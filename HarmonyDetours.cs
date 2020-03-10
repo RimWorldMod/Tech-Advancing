@@ -269,7 +269,7 @@ namespace TechAdvancing
             if (Faction.OfPlayerSilentFail?.def?.techLevel == null || Faction.OfPlayer.def.techLevel == TechLevel.Undefined) // abort if our techlevel is undefined for some reason
                 return;
 
-            LogOutput.WriteLogMessage(Errorlevel.Warning, "research manager called");
+            LogOutput.WriteLogMessage(Errorlevel.Debug, "Research Manager called");
 
             if (Find.CurrentMap == null)
             {
@@ -280,7 +280,7 @@ namespace TechAdvancing
             if (firstpass || facName != Faction.OfPlayer.def.defName)
             {
                 startedAt = DateTime.Now;
-                LogOutput.WriteLogMessage(Errorlevel.Warning, "research manager restarted");
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Research Manager restarted");
                 facName = Faction.OfPlayer.def.defName;
                 try
                 {
@@ -417,7 +417,7 @@ namespace TechAdvancing
 
         internal static void FlushCfg()
         {
-            LogOutput.WriteLogMessage(Errorlevel.Warning, "Flushing old Research Manager values.");
+            LogOutput.WriteLogMessage(Errorlevel.Information, "Flushing old Research Manager values.");
 
             firstpass = true;
             facName = "";
