@@ -7,8 +7,7 @@ using Verse;
 namespace TechAdvancing
 {
     public class MapCompSaveHandler : MapComponent
-    {
-
+    {        
         public MapCompSaveHandler(Map map) : base(map)
         {
 

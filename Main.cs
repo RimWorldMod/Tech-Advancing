@@ -14,8 +14,10 @@ namespace TechAdvancing
 
         static TechAdvancingStartupClass()     // Initialize the mod
         {
+            ConfigTabValueSavedAttribute.BuildDefaultValueCache();
+
             ConfigButtonTexture = ContentFinder<Texture2D>.Get("TechAdvancingSettingsLogo", true);
-            
+
             HarmonyDetours.Setup();
 
             if (MP.enabled)

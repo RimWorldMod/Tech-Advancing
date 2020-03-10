@@ -23,7 +23,7 @@ namespace TechAdvancing
 
         public WorldCompSaveHandler(World world) : base(world) // Rimworld will initialize this on world load!
         {
-            isInitialized = false;
+            this.isInitialized = false;
         }
 
         public void LoadValuesForUpgrade(Dictionary<string, int> cfgVals, Dictionary<Pawn, Faction> colonyPpl)
@@ -35,34 +35,42 @@ namespace TechAdvancing
         public bool IsValueSaved(string key) { return this.ConfigValues.ContainsKey(key); }
         public void RemoveConfigValue(string key) { this.ConfigValues.Remove(key); }
 
-        public void TA_ExposeData(string key, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
+        public void TA_ExposeData(ConfigTabValueSavedAttribute attrib, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
         {
+            string saveName = attrib.SaveName;
+            object defaultValue = attrib.DefaultValue;
+
             if (mode == TA_Expose_Mode.Save)
             {
-                LogOutput.WriteLogMessage(Errorlevel.Debug, "Adding " + key + " : " + value + "to save dictionary");
-                if (this.ConfigValues.ContainsKey(key))
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Adding " + saveName + " : " + value + "to save dictionary");
+                if (this.ConfigValues.ContainsKey(saveName))
                 {
-                    this.ConfigValues.Remove(key);
+                    this.ConfigValues.Remove(saveName);
                 }
-                this.ConfigValues.Add(key, value);
+                this.ConfigValues.Add(saveName, value);
             }
             else if (mode == TA_Expose_Mode.Load)
             {
-                if (this.ConfigValues.TryGetValue(key, out int tempval))
+                if (this.ConfigValues.TryGetValue(saveName, out int tempval))
                 {
                     value = tempval;
                 }
-                else if (this.ConfigValues.TryGetValue(Enum.GetNames(typeof(TA_Expose_Name)).Contains(key) ? ((int)Enum.Parse(typeof(TA_Expose_Name), key)).ToString() : key, out tempval)) // TODO remove backwards compatability fallback
+                else if (this.ConfigValues.TryGetValue(Enum.GetNames(typeof(TA_Expose_Name)).Contains(saveName) ? ((int)Enum.Parse(typeof(TA_Expose_Name), saveName)).ToString() : saveName, out tempval)) // TODO remove backwards compatability fallback
                 {
                     value = tempval;
-                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + key + " was loaded via fallback. (A new save system is in place. But this message shouldnt appear anymore after saving)");
+                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + saveName + " was loaded via fallback. (A new save system is in place. But this message shouldnt appear anymore after saving)");
                 }
                 else
                 {
-                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + key + " could not be loaded. This usually happens when updating to the new config-system. Try saving and reloading the map.");
+                    LogOutput.WriteLogMessage(Errorlevel.Information, "Value " + saveName + " is not present. Using default value.");
+
+                    if (defaultValue == null)
+                        LogOutput.WriteLogMessage(Errorlevel.Error, $"Default value of {saveName} is null!");
+                    else
+                        value = (int)defaultValue;
                 }
 
-                LogOutput.WriteLogMessage(Errorlevel.Debug, "Successfully loaded " + key + " : " + value + "from save dictionary.");
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Successfully loaded " + saveName + " : " + value + "from save dictionary.");
             }
         }
 
@@ -91,6 +99,8 @@ namespace TechAdvancing
                 this.ColonyPeople = new Dictionary<Pawn, Faction>();
             }
             LogOutput.WriteLogMessage(Errorlevel.Information, "Loading finished.");
+
+            TA_ResearchManager.FlushCfg();
         }
     }
 

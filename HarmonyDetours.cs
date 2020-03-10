@@ -135,8 +135,30 @@ namespace TechAdvancing
         }
     }
 
+
     /// <summary>
     /// Postfix Patch for hooking the LoadGame method to load configs
+    /// </summary>
+    [HarmonyPatch(typeof(Verse.Game))]
+    [HarmonyPatch("InitNewGame")]
+    [HarmonyPatch(new Type[] { })]
+    class TA_PostOnMapGenerate_Event
+    {
+        [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameters", Justification = "Referenced at runtime by harmony")]
+        static void Postfix()
+        {
+            LogOutput.WriteLogMessage(Errorlevel.Information, "Detected new world. Creating fresh config...");
+
+            MapCompSaveHandler.ColonyPeople.Clear();  // TODO cleanup. This was added on 05.Mar.2020
+            MapCompSaveHandler.Configvalues.Clear();
+
+            TA_PostOnMapLoad_Event.LoadOrCreateCfg();
+        }
+    }
+
+    /// <summary>
+    /// Postfix Patch for hooking the LoadGame method to load configs for when an existing map is loaded.
     /// </summary>
     [HarmonyPatch(typeof(Verse.Game))]
     [HarmonyPatch("LoadGame")]
@@ -146,6 +168,12 @@ namespace TechAdvancing
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         [SuppressMessage("Style", "IDE0060:Remove unused parameters", Justification = "Referenced at runtime by harmony")]
         static void Postfix()
+        {
+            LogOutput.WriteLogMessage(Errorlevel.Information, "Detected existing world. Loading existing config...");
+            LoadOrCreateCfg();
+        }
+
+        internal static void LoadOrCreateCfg()
         {
             LogOutput.WriteLogMessage(Errorlevel.Information, "Loading config...");
             var TA_currentWorld = Find.World;
@@ -200,10 +228,10 @@ namespace TechAdvancing
                 wcsh.isInitialized = true;
             }
             TechAdvancing_Config_Tab.worldCompSaveHandler = wcsh;
-            wcsh.ExposeData();
+            //wcsh.ExposeData();
             LoadCfgValues();
-
         }
+
         internal static void LoadCfgValues()
         {
             if (TechAdvancing_Config_Tab.worldCompSaveHandler.world != Find.World)
@@ -229,7 +257,7 @@ namespace TechAdvancing
     {
         public static TechLevel factionDefault = TechLevel.Undefined;
         public static bool isTribe = true;
-        private static bool firstNotificationHidden = false;
+        public static bool firstNotificationHidden = false;
 
         public static DateTime startedAt = DateTime.Now;
         public static string facName = "";
@@ -241,10 +269,18 @@ namespace TechAdvancing
             if (Faction.OfPlayerSilentFail?.def?.techLevel == null || Faction.OfPlayer.def.techLevel == TechLevel.Undefined) // abort if our techlevel is undefined for some reason
                 return;
 
+            LogOutput.WriteLogMessage(Errorlevel.Warning, "research manager called");
+
+            if (Find.CurrentMap == null)
+            {
+                //LogOutput.WriteLogMessage(Errorlevel.Information, "Research Manager called while loading a new map. Flushing old values.");
+                FlushCfg();
+            }
 
             if (firstpass || facName != Faction.OfPlayer.def.defName)
             {
                 startedAt = DateTime.Now;
+                LogOutput.WriteLogMessage(Errorlevel.Warning, "research manager restarted");
                 facName = Faction.OfPlayer.def.defName;
                 try
                 {
@@ -377,6 +413,16 @@ namespace TechAdvancing
             {
                 Messages.Message("ConfigEditTechlevelChange".Translate() + " " + (TechLevel)Faction.OfPlayer.def.techLevel + ".", MessageTypeDefOf.PositiveEvent);
             }
+        }
+
+        internal static void FlushCfg()
+        {
+            LogOutput.WriteLogMessage(Errorlevel.Warning, "Flushing old Research Manager values.");
+
+            firstpass = true;
+            facName = "";
+            firstNotificationHidden = false;
+            startedAt = DateTime.Now;
         }
     }
 }

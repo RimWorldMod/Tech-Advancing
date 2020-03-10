@@ -420,13 +420,13 @@ namespace TechAdvancing
 
                 var refVal = (int)value.GetValue(null, null);
                 var oldRefVal = refVal;
-                worldCompSaveHandler.TA_ExposeData(attribute.SaveName, ref refVal, mode);
+                worldCompSaveHandler.TA_ExposeData(attribute, ref refVal, mode);
                 if (oldRefVal != refVal) // if the value was changed by the method
                     value.SetValue(null, refVal, null);
 
                 if (!worldCompSaveHandler.IsValueSaved(attribute.SaveName))
                 {
-                    worldCompSaveHandler.TA_ExposeData(attribute.SaveName, ref refVal, TA_Expose_Mode.Save);
+                    worldCompSaveHandler.TA_ExposeData(attribute, ref refVal, TA_Expose_Mode.Save);
                     LogOutput.WriteLogMessage(Errorlevel.Information, $"Added new value called '{attribute.SaveName}' was added to the save file. This message shouldn't appear more than once per value and world.");
                 }
 
