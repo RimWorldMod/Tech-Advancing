@@ -47,6 +47,11 @@ namespace TechAdvancing
 
         public static void OnNewPawn(Pawn newPawn)  //event for new pawn in the colony
         {
+            if (!newPawn.Faction.IsPlayer) // skip pawns on the map that dont belong to the player
+            {
+                return;
+            }
+
             if (((int?)newPawn?.Faction?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial)
             {
                 if (!TechAdvancing.MapCompSaveHandler.ColonyPeople.ContainsKey(newPawn))
