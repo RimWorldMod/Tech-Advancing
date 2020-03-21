@@ -45,13 +45,13 @@ namespace TechAdvancing
             TechAdvancing.TA_ResearchManager.RecalculateTechlevel(false);
         }
 
-        public static void OnNewPawn(Pawn oldPawn)  //event for new pawn in the colony
+        public static void OnNewPawn(Pawn newPawn)  //event for new pawn in the colony
         {
-            if (((int?)oldPawn?.Faction?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial)
+            if (((int?)newPawn?.Faction?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial)
             {
-                if (!TechAdvancing.MapCompSaveHandler.ColonyPeople.ContainsKey(oldPawn))
+                if (!TechAdvancing.MapCompSaveHandler.ColonyPeople.ContainsKey(newPawn))
                 {
-                    TechAdvancing.MapCompSaveHandler.ColonyPeople.Add(oldPawn, oldPawn.Faction);
+                    TechAdvancing.MapCompSaveHandler.ColonyPeople.Add(newPawn, newPawn.Faction);
                     if (TechAdvancing.MapCompSaveHandler.ColonyPeople.Count == 1 &&   // that means there was nothing in there before -> now the techlvl is unlocked
                         TechAdvancing_Config_Tab.ConfigCheckboxNeedTechColonists == 1         // and the limit is enabled
                         )
@@ -62,7 +62,7 @@ namespace TechAdvancing
                 }
                 else
                 {
-                    TechAdvancing.MapCompSaveHandler.ColonyPeople[oldPawn] = oldPawn.Faction;
+                    TechAdvancing.MapCompSaveHandler.ColonyPeople[newPawn] = newPawn.Faction;
                 }
             }
         }
