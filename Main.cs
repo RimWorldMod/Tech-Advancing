@@ -47,7 +47,7 @@ namespace TechAdvancing
 
         public static void OnNewPawn(Pawn newPawn)  //event for new pawn in the colony
         {
-            if (!newPawn.Faction.IsPlayer) // skip pawns on the map that dont belong to the player
+            if (newPawn?.Faction?.IsPlayer != true) // skip pawns on the map that dont belong to the player and pawns that are null or dont have a faction
             {
                 return;
             }
