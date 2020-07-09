@@ -61,9 +61,15 @@ namespace TechAdvancing
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         static void Postfix(Verse.ResearchProjectDef __instance, ref float __result, TechLevel researcherTechLevel)
         {
-            if (researcherTechLevel >= __instance.techLevel)
+            if (researcherTechLevel == __instance.techLevel)
             {
                 __result = 1f;
+            }
+            else if (researcherTechLevel > __instance.techLevel)
+            {
+                int techlevelDifference = researcherTechLevel - __instance.techLevel;
+                var discountFactor = (float)Math.Pow(1d - (TechAdvancing_Config_Tab.ConfigDiscountPctForLowerTechs / 100d), techlevelDifference);
+                __result *= discountFactor;
             }
             else
             {

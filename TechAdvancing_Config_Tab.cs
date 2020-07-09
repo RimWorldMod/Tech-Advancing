@@ -62,6 +62,10 @@ namespace TechAdvancing
 
         [ConfigTabValueSaved("configChangeResearchCostFac")]
         public static int ConfigChangeResearchCostFac { get; set; } = 100; // 100 equals to a factor of x1
+
+        [ConfigTabValueSaved("configSimpleResearchDiscountFac")]
+        public static int ConfigDiscountPctForLowerTechs { get; set; } = 0; // 0 equals no discount
+
         public static float ConfigChangeResearchCostFacAsFloat()
         {
             var scaled = ConfigChangeResearchCostFac * 0.01f;
@@ -247,6 +251,12 @@ namespace TechAdvancing
 
                         ConfigChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), (int)cfgToSlider2(ConfigChangeResearchCostFac), 2, 1000f,
                                 label: "configChangeResearchCostFac".Translate(s), roundTo: 1f));
+
+                        AddSpace(ref drawpos, 50f);
+
+                        ConfigDiscountPctForLowerTechs = (int)Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), ConfigDiscountPctForLowerTechs, 0, 99f,
+                                label: "configDiscountPctForLowerTechs".Translate(ConfigDiscountPctForLowerTechs), roundTo: 1f);
+
                     }
                     break;
 
