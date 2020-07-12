@@ -33,8 +33,8 @@ namespace TechAdvancing
         /// <returns></returns>
         internal static TechLevel GetRuleTechlevel()
         {
-            LogOutput.WriteLogMessage(Errorlevel.Debug, $"A: {RuleA().ToString()} | B:{RuleB().ToString()}");
-            return Util.GetHighestTechlevel(TechAdvancing_Config_Tab.baseFactionTechLevel, RuleA(), RuleB());
+            LogOutput.WriteLogMessage(Errorlevel.Debug, $"A: {RuleA()} | B:{RuleB()}");
+            return Util.GetHighestTechlevel(TechAdvancing_Config_Tab.GetBaseTechlevel(), RuleA(), RuleB());
         }
 
         /// <summary>
