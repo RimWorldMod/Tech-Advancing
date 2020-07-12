@@ -82,7 +82,7 @@ namespace TechAdvancing
                 if (TA_ResearchManager.originalTechlevelCache.ContainsKey(Find.FactionManager.OfPlayer.Name))
                 {
                     var correctTl = TA_ResearchManager.originalTechlevelCache[Find.FactionManager.OfPlayer.Name];
-                    LogOutput.WriteLogMessage(Errorlevel.Warning, $"Scribe mode is LoadingVars. The playerfaction is the same as one which was previously loaded. " +
+                    LogOutput.WriteLogMessage(Errorlevel.Information, $"The playerfaction is the same as one which was previously loaded. " +
                         $"Resetting the techlevel to what it was before we changed it. Current faction techlevel: {Find.FactionManager.OfPlayer.def.techLevel} New (correct) techlevel: {correctTl}");
                     Find.FactionManager.OfPlayer.def.techLevel = correctTl;
                 }
