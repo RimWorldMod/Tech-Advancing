@@ -42,7 +42,17 @@ namespace TechAdvancing
 
         [ConfigTabValueSaved("baseTechlvlCfg")]
         public static int BaseTechlvlCfg { get; set; } = 1; //0=neolithic ; 1= auto ; 2=colony
-        public static TechLevel baseFactionTechLevel = TechLevel.Undefined;
+        public static TechLevel GetBaseTechlevel()
+        {
+            if (BaseTechlvlCfg == 1) // automatic detection (no override)
+            {
+                return TA_ResearchManager.factionDefault;
+            }
+            else // override techlevel
+            {
+                return BaseTechlvlCfg == 0 ? TechLevel.Neolithic : TechLevel.Industrial;
+            }
+        }
         public const TechLevel maxTechLevelForTribals = TechLevel.Medieval;
 
         [ConfigTabValueSaved("configCheckboxNeedTechColonists")]
@@ -161,11 +171,7 @@ namespace TechAdvancing
                         AddSpace(ref drawpos, 70f);
                         DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((BaseTechlvlCfg == 1) ? ((TA_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((BaseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((BaseTechlvlCfg == 1) ? TA_ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((BaseTechlvlCfg == 0) ? "configNeolithic".Translate().ToString() : "configIndustrial".Translate().ToString())), ref drawpos);
                         AddSpace(ref drawpos, 20f);
-                        baseFactionTechLevel = TA_ResearchManager.factionDefault;
-                        if (BaseTechlvlCfg != 1)
-                        {
-                            baseFactionTechLevel = (BaseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
-                        }
+
                         DrawText(canvas, this.descriptionA2 + " (" + "configWordDefault".Translate() + conditionvalue_A_Default + ")", ref drawpos);
                         string bufferA = null;
                         string bufferB = null;

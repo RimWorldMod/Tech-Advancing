@@ -42,7 +42,7 @@ namespace TechAdvancing
 
             if (mode == TA_Expose_Mode.Save)
             {
-                LogOutput.WriteLogMessage(Errorlevel.Debug, "Adding " + saveName + " : " + value + "to save dictionary");
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Adding " + saveName + " : " + value + " to save dictionary");
                 if (this.ConfigValues.ContainsKey(saveName))
                 {
                     this.ConfigValues.Remove(saveName);
@@ -70,12 +70,29 @@ namespace TechAdvancing
                         value = (int)defaultValue;
                 }
 
-                LogOutput.WriteLogMessage(Errorlevel.Debug, "Successfully loaded " + saveName + " : " + value + "from save dictionary.");
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Successfully loaded " + saveName + " : " + value + " from save dictionary.");
             }
         }
 
         public override void ExposeData()
         {
+            LogOutput.WriteLogMessage(Errorlevel.Debug, $"Loading begun. Factiondef techlevel: {Find.FactionManager.OfPlayer.def.techLevel}");
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                if (TA_ResearchManager.originalTechlevelCache.ContainsKey(Find.FactionManager.OfPlayer.Name))
+                {
+                    var correctTl = TA_ResearchManager.originalTechlevelCache[Find.FactionManager.OfPlayer.Name];
+                    LogOutput.WriteLogMessage(Errorlevel.Warning, $"Scribe mode is LoadingVars. The playerfaction is the same as one which was previously loaded. " +
+                        $"Resetting the techlevel to what it was before we changed it. Current faction techlevel: {Find.FactionManager.OfPlayer.def.techLevel} New (correct) techlevel: {correctTl}");
+                    Find.FactionManager.OfPlayer.def.techLevel = correctTl;
+                }
+                else
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Scribe mode is LoadingVars. The playerfaction is new, adding it to cache, with techlevel {Find.FactionManager.OfPlayer.def.techLevel}.");
+                    TA_ResearchManager.originalTechlevelCache.Add(Find.FactionManager.OfPlayer.Name, Find.FactionManager.OfPlayer.def.techLevel);
+                }
+            }
+
             TechAdvancing_Config_Tab.worldCompSaveHandler = this;
             base.ExposeData();
 

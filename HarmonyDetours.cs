@@ -184,6 +184,7 @@ namespace TechAdvancing
             LogOutput.WriteLogMessage(Errorlevel.Information, "Loading config...");
             var TA_currentWorld = Find.World;
 
+
             if (TA_currentWorld.components.Any(x => x is WorldCompSaveHandler wcshObj && wcshObj.isInitialized))
                 LogOutput.WriteLogMessage(Errorlevel.Warning, "Found an already existing and initialized worldcomponent!!!");
 
@@ -246,11 +247,6 @@ namespace TechAdvancing
             }
 
             TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
-
-            if (TechAdvancing_Config_Tab.BaseTechlvlCfg != 1)
-            {
-                TechAdvancing_Config_Tab.baseFactionTechLevel = (TechAdvancing_Config_Tab.BaseTechlvlCfg == 0) ? TechLevel.Neolithic : TechLevel.Industrial;
-            }
         }
     }
 
@@ -269,11 +265,16 @@ namespace TechAdvancing
         public static string facName = "";
         public static bool firstpass = true;
 
+        public static Dictionary<string, TechLevel> originalTechlevelCache = new Dictionary<string, TechLevel>();
+
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         static void Postfix()
         {
             if (Faction.OfPlayerSilentFail?.def?.techLevel == null || Faction.OfPlayer.def.techLevel == TechLevel.Undefined) // abort if our techlevel is undefined for some reason
+            {
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Aborted reasearch manager postfix!");
                 return;
+            }
 
             LogOutput.WriteLogMessage(Errorlevel.Debug, "Research Manager called");
 
@@ -373,6 +374,7 @@ namespace TechAdvancing
                     firstNotificationHidden = true;
                 }
 
+                LogOutput.WriteLogMessage(Errorlevel.Debug, $"Factiondeflevel was changed from {Faction.OfPlayer.def.techLevel} to {newLevel} via call #1.");
                 Faction.OfPlayer.def.techLevel = newLevel;
             }
 
@@ -389,9 +391,14 @@ namespace TechAdvancing
         {
             if (Faction.OfPlayer.def.techLevel > TechLevel.Undefined && TA_ResearchManager.factionDefault == TechLevel.Undefined)
             {
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Set default techlevel to: " + Faction.OfPlayer.def.techLevel);
                 TA_ResearchManager.factionDefault = Faction.OfPlayer.def.techLevel;
-                TechAdvancing_Config_Tab.baseFactionTechLevel = Faction.OfPlayer.def.techLevel;
             }
+            else
+            {
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Techlevel was not set. Techlevel currently is " + Faction.OfPlayer.def.techLevel.ToString());
+            }
+
             if (Faction.OfPlayer.def.techLevel == TechLevel.Undefined)
             {
                 LogOutput.WriteLogMessage(Errorlevel.Warning, "Called without valid TL");
@@ -408,10 +415,13 @@ namespace TechAdvancing
             TechLevel baseNewTL = Rules.GetNewTechLevel();
             if (TechAdvancing_Config_Tab.ConfigCheckboxNeedTechColonists == 1 && !Util.ColonyHasHiTechPeople())
             {
-                Faction.OfPlayer.def.techLevel = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)baseNewTL, (int)TechAdvancing_Config_Tab.maxTechLevelForTribals);
+                var newTl = (TechLevel)Util.Clamp((int)TechLevel.Undefined, (int)baseNewTL, (int)TechAdvancing_Config_Tab.maxTechLevelForTribals);
+                LogOutput.WriteLogMessage(Errorlevel.Debug, $"Factiondeflevel was changed from {Faction.OfPlayer.def.techLevel} to {newTl} via call #2.");
+                Faction.OfPlayer.def.techLevel = newTl;
             }
             else
             {
+                LogOutput.WriteLogMessage(Errorlevel.Debug, $"Factiondeflevel was changed from {Faction.OfPlayer.def.techLevel} to {baseNewTL} via call #3.");
                 Faction.OfPlayer.def.techLevel = baseNewTL;
             }
 
@@ -425,6 +435,7 @@ namespace TechAdvancing
         {
             LogOutput.WriteLogMessage(Errorlevel.Information, "Flushing old Research Manager values.");
 
+            TA_ResearchManager.factionDefault = TechLevel.Undefined;
             firstpass = true;
             facName = "";
             firstNotificationHidden = false;
