@@ -12,7 +12,7 @@ namespace BuildMultiVersionMod
     {
         private static void Log(string message)
         {
-            Console.WriteLine($"[{DateTime.Now.ToString("dd.MMM.yyyy HH:mm:ss.fff")}] {message}");
+            Console.WriteLine($"[{DateTime.Now:dd.MMM.yyyy HH:mm:ss.fff}] {message}");
         }
 
         private static void Log(params string[] categoriesAndMessage)
@@ -40,7 +40,7 @@ namespace BuildMultiVersionMod
             }
         }
 
-        static void Main(string[] args)
+        static void Main()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
 
