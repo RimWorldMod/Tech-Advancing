@@ -54,6 +54,7 @@
   <configCheckboxMakeHigherResearchesSuperExpensiveFac>Utiliser cette valeur pour le paramètre ci-dessus: (current factor: x{0})</configCheckboxMakeHigherResearchesSuperExpensiveFac>
   <configChangeResearchCostFac>Modifier le coût des recherches selon cette valeur: (current factor: x{0})</configChangeResearchCostFac>
   <configDiscountPctForLowerTechs>Appliquer une réduction de X^N pourcents pour les technologies plus simples que votre niveau technologique, où X est la valeur du curseur \net N est le nombre de niveaux technologiques d'avance que vous avez sur le niveau du projet: (réduction actuelle: -{0}%)</configDiscountPctForLowerTechs>
+  <configCheckboxIgnoreNonMainTreeTechs>Ignorer tous les projets qui ne sont pas dans l'onglet principal de l'arbre de recherche.</configCheckboxIgnoreNonMainTreeTechs>
   <configWordTechlevel>Niveau technologique</configWordTechlevel>
 
 
