@@ -54,6 +54,7 @@
   <configCheckboxMakeHigherResearchesSuperExpensiveFac>Use the following base multiplier for the above setting: (current factor: x{0})</configCheckboxMakeHigherResearchesSuperExpensiveFac>
   <configChangeResearchCostFac>Scale the cost of all research projects by following value: (current factor: x{0})</configChangeResearchCostFac>
   <configDiscountPctForLowerTechs>Apply a discount of X^N percent for techs that are below your techlevel, where X is the slider value \nand N is the number of techlevels you are ahead of the project's level: (current discount: -{0}%)</configDiscountPctForLowerTechs>
+  <configCheckboxIgnoreNonMainTreeTechs>Ignore all projects that are not on the main tab of the research tree.</configCheckboxIgnoreNonMainTreeTechs>
   <configWordTechlevel>Techlevel</configWordTechlevel>
   
   

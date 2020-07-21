@@ -54,6 +54,7 @@
   <configCheckboxMakeHigherResearchesSuperExpensiveFac>Verwende folgenden Multiplikator für die obere Einstellung: (aktueller Faktor: x{0})</configCheckboxMakeHigherResearchesSuperExpensiveFac>
   <configChangeResearchCostFac>Vervielfache die Entwicklungskosten aller Forschungsprojekte mittels folgendem Wert: (aktueller Faktor: x{0})</configChangeResearchCostFac>
   <configDiscountPctForLowerTechs>Gewähre X^N Prozent Rabatt für Technologien, deren Technologielevel unter deinem liegt, wobei X der Wert des folgenden Schiebers ist.\nN steht für die Anzahl der Technologielevel die du dem Forschungsprojekt voraus bist. (Aktueller Rabatt: -{0}%)</configDiscountPctForLowerTechs>
+  <configCheckboxIgnoreNonMainTreeTechs>Ignoriere alle Forschungsprojekte die sich nicht im Standardtab des Forschungsbaums befinden.</configCheckboxIgnoreNonMainTreeTechs>
   <configWordTechlevel>Technologielevel</configWordTechlevel>
   
   

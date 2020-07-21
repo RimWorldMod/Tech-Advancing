@@ -305,6 +305,37 @@ namespace TechAdvancing
 
             }
 
+            UpdateFinishedProjectCounts();
+
+            TechLevel newLevel = TechAdvancing.Rules.GetNewTechLevel();
+
+            if (newLevel != TechLevel.Undefined)
+            {
+                if (firstNotificationHidden && DateTime.Now.Subtract(TimeSpan.FromSeconds(5)) > startedAt) //hiding the notification on world start
+                {
+                    if (Faction.OfPlayer.def.techLevel < newLevel)
+                        Find.LetterStack.ReceiveLetter("newTechLevelLetterTitle".Translate(), "newTechLevelLetterContents".Translate(isTribe ? "configTribe".Translate() : "configColony".Translate()) + " " + newLevel.ToString() + ".", LetterDefOf.PositiveEvent);
+                }
+                else
+                {
+                    firstNotificationHidden = true;
+                }
+
+                LogOutput.WriteLogMessage(Errorlevel.Debug, $"Factiondeflevel was changed from {Faction.OfPlayer.def.techLevel} to {newLevel} via call #1.");
+                Faction.OfPlayer.def.techLevel = newLevel;
+            }
+
+            /***
+            how techlevel increases:
+            player researched all techs of techlevel X and below. the techlevel rises to X+1
+
+            player researched more than 50% of the techlevel Y then the techlevel rises to Y
+            **/
+            RecalculateTechlevel(false);
+        }
+
+        internal static void UpdateFinishedProjectCounts()
+        {
             var researchProjectStoreTotal = new Dictionary<TechLevel, int>();
             var researchProjectStoreFinished = new Dictionary<TechLevel, int>();
 
@@ -339,7 +370,15 @@ namespace TechAdvancing
                 */
                 #endregion
 
-                if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") != true)
+                if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") == true)
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Found ta-ignore tag in: {researchProjectDef.defName}");
+                }
+                else if (TechAdvancing_Config_Tab.b_configCheckboxIgnoreNonMainTreeTechs && researchProjectDef.tab != ResearchTabDefOf.Main)
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Ignoring project '{researchProjectDef.defName}' from nonMainTab: '{researchProjectDef.tab.defName}'");
+                }
+                else
                 {
                     researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                     if (researchProjectDef.IsFinished)
@@ -348,10 +387,6 @@ namespace TechAdvancing
                         researchProjectDef.ReapplyAllMods();
                     }
                 }
-                else
-                {
-                    LogOutput.WriteLogMessage(Errorlevel.Debug, "Found ta-ignore tag in:" + researchProjectDef.defName);
-                }
 
                 if (researchProjectDef.IsFinished)
                     researchProjectDef.ReapplyAllMods();
@@ -359,32 +394,6 @@ namespace TechAdvancing
 
             TechAdvancing.Rules.researchProjectStoreTotal = researchProjectStoreTotal;
             TechAdvancing.Rules.researchProjectStoreFinished = researchProjectStoreFinished;
-
-            TechLevel newLevel = TechAdvancing.Rules.GetNewTechLevel();
-
-            if (newLevel != TechLevel.Undefined)
-            {
-                if (firstNotificationHidden && DateTime.Now.Subtract(TimeSpan.FromSeconds(5)) > startedAt) //hiding the notification on world start
-                {
-                    if (Faction.OfPlayer.def.techLevel < newLevel)
-                        Find.LetterStack.ReceiveLetter("newTechLevelLetterTitle".Translate(), "newTechLevelLetterContents".Translate(isTribe ? "configTribe".Translate() : "configColony".Translate()) + " " + newLevel.ToString() + ".", LetterDefOf.PositiveEvent);
-                }
-                else
-                {
-                    firstNotificationHidden = true;
-                }
-
-                LogOutput.WriteLogMessage(Errorlevel.Debug, $"Factiondeflevel was changed from {Faction.OfPlayer.def.techLevel} to {newLevel} via call #1.");
-                Faction.OfPlayer.def.techLevel = newLevel;
-            }
-
-            /***
-            how techlevel increases:
-            player researched all techs of techlevel X and below. the techlevel rises to X+1
-
-            player researched more than 50% of the techlevel Y then the techlevel rises to Y
-            **/
-            RecalculateTechlevel(false);
         }
 
         internal static TechLevel GetAndReloadTL()

@@ -74,7 +74,14 @@ namespace TechAdvancing
         public static int ConfigChangeResearchCostFac { get; set; } = 100; // 100 equals to a factor of x1
 
         [ConfigTabValueSaved("configSimpleResearchDiscountFac")]
-        public static int ConfigDiscountPctForLowerTechs { get; set; } = 0; // 0 equals no discount
+        public static int ConfigDiscountPctForLowerTechs { get; set; } = 20; // 0 equals no discount
+
+        [ConfigTabValueSaved("configCheckboxIgnoreNonMainTreeTechs")]
+        public static int ConfigCheckboxIgnoreNonMainTreeTechs { get => b_configCheckboxIgnoreNonMainTreeTechs ? 1 : 0; set => b_configCheckboxIgnoreNonMainTreeTechs = value == 1; }
+        public static bool b_configCheckboxIgnoreNonMainTreeTechs = false;
+
+
+        internal const int spaceBetweenSettings = 50;
 
         public static float ConfigChangeResearchCostFacAsFloat()
         {
@@ -122,6 +129,28 @@ namespace TechAdvancing
             Text.Font = GameFont.Small;
             float drawpos = 0;
 
+            void AddCheckboxSetting(ref bool val, string name, int prefixSpace = spaceBetweenSettings)
+            {
+                AddSpace(ref drawpos, prefixSpace);
+                var size = Text.CalcSize(name);
+                Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, size.x + 40, size.y), name, ref val, false);
+            }
+
+            float AddSliderSetting(float val, string name, float leftValue, float rightValue, float roundTo = 1f, int prefixSpace = spaceBetweenSettings)
+            {
+                AddSpace(ref drawpos, prefixSpace);
+                var size = Text.CalcSize(name);
+
+                return Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, size.y), ConfigDiscountPctForLowerTechs, leftValue, rightValue,
+                        label: name, roundTo: roundTo);
+            }
+
+
+            void AddSliderSettingRef(ref float val, string name, float leftValue, float rightValue, float roundTo = 1f, int prefixSpace = spaceBetweenSettings)
+            {
+                val = AddSliderSetting(val, name, roundTo, prefixSpace);
+            }
+
             // --- start of menu selection code --- //
             string[] buttonTexts = new[] { "config_menu_button_main", "config_menu_button_research_project_settings" };
             if (this.menuButtonSelected == null)
@@ -149,7 +178,7 @@ namespace TechAdvancing
 
             var pageIndex = Array.IndexOf(buttonTexts, this.menuButtonSelected);
 
-            switch (pageIndex)
+            switch (pageIndex) // Main Settings tab
             {
                 case 0:
                     {
@@ -218,25 +247,21 @@ namespace TechAdvancing
                     }
                     break;
 
-                case 1:
+                case 1: // Project Settings tab
                     {
-                        b_configCheckboxDisableCostMultiplicatorCap = ConfigCheckboxDisableCostMultiplicatorCap == 1;
+                        AddCheckboxSetting(ref b_configCheckboxDisableCostMultiplicatorCap, "configCheckboxDisableCostMultiplicatorCap".Translate(), 0);
+                        AddCheckboxSetting(ref b_configCheckboxMakeHigherResearchesSuperExpensive, "configCheckboxMakeHigherResearchesSuperExpensive".Translate());
 
-                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxDisableCostMultiplicatorCap".Translate()).x + 40f, 40f), "configCheckboxDisableCostMultiplicatorCap".Translate() + "\n", ref b_configCheckboxDisableCostMultiplicatorCap, false);
-                        ConfigCheckboxDisableCostMultiplicatorCap = (b_configCheckboxDisableCostMultiplicatorCap) ? 1 : 0;
-
-                        AddSpace(ref drawpos, 40f);
-
-
-                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxMakeHigherResearchesSuperExpensive".Translate()).x + 40f, 40f), "configCheckboxMakeHigherResearchesSuperExpensive".Translate() + "\n", ref b_configCheckboxMakeHigherResearchesSuperExpensive, false);
                         AddSpace(ref drawpos, 40f);
                         if (b_configCheckboxMakeHigherResearchesSuperExpensive)
                         {
                             int slider1ToCfg(float x) => x < 10 ? (int)x : (int)(x * x / 10);
                             float cfgToSlider1(float x) => x < 10 ? x : (float)Math.Sqrt(10 * x);
+                            var translatedLabel = "configCheckboxMakeHigherResearchesSuperExpensiveFac".Translate(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac);
 
-                            ConfigCheckboxMakeHigherResearchesSuperExpensiveFac = slider1ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), cfgToSlider1(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac), 1, 100f,
-                                label: "configCheckboxMakeHigherResearchesSuperExpensiveFac".Translate(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac)));
+
+                            ConfigCheckboxMakeHigherResearchesSuperExpensiveFac = slider1ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, Text.CalcSize(translatedLabel).y),
+                                cfgToSlider1(ConfigCheckboxMakeHigherResearchesSuperExpensiveFac), 1, 100f, label: translatedLabel));
                         }
 
                         AddSpace(ref drawpos, 40f);
@@ -255,13 +280,17 @@ namespace TechAdvancing
                             s = val.ToString();
                         }
 
-                        ConfigChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), (int)cfgToSlider2(ConfigChangeResearchCostFac), 2, 1000f,
-                                label: "configChangeResearchCostFac".Translate(s), roundTo: 1f));
+                        ConfigChangeResearchCostFac = slider2ToCfg(Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f,
+                            Text.CalcSize("configChangeResearchCostFac".Translate(s)).y), (int)cfgToSlider2(ConfigChangeResearchCostFac), 2, 1000f,
+                            label: "configChangeResearchCostFac".Translate(s), roundTo: 1f));
 
-                        AddSpace(ref drawpos, 50f);
+                        ConfigDiscountPctForLowerTechs = (int)AddSliderSetting(ConfigDiscountPctForLowerTechs, "configDiscountPctForLowerTechs".Translate(ConfigDiscountPctForLowerTechs), 0, 99, roundTo: 1f);
 
-                        ConfigDiscountPctForLowerTechs = (int)Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, 40f), ConfigDiscountPctForLowerTechs, 0, 99f,
-                                label: "configDiscountPctForLowerTechs".Translate(ConfigDiscountPctForLowerTechs), roundTo: 1f);
+                        var lastState = b_configCheckboxIgnoreNonMainTreeTechs;
+                        AddCheckboxSetting(ref b_configCheckboxIgnoreNonMainTreeTechs, "configCheckboxIgnoreNonMainTreeTechs".Translate());
+                        if (lastState != b_configCheckboxIgnoreNonMainTreeTechs)
+                            TA_ResearchManager.UpdateFinishedProjectCounts();
+
 
                     }
                     break;
