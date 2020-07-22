@@ -338,6 +338,7 @@ namespace TechAdvancing
         {
             var researchProjectStoreTotal = new Dictionary<TechLevel, int>();
             var researchProjectStoreFinished = new Dictionary<TechLevel, int>();
+            var nonIgnoredTechs = new List<ResearchProjectDef>();
 
             for (int i = 0; i < Enum.GetValues(typeof(TechLevel)).Length; i++)
             {
@@ -380,6 +381,7 @@ namespace TechAdvancing
                 }
                 else
                 {
+                    nonIgnoredTechs.Add(researchProjectDef);
                     researchProjectStoreTotal[researchProjectDef.techLevel]++;  //total projects for techlevel  
                     if (researchProjectDef.IsFinished)
                     {
@@ -394,6 +396,7 @@ namespace TechAdvancing
 
             TechAdvancing.Rules.researchProjectStoreTotal = researchProjectStoreTotal;
             TechAdvancing.Rules.researchProjectStoreFinished = researchProjectStoreFinished;
+            TechAdvancing.Rules.nonIgnoredTechs = nonIgnoredTechs;
         }
 
         internal static TechLevel GetAndReloadTL()

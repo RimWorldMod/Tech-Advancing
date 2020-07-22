@@ -129,17 +129,28 @@ namespace TechAdvancing
             Text.Font = GameFont.Small;
             float drawpos = 0;
 
+            Vector2 CalcSizeOnCanvas(string text, float paddingRight = 50f)
+            {
+                var size = Text.CalcSize(text);
+                float maxWidth = canvas.width - paddingRight;
+                if (size.x < maxWidth)
+                {
+                    return size;
+                }
+                return new Vector2(maxWidth, Text.CalcHeight(text, maxWidth));
+            }
+
             void AddCheckboxSetting(ref bool val, string name, int prefixSpace = spaceBetweenSettings)
             {
                 AddSpace(ref drawpos, prefixSpace);
-                var size = Text.CalcSize(name);
+                var size = CalcSizeOnCanvas(name);
                 Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, size.x + 40, size.y), name, ref val, false);
             }
 
             float AddSliderSetting(float val, string name, float leftValue, float rightValue, float roundTo = 1f, int prefixSpace = spaceBetweenSettings)
             {
                 AddSpace(ref drawpos, prefixSpace);
-                var size = Text.CalcSize(name);
+                var size = CalcSizeOnCanvas(name);
 
                 return Widgets.HorizontalSlider(new Rect(canvas.x, drawpos, this.windowRect.width - 40f, size.y), ConfigDiscountPctForLowerTechs, leftValue, rightValue,
                         label: name, roundTo: roundTo);
@@ -152,7 +163,7 @@ namespace TechAdvancing
             }
 
             // --- start of menu selection code --- //
-            string[] buttonTexts = new[] { "config_menu_button_main", "config_menu_button_research_project_settings" };
+            string[] buttonTexts = new[] { "config_menu_button_main", "config_menu_button_research_project_settings", "config_menu_button_research_project_info" };
             if (this.menuButtonSelected == null)
             {
                 this.menuButtonSelected = buttonTexts[0];
@@ -231,7 +242,8 @@ namespace TechAdvancing
 
                         b_configCheckboxNeedTechColonists = ConfigCheckboxNeedTechColonists == 1;
 
-                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), "configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_")), ref b_configCheckboxNeedTechColonists, false);
+                        var cfgCbNTCTranslated = "configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"));
+                        Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, Verse.Text.CalcSize("configCheckboxNeedTechColonists".Translate(maxTechLevelForTribals.ToString().TranslateOrDefault(null, "TA_TL_"))).x + 40f, 40f), cfgCbNTCTranslated, ref b_configCheckboxNeedTechColonists, false);
                         ConfigCheckboxNeedTechColonists = (b_configCheckboxNeedTechColonists) ? 1 : 0;
                         AddSpace(ref drawpos, 32f);
 
@@ -287,11 +299,41 @@ namespace TechAdvancing
                         ConfigDiscountPctForLowerTechs = (int)AddSliderSetting(ConfigDiscountPctForLowerTechs, "configDiscountPctForLowerTechs".Translate(ConfigDiscountPctForLowerTechs), 0, 99, roundTo: 1f);
 
                         var lastState = b_configCheckboxIgnoreNonMainTreeTechs;
-                        AddCheckboxSetting(ref b_configCheckboxIgnoreNonMainTreeTechs, "configCheckboxIgnoreNonMainTreeTechs".Translate());
+                        AddCheckboxSetting(ref b_configCheckboxIgnoreNonMainTreeTechs, "configCheckboxIgnoreNonMainTreeTechs".Translate(), 70);
                         if (lastState != b_configCheckboxIgnoreNonMainTreeTechs)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
 
 
+                    }
+                    break;
+
+                case 2: // project info
+                    {
+                        var techs = (TechLevel[])Enum.GetValues(typeof(TechLevel));
+                        var allProjects = Rules.nonIgnoredTechs.GroupBy(x => x.techLevel).ToDictionary(x => x.Key, x => x.ToList());
+                        for (int i = 0; i < techs.Length; i++)
+                        {
+                            var tl = techs[i];
+                            if (!allProjects.ContainsKey(tl))
+                                continue;
+
+                            var unfinishedTechs = allProjects[tl].Where(x => !x.IsFinished).ToList();
+                            var tlNameTranslated = $"TA_TL_{tl}".Translate();
+
+                            if (unfinishedTechs.Count != Rules.researchProjectStoreTotal[tl] - Rules.researchProjectStoreFinished[tl])
+                            {
+                                LogOutput.WriteLogMessage(Errorlevel.Error, "Count mismatch.");
+                            }
+
+                            string percentageResearched = (100 - unfinishedTechs.Count * 100f / allProjects[tl].Count).ToString("N0");
+
+                            var translationToUse = unfinishedTechs.Count == 0 ? "configResearchProjectInfo_TechsRemainingNone" : (unfinishedTechs.Count == 1 ? "configResearchProjectInfo_TechsRemainingSingular" : "configResearchProjectInfo_TechsRemainingPlural");
+
+                            var contentTranslated = translationToUse.Translate(unfinishedTechs.Count, percentageResearched, string.Join(", ", unfinishedTechs.Select(x => x.label.CapitalizeFirst())));
+                            DrawText(canvas, tlNameTranslated + ":\n" + contentTranslated, ref drawpos);
+
+                            AddSpace(ref drawpos, 10f);
+                        }
                     }
                     break;
 
@@ -347,7 +389,7 @@ namespace TechAdvancing
 
                     if (!Equals(val, lastVal))
                     {
-                        LogOutput.WriteLogMessage(Errorlevel.Debug, field.Name + $" differs: newVal: {val} ; lastval: {lastVal}");
+                        LogOutput.WriteLogMessage(Errorlevel.Debug, field.Name + $" differs: newVal: {val}; lastval: {lastVal}");
                     }
 
                     SetOldCfgValue(varSaveName, val);
@@ -364,7 +406,7 @@ namespace TechAdvancing
             return new[] { Rules.RuleA(), Rules.RuleB(), Rules.GetLowTechTL() };
         }
 
-        private void DrawText(Rect canvas, string Text, ref float drawpos, bool increaseDrawpos = true, Color? color = null)
+        private void DrawText(Rect canvas, string text, ref float drawpos, bool increaseDrawpos = true, Color? color = null)
         {
             Color defaultcolor = GUI.contentColor;
             if (color != null)
@@ -372,9 +414,9 @@ namespace TechAdvancing
                 GUI.contentColor = (Color)color;
             }
 
-            var descHeight = Verse.Text.CalcSize(Text).y;
+            var descHeight = Verse.Text.CalcHeight(text, canvas.width);
             Rect drawCanvas = new Rect(canvas.x, canvas.y + drawpos, canvas.width, descHeight);
-            GUI.Label(drawCanvas, Text);
+            GUI.Label(drawCanvas, text);
             if (increaseDrawpos)
             {
                 drawpos += drawCanvas.height;

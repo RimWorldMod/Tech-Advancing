@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Verse;
 
 namespace TechAdvancing
 {
@@ -12,6 +13,8 @@ namespace TechAdvancing
     {
         public static Dictionary<TechLevel, int> researchProjectStoreTotal = new Dictionary<TechLevel, int>();
         public static Dictionary<TechLevel, int> researchProjectStoreFinished = new Dictionary<TechLevel, int>();
+        public static List<ResearchProjectDef> nonIgnoredTechs = new List<ResearchProjectDef>();
+
         public static TechLevel baseFactionLevel = TechLevel.Undefined;
 
         /// <summary>
