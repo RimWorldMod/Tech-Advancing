@@ -36,6 +36,10 @@ namespace TechAdvancing
         private readonly string descriptionB2_s = "configRuleBSliderdesc".Translate();     //Description for the Slider thats used to change the threshold of the rule B
         private readonly string descriptionA2_calc = "configRuleAdesc".Translate();
         private readonly string descriptionB2_calc = "configRuleBdesc".Translate();
+
+        private Vector2 scrollPosPageProjectInfo = Vector2.zero;
+        private float scrollPosPageProjectInfoSize = 0;
+
         private bool settingsChanged = false;
         // private static float _iconSize = 30f;
         // private static float _margin = 6f;
@@ -309,6 +313,11 @@ namespace TechAdvancing
 
                 case 2: // project info
                     {
+                        var scrollViewDrawCanvasInner = new Rect(canvas.x, canvas.y + drawpos, canvas.width - 50, this.scrollPosPageProjectInfoSize);
+                        var scrollViewArea = new Rect(canvas.x, canvas.y + 25, canvas.width, 500);
+
+                        float scrollViewDrawpos = 0f;
+                        Widgets.BeginScrollView(scrollViewArea, ref this.scrollPosPageProjectInfo, scrollViewDrawCanvasInner, true);
                         var techs = (TechLevel[])Enum.GetValues(typeof(TechLevel));
                         var allProjects = Rules.nonIgnoredTechs.GroupBy(x => x.techLevel).ToDictionary(x => x.Key, x => x.ToList());
                         for (int i = 0; i < techs.Length; i++)
@@ -322,18 +331,22 @@ namespace TechAdvancing
 
                             if (unfinishedTechs.Count != Rules.researchProjectStoreTotal[tl] - Rules.researchProjectStoreFinished[tl])
                             {
-                                LogOutput.WriteLogMessage(Errorlevel.Error, "Count mismatch.");
+                                LogOutput.WriteLogMessage(Errorlevel.Error, $"Count mismatch: {unfinishedTechs.Count} != {Rules.researchProjectStoreTotal[tl] - Rules.researchProjectStoreFinished[tl]}");
                             }
 
                             string percentageResearched = (100 - unfinishedTechs.Count * 100f / allProjects[tl].Count).ToString("N0");
 
                             var translationToUse = unfinishedTechs.Count == 0 ? "configResearchProjectInfo_TechsRemainingNone" : (unfinishedTechs.Count == 1 ? "configResearchProjectInfo_TechsRemainingSingular" : "configResearchProjectInfo_TechsRemainingPlural");
 
-                            var contentTranslated = translationToUse.Translate(unfinishedTechs.Count, percentageResearched, string.Join(", ", unfinishedTechs.Select(x => x.label.CapitalizeFirst())));
-                            DrawText(canvas, tlNameTranslated + ":\n" + contentTranslated, ref drawpos);
+                            var contentTranslated = translationToUse.Translate(unfinishedTechs.Count, percentageResearched,
+                                string.Join(", ", unfinishedTechs.Select(x => x.label.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", " ").Trim(' ').CapitalizeFirst())));
+                            DrawText(scrollViewDrawCanvasInner, tlNameTranslated + ":\n" + contentTranslated, ref scrollViewDrawpos);
 
-                            AddSpace(ref drawpos, 10f);
+                            AddSpace(ref scrollViewDrawpos, 10f);
                         }
+
+                        Widgets.EndScrollView();
+                        this.scrollPosPageProjectInfoSize = scrollViewDrawpos;
                     }
                     break;
 
@@ -479,6 +492,7 @@ namespace TechAdvancing
             this.settingsChanged = false;
             this.previewTechLevels = GetTechlevelPreview();
             this.menuButtonSelected = null; // reset the last clicked button for selecting pages. This will show the normal view.
+            this.scrollPosPageProjectInfo = Vector2.zero; // reset scrollpos just in case
         }
 
         public override Vector2 InitialSize
