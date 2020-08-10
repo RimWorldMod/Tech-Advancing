@@ -113,8 +113,11 @@ namespace BuildMultiVersionMod
             Log("Copying old versions...");
             foreach (var oldVersion in oldVersions)
             {
+                Log($"Copying {oldVersion}...");
                 CopyDirectoryRecursively(Path.Combine(oldVersionFolder, oldVersion), Path.Combine(outputFolder, oldVersion));
-                Directory.Delete(Path.Combine(outputFolder, oldVersion, "About"), true);
+                var delPath = Path.Combine(outputFolder, oldVersion, "About");
+                if (Directory.Exists(delPath))
+                    Directory.Delete(delPath, true);
             }
 
 
