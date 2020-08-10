@@ -100,7 +100,7 @@ namespace BuildMultiVersionMod
 
             Log("Updating About.xml...");
 
-            var oldVersions = Directory.GetDirectories(oldVersionFolder, "*", SearchOption.TopDirectoryOnly).Select(x => x.Split(Path.DirectorySeparatorChar).Last()).ToList();
+            var oldVersions = Directory.GetDirectories(oldVersionFolder, "*", SearchOption.TopDirectoryOnly).Select(x => x.Split(Path.DirectorySeparatorChar).Last()).Reverse().ToList();
 
             foreach (var version in oldVersions)
             {
