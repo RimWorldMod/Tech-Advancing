@@ -1,65 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-  <TAcfgmenulabel>Tech Advancing</TAcfgmenulabel>
+  <TAcfgmenulabel>Techadvancing config</TAcfgmenulabel>
 	
-  <newTechLevelLetterTitle>Новый технологический уровень</newTechLevelLetterTitle>
-  <newTechLevelLetterContents>Поздравляем, исследователь только что завершил проект, благодаря которому ваш {0} стал умнее. Новый технологический уровень</newTechLevelLetterContents>
+  <newTechLevelLetterTitle>Новый уровень технологий</newTechLevelLetterTitle>
+  <newTechLevelLetterContents>Поздравляем, исследователь только что завершил изучение технологии, благодаря которой ваш {0} стал умнее. Новый уровень технологий</newTechLevelLetterContents>
   
-  <ConfigEditTechlevelChange>Из-за редактирования настроек Tech Advancing, ваш технологический уровень был изменен на</ConfigEditTechlevelChange>
+  <ConfigEditTechlevelChange>Из-за изменений условий Технологического прогресса, ваш уровень технологий был изменен на</ConfigEditTechlevelChange>
   
-  <configHeader>Вы можете редактировать правила здесь:</configHeader>
-  <configRuleAdesc>Правило A: \nЕсли игрок исследует все проекты технологического уровня X и ниже,\nто технологический уровень вырастет на X +</configRuleAdesc>
-  <configRuleBdesc>Правило B: \nЕсли игрок исследует более 50% проектов технологического уровня Y,\nто технологический уровень вырастет на Y +</configRuleBdesc>
-  <configRuleBSliderdesc>Этот ползунок задает порог исследований для правила B.</configRuleBSliderdesc>
+  <configHeader>Вы можете изменить правила здесь:</configHeader>
+  <configRuleAdesc>Правило A: \nЕсли Игрок изучил все технологии уровня X и ниже, то технологический уровень поднимается до X +</configRuleAdesc>
+  <configRuleBdesc>Правило B: \nЕсли игрок изучил более 50% технологии уровня Y, то технологический уровень поднимается до Y +</configRuleBdesc>
+  <configRuleBSliderdesc>Этот ползунок настраивает минимальное значение для Правила B.</configRuleBSliderdesc>
   <configRadioBtnNeolithic>Неолит / Племя</configRadioBtnNeolithic>
-  <configRadioBtnAutoDetect>Автовыбор</configRadioBtnAutoDetect>
-  <configRadioBtnIndustrial>Индустриал Колония</configRadioBtnIndustrial>
-  <configBaseTechLvl>Базовый технологический уровень</configBaseTechLvl>
+  <configRadioBtnAutoDetect>Автоопределение (по умолчанию)</configRadioBtnAutoDetect>
+  <configRadioBtnIndustrial>Промышленный / Колония</configRadioBtnIndustrial>
+  <configBaseTechLvl>Базовый уровень технологий</configBaseTechLvl>
   <configTribe>Племя</configTribe>
   <configColony>Колония</configColony>
-  <configSetToTribe>Племя</configSetToTribe>
-  <configSetToColony>Колония</configSetToColony>
+  <configSetToTribe>Установить как у Племени</configSetToTribe>
+  <configSetToColony>Установить как у Колонии</configSetToColony>
   <configNeolithic>Неолит</configNeolithic>
-  <configIndustrial>Инустриальный</configIndustrial>
-  <configWordDefault>По умолчанию: </configWordDefault>
-  <configExpectedTechLvl>Ожидаемый технологический уровень для этого правила:</configExpectedTechLvl>
-  <configResultingTechLvl>Текущий технологический уровень:</configResultingTechLvl>
-  <configCheckboxNeedTechColonists>Если в вашем поселении есть только члены племени, вы не сможете поднять ваш уровень выше «{0}».</configCheckboxNeedTechColonists>
-  <configCheckboxNeedTechColonists_CappedAt>Ваш технологический уровень будет ограничен «{0}», пока вы не получите поселенца, НЕ являющегося членом племени.</configCheckboxNeedTechColonists_CappedAt>
-  <configCheckboxDisableCostMultiplicatorCap>Отключить ограничение в 200% для расчета штрафа на скорость исследований.\n(Установить как было в версии 18 и раньше).</configCheckboxDisableCostMultiplicatorCap>
+  <configIndustrial>Промышленный</configIndustrial>
+  <configWordDefault>по умолчанию:</configWordDefault>
+  <configExpectedTechLvl>Ожидаемый уровень технологий исходя из этого правила:</configExpectedTechLvl>
+  <configResultingTechLvl>Итоговый уровень технологий:</configResultingTechLvl>
+  <configCheckboxNeedTechColonists>Если эта настройка включена - вы не сможете повысить свой уровень технологий выше чем \n '{0}', если у вас есть только члены племени в вашем поселении.</configCheckboxNeedTechColonists>
+  <configCheckboxNeedTechColonists_CappedAt>В таком случае выше уровень технологий будет '{0}', пока в вашем поселении не появится персонаж НЕ член племени.</configCheckboxNeedTechColonists_CappedAt>
+  <configCheckboxDisableCostMultiplicatorCap>Убрать базовый штраф в 200% к скорости исследования выше вашего уровня технологий(как в версии A18 и раньше).</configCheckboxDisableCostMultiplicatorCap>
   
-  <newTechLevelMedievalCapRemLetterTitle>Продвинутый технологический уровень разблокирован</newTechLevelMedievalCapRemLetterTitle>
-  <newTechLevelMedievalCapRemLetterContents>К вам только что присоединился новый поселенец, из более высокоразвитой цивилизации, который принес с собой новые знания. Ваш технологический уровень больше не ограничен средневековьем. Поздравляем!</newTechLevelMedievalCapRemLetterContents>
-  <newTechLevelMedievalCapRemLetterTitleRev>Продвинутый технологический уровень заблокирован</newTechLevelMedievalCapRemLetterTitleRev>
-  <newTechLevelMedievalCapRemLetterContentsRev>Не осталось людей, знакомых с высокими технологиями. Технологический уровень вашего поселение вновь ограничен с средневековьем!</newTechLevelMedievalCapRemLetterContentsRev>
+  <newTechLevelMedievalCapRemLetterTitle>Открыты более высокие уровни технологий.</newTechLevelMedievalCapRemLetterTitle>
+  <newTechLevelMedievalCapRemLetterContents>Ваше поселение {0} только что получило нового члена, который рассказал о существовании более продвинутых технологий. Из-за этого ограничение Средневековыми технологиями снято. Поздравляем!</newTechLevelMedievalCapRemLetterContents>
+  <newTechLevelMedievalCapRemLetterTitleRev>Потерян доступ к более высоким технологиям</newTechLevelMedievalCapRemLetterTitleRev>
+  <newTechLevelMedievalCapRemLetterContentsRev>Не осталось людей, знакомых с более продвинутыми технологиями. Ваш технологический уровень вновь ограничен Средневековыми технологиями!</newTechLevelMedievalCapRemLetterContentsRev>
   
-  <TAcfgunavailable>Кнопка конфигурации доступна только во время игры на карте.</TAcfgunavailable>
+  <TAcfgunavailable>Кнопка настроек доступна только после загрузки сохранения.</TAcfgunavailable>
   
   <availableTechLvls>Доступны следующие технологические уровни:</availableTechLvls>
   
-  <TA_TL_Archotech>Технологическая сингулярность</TA_TL_Archotech>
-  <TA_TL_Ultra>Ультра технологии</TA_TL_Ultra>
-  <TA_TL_Spacer>Космические технологии</TA_TL_Spacer>
-  <TA_TL_Industrial>Индустриальные технологии</TA_TL_Industrial>
-  <TA_TL_Medieval>Средневековье</TA_TL_Medieval>
+  <TA_TL_Archotech>Архотек</TA_TL_Archotech>
+  <TA_TL_Ultra>Ультра</TA_TL_Ultra>
+  <TA_TL_Spacer>Космический</TA_TL_Spacer>
+  <TA_TL_Industrial>Промышленный</TA_TL_Industrial>
+  <TA_TL_Medieval>Средневековый</TA_TL_Medieval>
   <TA_TL_Neolithic>Неолит</TA_TL_Neolithic>
-  <TA_TL_Animal>Животные</TA_TL_Animal>
-  <TA_TL_Undefined>Не определен</TA_TL_Undefined>
+  <TA_TL_Animal>Животный</TA_TL_Animal>
+  <TA_TL_Undefined>Не определенный</TA_TL_Undefined>
   
   
-  <config_menu_button_main> Основные настройки </config_menu_button_main>
-  <config_menu_button_research_project_settings> Модификаторы исследований </config_menu_button_research_project_settings>
-  <config_menu_button_research_project_info> Прогресс </config_menu_button_research_project_info>
+  <config_menu_button_main>Основные настройки</config_menu_button_main>
+  <config_menu_button_research_project_settings>Настройки проекта</config_menu_button_research_project_settings>
+  <config_menu_button_research_project_info>Информация о проекте</config_menu_button_research_project_info>
   
-  <configCheckboxMakeHigherResearchesSuperExpensive>Сделать исследования в X раз дороже, если они более продвинуты, чем ваш технологический уровень.</configCheckboxMakeHigherResearchesSuperExpensive>
-  <configCheckboxMakeHigherResearchesSuperExpensiveFac>Текущий множитель для параметра выше: x{0}</configCheckboxMakeHigherResearchesSuperExpensiveFac>
-  <configChangeResearchCostFac>Масштабировать стоимость всех исследований (текущий коэффициент: x{0})</configChangeResearchCostFac>
-  <configDiscountPctForLowerTechs>Применять скидку в {0}% для стоимости проектов, которые ниже вашего технологического уровня</configDiscountPctForLowerTechs>
-  <configCheckboxIgnoreNonMainTreeTechs>Игнорировать все проекты, которых нет на главной вкладке дерева исследований.</configCheckboxIgnoreNonMainTreeTechs>
-  <configWordTechlevel>Технологический уровень</configWordTechlevel>
+  <configCheckboxMakeHigherResearchesSuperExpensive>Сделать исследование технологий в X раз дороже, если они более продвинутые, чем ваша фракция.</configCheckboxMakeHigherResearchesSuperExpensive>
+  <configCheckboxMakeHigherResearchesSuperExpensiveFac>Использовать данный множитель для параметра выше: (текущий множитель: x{0})</configCheckboxMakeHigherResearchesSuperExpensiveFac>
+  <configChangeResearchCostFac>Увеличить стоимость всех исследований во столько раз: (текущий множитель: x{0})</configChangeResearchCostFac>
+  <configDiscountPctForLowerTechs>Снижать на X^N процентов стоимость исследований ниже вашего уровня технологий, где X - значение ползунка \nа N - количество уровней, на которое ваш текущий уровень технологий выше: (текущая скидка: -{0}%)</configDiscountPctForLowerTechs>
+  <configCheckboxIgnoreNonMainTreeTechs>Игнорировать все технологии, находящиеся не на главной вкладке древа технологий.</configCheckboxIgnoreNonMainTreeTechs>
+  <configWordTechlevel>Уровень технологий</configWordTechlevel>
   
-  <configResearchProjectInfo_TechsRemainingSingular>Остается изучить один проект.\nТехнологический уровень завершен на: {1}%\nОставшийся проект: {2}</configResearchProjectInfo_TechsRemainingSingular>
-  <configResearchProjectInfo_TechsRemainingPlural>Осталось изучить {0} проектов.\nТехнологический уровень завершен на: {1}%\nОставшиеся проекты:\n{2}</configResearchProjectInfo_TechsRemainingPlural>
-  <configResearchProjectInfo_TechsRemainingNone>Все проекты текущего технологического уровня исследованы.</configResearchProjectInfo_TechsRemainingNone>
+  <configResearchProjectInfo_TechsRemainingSingular>Осталась одна неисследованная технология. Текущий уровень завершен на: {1}%\nОставшихся технологий: {2}</configResearchProjectInfo_TechsRemainingSingular>
+  <configResearchProjectInfo_TechsRemainingPlural>Осталось исследовать {0} технологий. Текущий уровень завершен на: {1}%\nОставшихся технологий:\n{2}</configResearchProjectInfo_TechsRemainingPlural>
+  <configResearchProjectInfo_TechsRemainingNone>Все технологии данного уровня исследованы.</configResearchProjectInfo_TechsRemainingNone>
   
 </LanguageData>
