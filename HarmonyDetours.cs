@@ -371,6 +371,28 @@ namespace TechAdvancing
                 */
                 #endregion
 
+                var seenResearchProjDefNames = new List<string>();
+                bool projectHasTechprintsRecursive(ResearchProjectDef p)
+                {
+                    if (seenResearchProjDefNames.Contains(p.defName))
+                        return false; // if the lookup was already done, then it must have been false. So return false again.
+
+                    seenResearchProjDefNames.Add(p.defName);
+
+                    if (p.techprintCount > 0)
+                    {
+                        return true;
+                    }
+
+                    if (p.prerequisites?.Any(x => projectHasTechprintsRecursive(x)) == true)
+                        return true;
+
+                    if (p.hiddenPrerequisites?.Any(x => projectHasTechprintsRecursive(x)) == true)
+                        return true;
+
+                    return false;
+                }
+
                 if (researchProjectDef.tags?.Any(x => x.defName == "ta-ignore") == true)
                 {
                     LogOutput.WriteLogMessage(Errorlevel.Debug, $"Found ta-ignore tag in: {researchProjectDef.defName}");
@@ -378,6 +400,11 @@ namespace TechAdvancing
                 else if (TechAdvancing_Config_Tab.b_configCheckboxIgnoreNonMainTreeTechs && researchProjectDef.tab != ResearchTabDefOf.Main)
                 {
                     LogOutput.WriteLogMessage(Errorlevel.Debug, $"Ignoring project '{researchProjectDef.defName}' from nonMainTab: '{researchProjectDef.tab.defName}'");
+                }
+                else if (TechAdvancing_Config_Tab.b_configCheckboxIgnoreResearchNeedingTechprints && projectHasTechprintsRecursive(researchProjectDef))
+                // if it requires techprints, ignore it if the cfg wants it
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Ignoring project '{researchProjectDef.defName}' because it requires '{researchProjectDef.techprintCount}' techprint(s).");
                 }
                 else
                 {

@@ -84,6 +84,13 @@ namespace TechAdvancing
         public static int ConfigCheckboxIgnoreNonMainTreeTechs { get => b_configCheckboxIgnoreNonMainTreeTechs ? 1 : 0; set => b_configCheckboxIgnoreNonMainTreeTechs = value == 1; }
         public static bool b_configCheckboxIgnoreNonMainTreeTechs = false;
 
+        /// <summary>
+        /// If checked, ta will ignore all research projects that need techprints, or have prerequisites that require techprints.
+        /// </summary>
+        [ConfigTabValueSaved("configCheckboxIgnoreResearchNeedingTechprints")]
+        public static int ConfigCheckboxIgnoreResearchNeedingTechprints { get => b_configCheckboxIgnoreResearchNeedingTechprints ? 1 : 0; set => b_configCheckboxIgnoreResearchNeedingTechprints = value == 1; }
+        public static bool b_configCheckboxIgnoreResearchNeedingTechprints = false;
+
 
         internal const int spaceBetweenSettings = 50;
 
@@ -305,6 +312,11 @@ namespace TechAdvancing
                         var lastState = b_configCheckboxIgnoreNonMainTreeTechs;
                         AddCheckboxSetting(ref b_configCheckboxIgnoreNonMainTreeTechs, "configCheckboxIgnoreNonMainTreeTechs".Translate(), 70);
                         if (lastState != b_configCheckboxIgnoreNonMainTreeTechs)
+                            TA_ResearchManager.UpdateFinishedProjectCounts();
+
+                        var lastStateTp = b_configCheckboxIgnoreResearchNeedingTechprints;
+                        AddCheckboxSetting(ref b_configCheckboxIgnoreResearchNeedingTechprints, "configCheckboxIgnoreResearchNeedingTechprints".Translate(), 70);
+                        if (lastStateTp != b_configCheckboxIgnoreResearchNeedingTechprints)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
 
 
