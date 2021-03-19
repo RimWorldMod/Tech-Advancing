@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
   <TAcfgmenulabel>Techadvancing</TAcfgmenulabel>
 	
@@ -56,6 +56,7 @@
   <configChangeResearchCostFac>Увеличить стоимость всех исследований во столько раз: (текущий множитель: x{0})</configChangeResearchCostFac>
   <configDiscountPctForLowerTechs>Снижать на X^N процентов стоимость исследований ниже вашего уровня технологий, где X - значение ползунка, \nа N - количество уровней, на которое ваш текущий уровень технологий выше: (текущая скидка: -{0}%)</configDiscountPctForLowerTechs>
   <configCheckboxIgnoreNonMainTreeTechs>Игнорировать все технологии, находящиеся не на главной вкладке древа технологий.</configCheckboxIgnoreNonMainTreeTechs>
+  <configCheckboxIgnoreResearchNeedingTechprints>Игнорировать все технологии, которые требуют чертежи или открываются технологиями, требующими чертежи.</configCheckboxIgnoreResearchNeedingTechprints>
   <configWordTechlevel>Уровень технологий</configWordTechlevel>
   
   <configResearchProjectInfo_TechsRemainingSingular>Осталась одна неисследованная технология. Текущий уровень завершен на: {1}%\nОставшаяся технология: {2}</configResearchProjectInfo_TechsRemainingSingular>
