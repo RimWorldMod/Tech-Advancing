@@ -1,0 +1,3 @@
+assume we are on version CURRVER and update to NEXTVER.
+Copy current Techadvancing folder's contents to TechAdvancingMulti/OldVersions/CURRVER, add NEXTVER to about.xml,
+rebuild.
