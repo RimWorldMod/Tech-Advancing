@@ -8,7 +8,7 @@
   <ConfigEditTechlevelChange>En raison des changements de l'impact de Tech Advancing sur votre partie, votre niveau de technologie a été modifié en</ConfigEditTechlevelChange>
 
   <configHeader>Vous pouvez modifier les paramètres ici:</configHeader>
-  <configRuleAdesc>Règle A: \nSi le Joueur a fini toutes les recherches d'un niveau de technologie X et en dessous, le niveau de technologie s'élève à X+</configRuleAdesc>
+  <configRuleAdesc>Règle A: \nSi le Joueur a fini toutes les recherches d'un niveau de technologie X et des niveaux inférieurs, le niveau de technologie s'élève à X+</configRuleAdesc>
   <configRuleBdesc>Règle B: \nSi le Joueur a fini plus de 50% des recherches d'un niveau de technologie Y, le niveau de technologie s'élève à Y+</configRuleBdesc>
   <configRuleBSliderdesc>Ce curseur contrôle le seuil de la règle B</configRuleBSliderdesc>
   <configRadioBtnNeolithic>Néolithique / Tribal</configRadioBtnNeolithic>
@@ -25,7 +25,7 @@
   <configExpectedTechLvl>Niveau de technologie attendu pour cette règle:</configExpectedTechLvl>
   <configResultingTechLvl>Niveau de technologie produit:</configResultingTechLvl>
   <configCheckboxNeedTechColonists>Si cette option est activée, vous ne pourrez pas faire avancer votre niveau de technologie \nau-delà de '{0}' si vous n'avez que des membres tribaux dans votre colonie/tribu.</configCheckboxNeedTechColonists>
-  <configCheckboxNeedTechColonists_CappedAt>En conséquence, votre niveau technique est bloqué à '{0}' jusqu'à ce que votre colonie/tribu gagne un personnage non tribal.</configCheckboxNeedTechColonists_CappedAt>
+  <configCheckboxNeedTechColonists_CappedAt>En conséquence, votre niveau de technologie est bloqué à '{0}' jusqu'à ce qu'un personnage non tribal rejoigne votre colonie/tribu.</configCheckboxNeedTechColonists_CappedAt>
   <configCheckboxDisableCostMultiplicatorCap>Retire la limite vanilla de 200% pour le calcul de la pénalité de vitesse de recherche. (Comme en A18 et antérieur).</configCheckboxDisableCostMultiplicatorCap>
 
   <newTechLevelMedievalCapRemLetterTitle>Niveau de technologie avancé déverrouillé</newTechLevelMedievalCapRemLetterTitle>
@@ -37,7 +37,7 @@
   <TAcfgDefaultsHeader>Valeurs par défaut utilisées dans les nouveaux mondes:</TAcfgDefaultsHeader>
   <TAcfgSetDefaults>Enregistrer les valeurs par défaut</TAcfgSetDefaults>
   
-  <availableTechLvls>Les niveaux de technologies suivants sont disponibles:</availableTechLvls>
+  <availableTechLvls>Niveaux de technologie disponibles:</availableTechLvls>
 
   <TA_TL_Archotech>Archotech</TA_TL_Archotech>
   <TA_TL_Ultra>Ultra</TA_TL_Ultra>
@@ -56,13 +56,13 @@
   <configCheckboxMakeHigherResearchesSuperExpensive>Faire une recherche plus avancée que votre faction coûte X fois plus cher.</configCheckboxMakeHigherResearchesSuperExpensive>
   <configCheckboxMakeHigherResearchesSuperExpensiveFac>Utiliser cette valeur pour le paramètre ci-dessus: (current factor: x{0})</configCheckboxMakeHigherResearchesSuperExpensiveFac>
   <configChangeResearchCostFac>Modifier le coût des recherches selon cette valeur: (current factor: x{0})</configChangeResearchCostFac>
-  <configDiscountPctForLowerTechs>Appliquer une réduction de X^N pourcents pour les technologies plus simples que votre niveau technologique, où X est la valeur du curseur \net N est le nombre de niveaux technologiques d'avance que vous avez sur le niveau du projet: (réduction actuelle: -{0}%)</configDiscountPctForLowerTechs>
+  <configDiscountPctForLowerTechs>Appliquer une réduction de X^N pourcents pour les technologies plus simples que votre niveau de technologie, où X est la valeur du curseur \net N est le nombre de niveaux de technologie d'avance que vous avez sur le niveau du projet: (réduction actuelle: -{0}%)</configDiscountPctForLowerTechs>
   <configCheckboxIgnoreNonMainTreeTechs>Ignorer tous les projets qui ne sont pas dans l'onglet principal de l'arbre de recherche.</configCheckboxIgnoreNonMainTreeTechs>
   <configCheckboxIgnoreResearchNeedingTechprints>Ignorer tous les projets qui nécessitent des schémas techniques comme prérequis, ou qui ont un prérequis qui en nécessite.</configCheckboxIgnoreResearchNeedingTechprints>
-  <configWordTechlevel>Niveau technologique</configWordTechlevel>
+  <configWordTechlevel>Niveau de technologie</configWordTechlevel>
 
   <configResearchProjectInfo_TechsRemainingSingular>Il reste un projet à rechercher. Recherche du niveau complétée actuellement: {1}%\nLa recherche restante est: {2}</configResearchProjectInfo_TechsRemainingSingular>
   <configResearchProjectInfo_TechsRemainingPlural>Il reste {0} projets à rechercher. Recherche du niveau complétée actuellement: {1}%\nLes recherches restantes sont:\n{2}</configResearchProjectInfo_TechsRemainingPlural>
-  <configResearchProjectInfo_TechsRemainingNone>Tous les projets de ce niveau technologique ont été recherchés.</configResearchProjectInfo_TechsRemainingNone>
+  <configResearchProjectInfo_TechsRemainingNone>Tous les projets de ce niveau de technologie ont été recherchés.</configResearchProjectInfo_TechsRemainingNone>
   
 </LanguageData>
