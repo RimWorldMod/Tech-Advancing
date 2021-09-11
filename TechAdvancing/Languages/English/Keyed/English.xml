@@ -34,6 +34,8 @@
   <newTechLevelMedievalCapRemLetterContentsRev>There are no people left that are familiar with that high-tech stuff. For that reason the medieval techlevel-limit is back!</newTechLevelMedievalCapRemLetterContentsRev>
   
   <TAcfgunavailable>The config button is only available while playing a map.</TAcfgunavailable>
+  <TAcfgDefaultsHeader>Default config-values to be used for new maps:</TAcfgDefaultsHeader>
+  <TAcfgSetDefaults>Save default values</TAcfgSetDefaults>
   
   <availableTechLvls>The following technology-levels are available:</availableTechLvls>
   

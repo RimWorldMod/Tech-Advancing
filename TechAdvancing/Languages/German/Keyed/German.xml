@@ -34,6 +34,8 @@
   <newTechLevelMedievalCapRemLetterContentsRev>Da keine Mitglieder mehr vorhanden sind, welche von einer technologisch hochentwickelten Fraktion stammen tritt nun wieder die Technologielevelgrenze in kraft.</newTechLevelMedievalCapRemLetterContentsRev>
 
   <TAcfgunavailable>Das Konfigurationsmenü ist nur während des Spiels verfügbar.</TAcfgunavailable>
+  <TAcfgDefaultsHeader>Standard Konfigurations-einstellungen für neue Welten:</TAcfgDefaultsHeader>
+  <TAcfgSetDefaults>Standardwerte speichern</TAcfgSetDefaults>
   
   <availableTechLvls>Es existieren die folgenden Technologielevel:</availableTechLvls>
   

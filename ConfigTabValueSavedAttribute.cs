@@ -12,7 +12,7 @@ namespace TechAdvancing
         public object DefaultValue { get => attributeDefaultValues[this.SaveName]; }
         private bool IsDefaultValueSet => allAttributeSavedNames.Contains(this.SaveName);
 
-        private static readonly Dictionary<string, object> attributeDefaultValues = new Dictionary<string, object>();
+        internal static readonly Dictionary<string, object> attributeDefaultValues = new Dictionary<string, object>();
         private static readonly List<string> allAttributeSavedNames = new List<string>();
         private static readonly List<ConfigTabValueSavedAttribute> allAttributes = new List<ConfigTabValueSavedAttribute>();
 
@@ -26,7 +26,19 @@ namespace TechAdvancing
             }
         }
 
+
+        private static bool defaultValueCacheBuilt = false;
+
         public static void BuildDefaultValueCache()
+        {
+            if (!defaultValueCacheBuilt)
+            {
+                defaultValueCacheBuilt = true;
+                RebuildDefaultValueCache();
+            }
+        }
+
+        public static void RebuildDefaultValueCache()
         {
             var types = new[] { typeof(TechAdvancing_Config_Tab) };
 
