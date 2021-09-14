@@ -34,6 +34,8 @@
   <newTechLevelMedievalCapRemLetterContentsRev>Не осталось людей, знакомых с более продвинутыми технологиями. Ваш технологический уровень вновь ограничен Средневековыми технологиями!</newTechLevelMedievalCapRemLetterContentsRev>
   
   <TAcfgunavailable>Кнопка настроек доступна только после загрузки сохранения.</TAcfgunavailable>
+  <TAcfgDefaultsHeader>Конфигурация по умолчанию(используются при создании новой игры):</TAcfgDefaultsHeader>
+  <TAcfgSetDefaults>Сохранить конфигурацию</TAcfgSetDefaults>
   
   <availableTechLvls>Доступны следующие технологические уровни:</availableTechLvls>
   
