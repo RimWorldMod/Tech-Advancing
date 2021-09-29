@@ -11,7 +11,14 @@ namespace TechAdvancing
     /// </summary>
     class Rules
     {
+        /// <summary>
+        /// How many total projects there are for a given techlevel, given that they havent been ignored.
+        /// </summary>
         public static Dictionary<TechLevel, int> researchProjectStoreTotal = new Dictionary<TechLevel, int>();
+
+        /// <summary>
+        /// How many finished projects there are for a given techlevel, given that they havent been ignored.
+        /// </summary>
         public static Dictionary<TechLevel, int> researchProjectStoreFinished = new Dictionary<TechLevel, int>();
         public static List<ResearchProjectDef> nonIgnoredTechs = new List<ResearchProjectDef>();
 
