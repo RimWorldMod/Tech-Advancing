@@ -65,9 +65,11 @@ namespace TechAdvancing
 
         internal static TechLevel RuleA()
         {
-            var notResearched = researchProjectStoreTotal.Except(researchProjectStoreFinished);
-            int min = notResearched.Where(x => x.Value > 0).Select(x => (int)x.Key).DefaultIfEmpty(0).Min();
-            return (TechLevel)Util.Clamp(0, min - 1 + TechAdvancing_Config_Tab.conditionvalue_A, (int)TechLevel.Archotech);
+            var unfinished = researchProjectStoreTotal.Keys.ToDictionary(x => x, x => researchProjectStoreTotal[x] - (researchProjectStoreFinished.ContainsKey(x) ? researchProjectStoreFinished[x] : 0));
+            var maxProjectTechlevel = researchProjectStoreTotal.Where(x => x.Value > 0).Select(y => (int)y.Key).DefaultIfEmpty(0).Max();
+            var newTechlevel = unfinished.Where(x => x.Value > 0).Select(x => (int)x.Key).DefaultIfEmpty(maxProjectTechlevel + 1).Min();
+
+            return (TechLevel)Util.Clamp(0, newTechlevel - 1 + TechAdvancing_Config_Tab.conditionvalue_A, (int)TechLevel.Archotech);
         }
 
         internal static TechLevel RuleB()
