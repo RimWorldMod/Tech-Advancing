@@ -86,6 +86,9 @@
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>RimworldDlls\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>RimworldDlls\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigTabValueSavedAttribute.cs" />

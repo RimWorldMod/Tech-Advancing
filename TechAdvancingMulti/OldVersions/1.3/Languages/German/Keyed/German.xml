@@ -26,7 +26,7 @@
   <configResultingTechLvl>Resultierendes Technologielevel:</configResultingTechLvl>
   <configCheckboxNeedTechColonists>Falls diese Option aktiviert ist kann dein Technologielevel die Stufe '{0}' \nnicht überschreiten falls deine Kolonie nur aus Stammesmitgliedern besteht</configCheckboxNeedTechColonists>
   <configCheckboxNeedTechColonists_CappedAt>Da die obere Option aktiviert ist, wird das Technologielevel auf '{0}' begrenzt, \nbis sich dir eine Person anschließt deren Fraktion ein höheres Technologielevel besitzt.</configCheckboxNeedTechColonists_CappedAt>
-  <configCheckboxDisableCostMultiplicatorCap>Entfernen des 50%-Minimums bei der Berechnung der Forschungsgeschwindigkeit für fortgeschrittene Technologien (wie in A18 und zuvor).</configCheckboxDisableCostMultiplicatorCap>
+  <configCheckboxDisableCostMultiplicatorCap>Entfernen der 200%-Begrenzung bei der Berechnung des Forschungsmalus für fortgeschrittene Technologien (wie in A18 und zuvor).</configCheckboxDisableCostMultiplicatorCap>
   
   <newTechLevelMedievalCapRemLetterTitle>Fortgeschrittene Technologielevel freigeschaltet</newTechLevelMedievalCapRemLetterTitle>
   <newTechLevelMedievalCapRemLetterContents>Dein(e) {0} hat gerade ein Mitglied dazugewonnen welches an fortschrittliche Technologielevel gewöhnt ist. Nun sind alle Technologielevel freigeschaltet. Weiter so!</newTechLevelMedievalCapRemLetterContents>
