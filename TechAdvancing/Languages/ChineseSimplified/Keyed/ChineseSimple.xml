@@ -9,7 +9,7 @@
 
   <configHeader>你可以在这里编辑规则：</configHeader>
   <configRuleAdesc>规则A: \n如果玩家研发了技术级别X以及更低的所有科技，则技术级别会提升至X +</configRuleAdesc>
-  <configRuleBdesc>规则B：\n如果玩家将科技等級Y的科技研究了50%以上，则技术级别会提升至Y +</configRuleBdesc>
+  <configRuleBdesc>规则B：\n如果玩家将技术级别Y的科技研究了50%以上，则技术级别会提升至Y +</configRuleBdesc>
   <configRuleBSliderdesc>此滑条控制规则B的阈值。</configRuleBSliderdesc>
   <configRadioBtnNeolithic>石器时代 / 部落</configRadioBtnNeolithic>
   <configRadioBtnAutoDetect>自动检测（默认）</configRadioBtnAutoDetect>
