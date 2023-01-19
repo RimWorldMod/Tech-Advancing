@@ -399,7 +399,7 @@ namespace TechAdvancing
                 }
                 else if (TechAdvancing_Config_Tab.b_configCheckboxIgnoreNonMainTreeTechs && researchProjectDef.tab != ResearchTabDefOf.Main)
                 {
-                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Ignoring project '{researchProjectDef.defName}' from nonMainTab: '{researchProjectDef.tab.defName}'");
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Ignoring project '{researchProjectDef.defName}' from nonMainTab: '{researchProjectDef.tab?.ToString() ?? "NULL"}'/'{researchProjectDef.tab?.defName ?? "NULL"}'");
                 }
                 else if (TechAdvancing_Config_Tab.b_configCheckboxIgnoreResearchNeedingTechprints && projectHasTechprintsRecursive(researchProjectDef))
                 // if it requires techprints, ignore it if the cfg wants it
