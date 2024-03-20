@@ -219,7 +219,7 @@ namespace TechAdvancing
                         {
                             BaseTechlvlCfg = 2;
                         }
-                        AddSpace(ref drawpos, 70f);
+                        AddSpace(ref drawpos, 60f);
                         DrawText(canvas, "configBaseTechLvl".Translate() + " (" + ((BaseTechlvlCfg == 1) ? ((TA_ResearchManager.isTribe) ? "configTribe".Translate() : "configColony".Translate()) : ((BaseTechlvlCfg == 0) ? "configSetToTribe".Translate() : "configSetToColony".Translate())) + "): " + ((BaseTechlvlCfg == 1) ? TA_ResearchManager.factionDefault.ToString().TranslateOrDefault(null, "TA_TL_") : ((BaseTechlvlCfg == 0) ? "configNeolithic".Translate().ToString() : "configIndustrial".Translate().ToString())), ref drawpos);
                         AddSpace(ref drawpos, 20f);
 
@@ -241,7 +241,7 @@ namespace TechAdvancing
 
                         DrawText(canvas, this.descriptionB2_s + " (" + "configWordDefault".Translate() + conditionvalue_B_s_Default + ")", ref drawpos);
                         AddSpace(ref drawpos, 10f);
-                        conditionvalue_B_s = (int)Widgets.HorizontalSlider(new Rect(canvas.x, canvas.y + drawpos, 500, 15), conditionvalue_B_s, 1, 99, true, "50%", "1%", "99%", 1);
+                        conditionvalue_B_s = (int)Widgets.HorizontalSlider(new Rect(canvas.x, canvas.y + drawpos, 500, 25), conditionvalue_B_s, 1, 99, true, "50%", "1%", "99%", 1);
                         DrawText(new Rect(canvas.x + 530, canvas.y - 5, canvas.width, canvas.height), $"{conditionvalue_B_s}%", ref drawpos);
 
                         AddSpace(ref drawpos, 20f);
