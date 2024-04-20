@@ -7,7 +7,13 @@ using Verse;
 namespace TechAdvancing
 {
     public class MapCompSaveHandler : MapComponent
-    {        
+    {
+#if DEBUG
+        const bool IS_DEBUG = true;
+#else
+        const bool IS_DEBUG = false;
+#endif
+
         public MapCompSaveHandler(Map map) : base(map)
         {
 
@@ -71,7 +77,11 @@ namespace TechAdvancing
             }
             if (isPplDictSaved == 1)
             {
-                Scribe_Collections.Look(ref ColonyPeople, "TA_Expose_People", LookMode.Reference, LookMode.Reference);
+                var l1 = new List<Pawn>();
+                var l2 = new List<Faction>();
+
+                Scribe_Collections.Look(ref ColonyPeople, "TA_Expose_People", LookMode.Reference, LookMode.Reference, ref l1, ref l2,
+                    logNullErrors: IS_DEBUG, saveDestroyedKeys: false, saveDestroyedValues: false);
                 //LogOutput.WriteLogMessage(Errorlevel.Information, "Read TA_ExposePeople");
             }
             //TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
