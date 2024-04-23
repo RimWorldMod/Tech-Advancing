@@ -1,6 +1,7 @@
 ﻿
 using Multiplayer.API;
 using RimWorld;
+using System;
 using UnityEngine;
 using Verse;
 
@@ -20,9 +21,17 @@ namespace TechAdvancing
 
             HarmonyDetours.Setup();
 
-            if (MP.enabled)
+            try
             {
-                MP.RegisterAll();
+                if (MP.enabled)
+                {
+                    MP.RegisterAll();
+                }
+            }
+            catch (MissingMethodException) // somehow this throws an exception for some people all of the sudden
+            {
+                LogOutput.WriteLogMessage(Errorlevel.Information, "Oddly checking the availability of the multiplayer mod threw an error. " +
+                    "If you are not using that mod you can freely ignore this information. If you are using the mod, try moving this mod further up in the load order.");
             }
         }
     }
