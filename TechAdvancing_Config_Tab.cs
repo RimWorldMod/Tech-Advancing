@@ -91,6 +91,13 @@ namespace TechAdvancing
         public static int ConfigCheckboxIgnoreResearchNeedingTechprints { get => b_configCheckboxIgnoreResearchNeedingTechprints ? 1 : 0; set => b_configCheckboxIgnoreResearchNeedingTechprints = value == 1; }
         public static bool b_configCheckboxIgnoreResearchNeedingTechprints = false;
 
+        /// <summary>
+        /// If checked, ta will ignore all research projects that have a techlevel of 'undefined'. Default TRUE.
+        /// </summary>
+        [ConfigTabValueSaved("configCheckboxIgnoreResearchTechlevelUndefined")]
+        public static int ConfigCheckboxIgnoreResearchTechlevelUndefined { get => b_configCheckboxIgnoreTechlevelUndefined ? 1 : 0; set => b_configCheckboxIgnoreTechlevelUndefined = value == 1; }
+        public static bool b_configCheckboxIgnoreTechlevelUndefined = true;
+
 
         internal const int spaceBetweenSettings = 50;
 
@@ -319,7 +326,11 @@ namespace TechAdvancing
                         if (lastStateTp != b_configCheckboxIgnoreResearchNeedingTechprints)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
 
-
+                        var lastStateIgnoreUndefined = b_configCheckboxIgnoreTechlevelUndefined;
+                        AddCheckboxSetting(ref b_configCheckboxIgnoreTechlevelUndefined, 
+                            "configCheckboxIgnoreTechlevelUndefined".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 70);
+                        if (lastStateIgnoreUndefined != b_configCheckboxIgnoreTechlevelUndefined)
+                            TA_ResearchManager.UpdateFinishedProjectCounts();
                     }
                     break;
 

@@ -401,6 +401,11 @@ namespace TechAdvancing
                 {
                     LogOutput.WriteLogMessage(Errorlevel.Debug, $"Ignoring project '{researchProjectDef.defName}' from nonMainTab: '{researchProjectDef.tab?.ToString() ?? "NULL"}'/'{researchProjectDef.tab?.defName ?? "NULL"}'");
                 }
+                else if (TechAdvancing_Config_Tab.b_configCheckboxIgnoreTechlevelUndefined && (researchProjectDef.techLevel == TechLevel.Undefined))
+                // if the techlevel is undefined, ignore it if the cfg wants it
+                {
+                    LogOutput.WriteLogMessage(Errorlevel.Debug, $"Ignoring project '{researchProjectDef.defName}' because its techlevel is undefined and the associated cfg setting is enabled.");
+                }
                 else if (TechAdvancing_Config_Tab.b_configCheckboxIgnoreResearchNeedingTechprints && projectHasTechprintsRecursive(researchProjectDef))
                 // if it requires techprints, ignore it if the cfg wants it
                 {
