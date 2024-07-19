@@ -59,6 +59,7 @@
   <configDiscountPctForLowerTechs>Снижать на X^N процентов стоимость исследований ниже вашего уровня технологий, где X - значение ползунка, \nа N - количество уровней, на которое ваш текущий уровень технологий выше: (текущая скидка: -{0}%)</configDiscountPctForLowerTechs>
   <configCheckboxIgnoreNonMainTreeTechs>Игнорировать все технологии, находящиеся не на главной вкладке древа технологий.</configCheckboxIgnoreNonMainTreeTechs>
   <configCheckboxIgnoreResearchNeedingTechprints>Игнорировать все технологии, которые требуют чертежи или открываются технологиями, требующими чертежи.</configCheckboxIgnoreResearchNeedingTechprints>
+  <configCheckboxIgnoreTechlevelUndefined>Игнорировать все проекты, уровень которых установлен как '{TA_TL_Undefined}'.</configCheckboxIgnoreTechlevelUndefined>
   <configWordTechlevel>Уровень технологий</configWordTechlevel>
   
   <configResearchProjectInfo_TechsRemainingSingular>Осталась одна неисследованная технология. Текущий уровень завершен на: {1}%\nОставшаяся технология: {2}</configResearchProjectInfo_TechsRemainingSingular>
