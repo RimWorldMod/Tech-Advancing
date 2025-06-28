@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -120,7 +121,8 @@ namespace BuildMultiVersionMod
                     Directory.Delete(delPath, true);
             }
 
-
+            Log("Creating zip for upload...");
+            ZipFile.CreateFromDirectory(outputFolder, Path.Combine(outputFolder, "..", "TechAdvancing.zip"), CompressionLevel.Optimal, false);
 
             Log("Done!");
         }
