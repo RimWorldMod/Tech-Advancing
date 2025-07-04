@@ -350,20 +350,20 @@ namespace TechAdvancing
                         if (lastStateIgnoreUndefined != b_configCheckboxIgnoreTechlevelUndefined)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
 
-                        AddCheckboxSetting(ref b_configCheckboxDontModifyCostOfUndefinedTLTechs, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 25);
+                        AddCheckboxSetting(ref b_configCheckboxDontModifyCostOfUndefinedTLTechs, "configCheckboxTreatUndefinedAsCurrentLevel".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 25);
 
                         AddSpace(ref drawpos, 40);
                         DrawText(canvas, "configPerTabCostModificationHeader".Translate(), ref drawpos);
-                        AddSpace(ref drawpos, 2);
 
                         var allTabs = DefDatabase<ResearchProjectDef>.AllDefs
-                            .Where(x => x.tab != null)
                             .Select(x => x.tab)
+                            .Where(x => x != null)
                             .Distinct()
                             .OrderBy(x => x.defName == "Main" ? 0 : 1)
                             .ThenBy(x => x.label)
                             .ToList();
 
+                        bool first = true;
                         foreach (var tab in allTabs)
                         {
                             bool tabEnabled = worldCompSaveHandler?.ShouldApplyCostModifications(tab.defName) ?? true;
@@ -375,7 +375,8 @@ namespace TechAdvancing
                             else if (tab.defName == "Anomaly")
                                 tabLabel += " (Default: Off)";
 
-                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), 26);
+                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), first ? 0 : 26);
+                            first = false;
 
                             if (newValue != tabEnabled && worldCompSaveHandler != null)
                             {
