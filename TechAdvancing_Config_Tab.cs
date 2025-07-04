@@ -101,11 +101,11 @@ namespace TechAdvancing
         public static bool b_configCheckboxIgnoreTechlevelUndefined = true;
 
         /// <summary>
-        /// If checked, undefined tech level projects will be treated as your current tech level for cost calculations (no cost modification). Default FALSE.
+        /// If checked, undefined tech level projects will be treated as your current tech level for cost calculations (no cost modification). Default TRUE.
         /// </summary>
         [ConfigTabValueSaved("configCheckboxTreatUndefinedAsCurrentLevel")]
         public static int ConfigCheckboxTreatUndefinedAsCurrentLevel { get => b_configCheckboxTreatUndefinedAsCurrentLevel ? 1 : 0; set => b_configCheckboxTreatUndefinedAsCurrentLevel = value == 1; }
-        public static bool b_configCheckboxTreatUndefinedAsCurrentLevel = false;
+        public static bool b_configCheckboxTreatUndefinedAsCurrentLevel = true;
 
 
         internal const int spaceBetweenSettings = 50;
@@ -291,12 +291,12 @@ namespace TechAdvancing
                     {
                         var scrollViewDrawCanvasInner = new Rect(canvas.x, canvas.y + drawpos, canvas.width - 50, this.scrollPosPageProjectSettingsSize);
                         var scrollViewArea = new Rect(canvas.x, canvas.y + 25, canvas.width, 500);
-                        
+
                         float scrollViewDrawpos = 0f;
                         Widgets.BeginScrollView(scrollViewArea, ref this.scrollPosPageProjectSettings, scrollViewDrawCanvasInner, true);
-                        
+
                         drawpos = scrollViewDrawpos + 20f;
-                        
+
                         AddCheckboxSetting(ref b_configCheckboxDisableCostMultiplicatorCap, "configCheckboxDisableCostMultiplicatorCap".Translate(), 0);
                         AddCheckboxSetting(ref b_configCheckboxMakeHigherResearchesSuperExpensive, "configCheckboxMakeHigherResearchesSuperExpensive".Translate());
 
@@ -345,17 +345,17 @@ namespace TechAdvancing
                             TA_ResearchManager.UpdateFinishedProjectCounts();
 
                         var lastStateIgnoreUndefined = b_configCheckboxIgnoreTechlevelUndefined;
-                        AddCheckboxSetting(ref b_configCheckboxIgnoreTechlevelUndefined, 
-                            "configCheckboxIgnoreTechlevelUndefined".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 70);
+                        AddCheckboxSetting(ref b_configCheckboxIgnoreTechlevelUndefined,
+                            "configCheckboxIgnoreTechlevelUndefined".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 50);
                         if (lastStateIgnoreUndefined != b_configCheckboxIgnoreTechlevelUndefined)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
-                            
-                        AddCheckboxSetting(ref b_configCheckboxTreatUndefinedAsCurrentLevel, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 50);
-                            
+
+                        AddCheckboxSetting(ref b_configCheckboxTreatUndefinedAsCurrentLevel, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 25);
+
                         AddSpace(ref drawpos, 40);
                         DrawText(canvas, "configPerTabCostModificationHeader".Translate(), ref drawpos);
                         AddSpace(ref drawpos, 2);
-                        
+
                         var allTabs = DefDatabase<ResearchProjectDef>.AllDefs
                             .Where(x => x.tab != null)
                             .Select(x => x.tab)
@@ -363,27 +363,27 @@ namespace TechAdvancing
                             .OrderBy(x => x.defName == "Main" ? 0 : 1)
                             .ThenBy(x => x.label)
                             .ToList();
-                            
+
                         foreach (var tab in allTabs)
                         {
                             bool tabEnabled = worldCompSaveHandler?.ShouldApplyCostModifications(tab.defName) ?? true;
                             bool newValue = tabEnabled;
-                            
+
                             string tabLabel = tab.label?.CapitalizeFirst() ?? tab.defName;
                             if (tab.defName == "Main")
                                 tabLabel += " (Main)";
                             else if (tab.defName == "Anomaly")
                                 tabLabel += " (Default: Off)";
-                                
+
                             AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), 26);
-                            
+
                             if (newValue != tabEnabled && worldCompSaveHandler != null)
                             {
                                 worldCompSaveHandler.TabCostModificationSettings[tab.defName] = newValue;
                                 LogOutput.WriteLogMessage(Errorlevel.Debug, $"Changed cost modifications for tab {tab.defName} to {newValue}");
                             }
                         }
-                        
+
                         this.scrollPosPageProjectSettingsSize = drawpos + 50f;
                         Widgets.EndScrollView();
                     }
