@@ -39,6 +39,8 @@ namespace TechAdvancing
 
         private Vector2 scrollPosPageProjectInfo = Vector2.zero;
         private float scrollPosPageProjectInfoSize = 0;
+        private Vector2 scrollPosPageProjectSettings = Vector2.zero;
+        private float scrollPosPageProjectSettingsSize = 0;
 
         private bool settingsChanged = false;
         // private static float _iconSize = 30f;
@@ -169,7 +171,8 @@ namespace TechAdvancing
             {
                 AddSpace(ref drawpos, prefixSpace);
                 var size = CalcSizeOnCanvas(name);
-                Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, size.x + 40, size.y), name, ref val, false);
+                const float standardHeight = 24f;
+                Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos - 2f, size.x + 40, standardHeight), name, ref val, false);
             }
 
             float AddSliderSetting(float val, string name, float leftValue, float rightValue, float roundTo = 1f, int prefixSpace = spaceBetweenSettings)
@@ -286,6 +289,14 @@ namespace TechAdvancing
 
                 case 1: // Project Settings tab
                     {
+                        var scrollViewDrawCanvasInner = new Rect(canvas.x, canvas.y + drawpos, canvas.width - 50, this.scrollPosPageProjectSettingsSize);
+                        var scrollViewArea = new Rect(canvas.x, canvas.y + 25, canvas.width, 500);
+                        
+                        float scrollViewDrawpos = 0f;
+                        Widgets.BeginScrollView(scrollViewArea, ref this.scrollPosPageProjectSettings, scrollViewDrawCanvasInner, true);
+                        
+                        drawpos = scrollViewDrawpos + 20f;
+                        
                         AddCheckboxSetting(ref b_configCheckboxDisableCostMultiplicatorCap, "configCheckboxDisableCostMultiplicatorCap".Translate(), 0);
                         AddCheckboxSetting(ref b_configCheckboxMakeHigherResearchesSuperExpensive, "configCheckboxMakeHigherResearchesSuperExpensive".Translate());
 
@@ -339,12 +350,12 @@ namespace TechAdvancing
                         if (lastStateIgnoreUndefined != b_configCheckboxIgnoreTechlevelUndefined)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
                             
-                        // Per-tab cost modification settings
-                        AddSpace(ref drawpos, 70);
+                        AddCheckboxSetting(ref b_configCheckboxTreatUndefinedAsCurrentLevel, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 50);
+                            
+                        AddSpace(ref drawpos, 40);
                         DrawText(canvas, "configPerTabCostModificationHeader".Translate(), ref drawpos);
-                        AddSpace(ref drawpos, 10);
+                        AddSpace(ref drawpos, 2);
                         
-                        // Get all unique research tabs
                         var allTabs = DefDatabase<ResearchProjectDef>.AllDefs
                             .Where(x => x.tab != null)
                             .Select(x => x.tab)
@@ -364,7 +375,7 @@ namespace TechAdvancing
                             else if (tab.defName == "Anomaly")
                                 tabLabel += " (Default: Off)";
                                 
-                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), 25);
+                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), 26);
                             
                             if (newValue != tabEnabled && worldCompSaveHandler != null)
                             {
@@ -373,9 +384,8 @@ namespace TechAdvancing
                             }
                         }
                         
-                        // Add undefined tech level cost setting
-                        AddSpace(ref drawpos, 70);
-                        AddCheckboxSetting(ref b_configCheckboxTreatUndefinedAsCurrentLevel, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 0);
+                        this.scrollPosPageProjectSettingsSize = drawpos + 50f;
+                        Widgets.EndScrollView();
                     }
                     break;
 
