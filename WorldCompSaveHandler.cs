@@ -141,6 +141,12 @@ namespace TechAdvancing
             }
             
             // Set default for Anomaly tab if not already saved
+            if (!this.TabCostModificationSettings.ContainsKey("Anomaly"))
+            {
+                this.TabCostModificationSettings["Anomaly"] = false;
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Setting Anomaly tab cost modifications to disabled by default");
+            }
+            
             TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
             if (this.ColonyPeople == null)
             {

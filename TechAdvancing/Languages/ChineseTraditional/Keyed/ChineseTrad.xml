@@ -41,5 +41,6 @@
   
   <configPerTabCostModificationHeader>分頁成本修改設定：</configPerTabCostModificationHeader>
   <configTabCostModification>將成本修改套用於 {0}</configTabCostModification>
+  <configCheckboxTreatUndefinedAsCurrentLevel>在計算成本時，將未定義科技等級的項目視為你當前的科技等級</configCheckboxTreatUndefinedAsCurrentLevel>
   
 </LanguageData>

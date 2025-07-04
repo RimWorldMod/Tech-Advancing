@@ -68,4 +68,6 @@
   
   <configPerTabCostModificationHeader>Kostenänderungseinstellungen pro Registerkarte:</configPerTabCostModificationHeader>
   <configTabCostModification>Kostenänderungen auf {0} anwenden</configTabCostModification>
+  <configCheckboxTreatUndefinedAsCurrentLevel>Projekte mit undefinierter Technologiestufe für Kostenberechnungen als aktuelle Technologiestufe behandeln</configCheckboxTreatUndefinedAsCurrentLevel>
+  
 </LanguageData>

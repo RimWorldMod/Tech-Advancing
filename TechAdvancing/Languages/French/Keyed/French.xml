@@ -68,4 +68,6 @@
   
   <configPerTabCostModificationHeader>Paramètres de modification des coûts par onglet :</configPerTabCostModificationHeader>
   <configTabCostModification>Appliquer les modifications de coût à {0}</configTabCostModification>
+  <configCheckboxTreatUndefinedAsCurrentLevel>Traiter les projets de niveau technologique indéfini comme votre niveau technologique actuel pour les calculs de coût</configCheckboxTreatUndefinedAsCurrentLevel>
+  
 </LanguageData>

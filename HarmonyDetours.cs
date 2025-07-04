@@ -72,6 +72,13 @@ namespace TechAdvancing
                 }
             }
             
+            // Check if undefined tech level should be treated as current level
+            if (__instance.techLevel == TechLevel.Undefined && TechAdvancing_Config_Tab.b_configCheckboxTreatUndefinedAsCurrentLevel)
+            {
+                __result = 1f; // No cost modification for undefined tech level projects
+                return;
+            }
+            
             if (researcherTechLevel == __instance.techLevel)
             {
                 __result = 1f;

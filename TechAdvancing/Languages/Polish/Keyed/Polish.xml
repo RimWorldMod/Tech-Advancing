@@ -47,5 +47,6 @@
 	
 	<configPerTabCostModificationHeader>Ustawienia modyfikacji kosztów dla zakładek:</configPerTabCostModificationHeader>
 	<configTabCostModification>Zastosuj modyfikacje kosztów do {0}</configTabCostModification>
+	<configCheckboxTreatUndefinedAsCurrentLevel>Traktuj projekty o nieokreślonym poziomie technologicznym jak twój obecny poziom technologiczny przy obliczaniu kosztów</configCheckboxTreatUndefinedAsCurrentLevel>
 	
 </LanguageData>

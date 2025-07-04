@@ -68,4 +68,6 @@
   
   <configPerTabCostModificationHeader>Per-Tab Cost Modification Settings:</configPerTabCostModificationHeader>
   <configTabCostModification>Apply cost modifications to {0}</configTabCostModification>
+  <configCheckboxTreatUndefinedAsCurrentLevel>Treat undefined tech level projects as your current tech level for cost calculations</configCheckboxTreatUndefinedAsCurrentLevel>
+  
 </LanguageData>

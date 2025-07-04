@@ -49,4 +49,6 @@
 
 	<configPerTabCostModificationHeader>Configuración de modificación de costos por pestaña:</configPerTabCostModificationHeader>
 	<configTabCostModification>Aplicar modificaciones de costo a {0}</configTabCostModification>
+	<configCheckboxTreatUndefinedAsCurrentLevel>Tratar proyectos con nivel tecnológico indefinido como tu nivel tecnológico actual para cálculos de costo</configCheckboxTreatUndefinedAsCurrentLevel>
+
 </LanguageData>

@@ -98,6 +98,13 @@ namespace TechAdvancing
         public static int ConfigCheckboxIgnoreResearchTechlevelUndefined { get => b_configCheckboxIgnoreTechlevelUndefined ? 1 : 0; set => b_configCheckboxIgnoreTechlevelUndefined = value == 1; }
         public static bool b_configCheckboxIgnoreTechlevelUndefined = true;
 
+        /// <summary>
+        /// If checked, undefined tech level projects will be treated as your current tech level for cost calculations (no cost modification). Default FALSE.
+        /// </summary>
+        [ConfigTabValueSaved("configCheckboxTreatUndefinedAsCurrentLevel")]
+        public static int ConfigCheckboxTreatUndefinedAsCurrentLevel { get => b_configCheckboxTreatUndefinedAsCurrentLevel ? 1 : 0; set => b_configCheckboxTreatUndefinedAsCurrentLevel = value == 1; }
+        public static bool b_configCheckboxTreatUndefinedAsCurrentLevel = false;
+
 
         internal const int spaceBetweenSettings = 50;
 

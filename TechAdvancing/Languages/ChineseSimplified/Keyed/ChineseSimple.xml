@@ -66,4 +66,6 @@
   
   <configPerTabCostModificationHeader>分标签成本修改设置：</configPerTabCostModificationHeader>
   <configTabCostModification>将成本修改应用于 {0}</configTabCostModification>
+  <configCheckboxTreatUndefinedAsCurrentLevel>在计算成本时，将未定义科技等级的项目视为你当前的科技等级</configCheckboxTreatUndefinedAsCurrentLevel>
+  
 </LanguageData>

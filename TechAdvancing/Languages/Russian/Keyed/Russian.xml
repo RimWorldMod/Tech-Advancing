@@ -68,4 +68,6 @@
   
   <configPerTabCostModificationHeader>Настройки изменения стоимости по вкладкам:</configPerTabCostModificationHeader>
   <configTabCostModification>Применить изменения стоимости к {0}</configTabCostModification>
+  <configCheckboxTreatUndefinedAsCurrentLevel>Считать проекты с неопределённым техническим уровнем как ваш текущий технический уровень при расчёте стоимости</configCheckboxTreatUndefinedAsCurrentLevel>
+  
 </LanguageData>
