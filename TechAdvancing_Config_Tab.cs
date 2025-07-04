@@ -39,6 +39,8 @@ namespace TechAdvancing
 
         private Vector2 scrollPosPageProjectInfo = Vector2.zero;
         private float scrollPosPageProjectInfoSize = 0;
+        private Vector2 scrollPosPageProjectSettings = Vector2.zero;
+        private float scrollPosPageProjectSettingsSize = 0;
 
         private bool settingsChanged = false;
         // private static float _iconSize = 30f;
@@ -97,6 +99,13 @@ namespace TechAdvancing
         [ConfigTabValueSaved("configCheckboxIgnoreResearchTechlevelUndefined")]
         public static int ConfigCheckboxIgnoreResearchTechlevelUndefined { get => b_configCheckboxIgnoreTechlevelUndefined ? 1 : 0; set => b_configCheckboxIgnoreTechlevelUndefined = value == 1; }
         public static bool b_configCheckboxIgnoreTechlevelUndefined = true;
+
+        /// <summary>
+        /// If checked, undefined tech level projects will be treated as your current tech level for cost calculations (no cost modification). Default TRUE.
+        /// </summary>
+        [ConfigTabValueSaved("configCheckboxDontModifyCostOfUndefinedTLTechs")]
+        public static int ConfigCheckboxDontModifyCostOfUndefinedTLTechs { get => b_configCheckboxDontModifyCostOfUndefinedTLTechs ? 1 : 0; set => b_configCheckboxDontModifyCostOfUndefinedTLTechs = value == 1; }
+        public static bool b_configCheckboxDontModifyCostOfUndefinedTLTechs = true;
 
 
         internal const int spaceBetweenSettings = 50;
@@ -162,7 +171,8 @@ namespace TechAdvancing
             {
                 AddSpace(ref drawpos, prefixSpace);
                 var size = CalcSizeOnCanvas(name);
-                Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos, size.x + 40, size.y), name, ref val, false);
+                const float standardHeight = 24f;
+                Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos - 2f, size.x + 40, standardHeight), name, ref val, false);
             }
 
             float AddSliderSetting(float val, string name, float leftValue, float rightValue, float roundTo = 1f, int prefixSpace = spaceBetweenSettings)
@@ -279,6 +289,14 @@ namespace TechAdvancing
 
                 case 1: // Project Settings tab
                     {
+                        var scrollViewDrawCanvasInner = new Rect(canvas.x, canvas.y + drawpos, canvas.width - 50, this.scrollPosPageProjectSettingsSize);
+                        var scrollViewArea = new Rect(canvas.x, canvas.y + 25, canvas.width, 500);
+
+                        float scrollViewDrawpos = 0f;
+                        Widgets.BeginScrollView(scrollViewArea, ref this.scrollPosPageProjectSettings, scrollViewDrawCanvasInner, true);
+
+                        drawpos = scrollViewDrawpos + 20f;
+
                         AddCheckboxSetting(ref b_configCheckboxDisableCostMultiplicatorCap, "configCheckboxDisableCostMultiplicatorCap".Translate(), 0);
                         AddCheckboxSetting(ref b_configCheckboxMakeHigherResearchesSuperExpensive, "configCheckboxMakeHigherResearchesSuperExpensive".Translate());
 
@@ -327,10 +345,48 @@ namespace TechAdvancing
                             TA_ResearchManager.UpdateFinishedProjectCounts();
 
                         var lastStateIgnoreUndefined = b_configCheckboxIgnoreTechlevelUndefined;
-                        AddCheckboxSetting(ref b_configCheckboxIgnoreTechlevelUndefined, 
-                            "configCheckboxIgnoreTechlevelUndefined".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 70);
+                        AddCheckboxSetting(ref b_configCheckboxIgnoreTechlevelUndefined,
+                            "configCheckboxIgnoreTechlevelUndefined".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 50);
                         if (lastStateIgnoreUndefined != b_configCheckboxIgnoreTechlevelUndefined)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
+
+                        AddCheckboxSetting(ref b_configCheckboxDontModifyCostOfUndefinedTLTechs, "configCheckboxTreatUndefinedAsCurrentLevel".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 25);
+
+                        AddSpace(ref drawpos, 40);
+                        DrawText(canvas, "configPerTabCostModificationHeader".Translate(), ref drawpos);
+
+                        var allTabs = DefDatabase<ResearchProjectDef>.AllDefs
+                            .Select(x => x.tab)
+                            .Where(x => x != null)
+                            .Distinct()
+                            .OrderBy(x => x.defName == "Main" ? 0 : 1)
+                            .ThenBy(x => x.label)
+                            .ToList();
+
+                        bool first = true;
+                        foreach (var tab in allTabs)
+                        {
+                            bool tabEnabled = worldCompSaveHandler?.ShouldApplyCostModifications(tab.defName) ?? true;
+                            bool newValue = tabEnabled;
+
+                            string tabLabel = tab.label?.CapitalizeFirst() ?? tab.defName;
+                            if (tab.defName == "Main")
+                                tabLabel += " (Main)";
+                            else if (tab.defName == "Anomaly")
+                                tabLabel += " (Default: Off)";
+
+                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), first ? 0 : 26);
+                            first = false;
+
+                            if (newValue != tabEnabled && worldCompSaveHandler != null)
+                            {
+                                worldCompSaveHandler.TabCostModificationSettings[tab.defName] = newValue;
+                                LogOutput.WriteLogMessage(Errorlevel.Debug, $"Changed cost modifications for tab {tab.defName} to {newValue}");
+                            }
+                        }
+
+                        this.scrollPosPageProjectSettingsSize = drawpos + 50f;
+                        Widgets.EndScrollView();
                     }
                     break;
 

@@ -19,6 +19,11 @@ namespace TechAdvancing
         /// </summary>
         public Dictionary<Pawn, Faction> ColonyPeople = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
 
+        /// <summary>
+        /// Stores per-tab settings for cost modifications. Key is tab defName, value is whether cost modifications apply. DEFAULT VALUE IS TRUE.
+        /// </summary>
+        public Dictionary<string, bool> TabCostModificationSettings = new Dictionary<string, bool>();
+
         public bool isInitialized;
 
         public WorldCompSaveHandler(World world) : base(world) // Rimworld will initialize this on world load!
@@ -34,6 +39,23 @@ namespace TechAdvancing
 
         public bool IsValueSaved(string key) { return this.ConfigValues.ContainsKey(key); }
         public void RemoveConfigValue(string key) { this.ConfigValues.Remove(key); }
+        
+        /// <summary>
+        /// Checks if cost modifications should apply to a given research tab
+        /// </summary>
+        /// <param name="tabDefName">The defName of the research tab</param>
+        /// <returns>True if cost modifications should apply, false otherwise</returns>
+        public bool ShouldApplyCostModifications(string tabDefName)
+        {
+            if (string.IsNullOrEmpty(tabDefName))
+                return true; // Default to true for null tabs
+                
+            if (this.TabCostModificationSettings.TryGetValue(tabDefName, out bool value))
+                return value;
+                
+            // Default to true for tabs not in the dictionary
+            return true;
+        }
 
         public void TA_ExposeData(ConfigTabValueSavedAttribute attrib, ref int value, TA_Expose_Mode mode = TA_Expose_Mode.Load)
         {
@@ -110,6 +132,21 @@ namespace TechAdvancing
                 Scribe_Collections.Look(ref this.ColonyPeople, "TA_Expose_People", LookMode.Reference, LookMode.Reference);
                 //LogOutput.WriteLogMessage(Errorlevel.Information, "Read TA_ExposePeople");
             }
+            
+            // Load tab cost modification settings
+            Scribe_Collections.Look(ref this.TabCostModificationSettings, "TA_Expose_TabCostSettings", LookMode.Value, LookMode.Value);
+            if (this.TabCostModificationSettings == null)
+            {
+                this.TabCostModificationSettings = new Dictionary<string, bool>();
+            }
+            
+            // Set default for Anomaly tab if not already saved
+            if (!this.TabCostModificationSettings.ContainsKey("Anomaly"))
+            {
+                this.TabCostModificationSettings["Anomaly"] = false;
+                LogOutput.WriteLogMessage(Errorlevel.Debug, "Setting Anomaly tab cost modifications to disabled by default");
+            }
+            
             TechAdvancing_Config_Tab.ExposeData(TA_Expose_Mode.Load);
             if (this.ColonyPeople == null)
             {
