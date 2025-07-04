@@ -122,7 +122,11 @@ namespace BuildMultiVersionMod
             }
 
             Log("Creating zip for upload...");
-            ZipFile.CreateFromDirectory(outputFolder, Path.Combine(outputFolder, "..", "TechAdvancing.zip"), CompressionLevel.Optimal, false);
+            var zipPath = Path.Combine(outputFolder, "..", "TechAdvancing.zip");
+            if (File.Exists(zipPath)) {
+                File.Delete(zipPath);
+            }
+            ZipFile.CreateFromDirectory(outputFolder, zipPath, CompressionLevel.Optimal, false);
 
             Log("Done!");
         }
