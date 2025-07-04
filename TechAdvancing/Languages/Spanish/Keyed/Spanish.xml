@@ -47,4 +47,6 @@
 	<TA_TL_Animal>Animal</TA_TL_Animal>
 	<TA_TL_Undefined>Indefinido</TA_TL_Undefined>
 
+	<configPerTabCostModificationHeader>Configuración de modificación de costos por pestaña:</configPerTabCostModificationHeader>
+	<configTabCostModification>Aplicar modificaciones de costo a {0}</configTabCostModification>
 </LanguageData>

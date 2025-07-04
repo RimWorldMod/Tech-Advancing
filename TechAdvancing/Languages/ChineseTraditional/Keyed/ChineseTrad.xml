@@ -39,5 +39,7 @@
   <TA_TL_Animal>動物</TA_TL_Animal>
   <TA_TL_Undefined>未定義</TA_TL_Undefined>
   
+  <configPerTabCostModificationHeader>分頁成本修改設定：</configPerTabCostModificationHeader>
+  <configTabCostModification>將成本修改套用於 {0}</configTabCostModification>
   
 </LanguageData>

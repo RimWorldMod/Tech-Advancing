@@ -61,6 +61,17 @@ namespace TechAdvancing
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
         static void Postfix(Verse.ResearchProjectDef __instance, ref float __result, TechLevel researcherTechLevel)
         {
+            // Check if cost modifications should apply to this research tab
+            var worldComp = TechAdvancing_Config_Tab.worldCompSaveHandler;
+            if (worldComp != null && __instance.tab != null)
+            {
+                if (!worldComp.ShouldApplyCostModifications(__instance.tab.defName))
+                {
+                    __result = 1f; // No cost modification for this tab
+                    return;
+                }
+            }
+            
             if (researcherTechLevel == __instance.techLevel)
             {
                 __result = 1f;

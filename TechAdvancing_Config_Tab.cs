@@ -331,6 +331,44 @@ namespace TechAdvancing
                             "configCheckboxIgnoreTechlevelUndefined".Translate().Replace("{TA_TL_Undefined}", "TA_TL_Undefined".Translate()), 70);
                         if (lastStateIgnoreUndefined != b_configCheckboxIgnoreTechlevelUndefined)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
+                            
+                        // Per-tab cost modification settings
+                        AddSpace(ref drawpos, 70);
+                        DrawText(canvas, "configPerTabCostModificationHeader".Translate(), ref drawpos);
+                        AddSpace(ref drawpos, 10);
+                        
+                        // Get all unique research tabs
+                        var allTabs = DefDatabase<ResearchProjectDef>.AllDefs
+                            .Where(x => x.tab != null)
+                            .Select(x => x.tab)
+                            .Distinct()
+                            .OrderBy(x => x.defName == "Main" ? 0 : 1)
+                            .ThenBy(x => x.label)
+                            .ToList();
+                            
+                        foreach (var tab in allTabs)
+                        {
+                            bool tabEnabled = worldCompSaveHandler?.ShouldApplyCostModifications(tab.defName) ?? true;
+                            bool newValue = tabEnabled;
+                            
+                            string tabLabel = tab.label?.CapitalizeFirst() ?? tab.defName;
+                            if (tab.defName == "Main")
+                                tabLabel += " (Main)";
+                            else if (tab.defName == "Anomaly")
+                                tabLabel += " (Default: Off)";
+                                
+                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), 25);
+                            
+                            if (newValue != tabEnabled && worldCompSaveHandler != null)
+                            {
+                                worldCompSaveHandler.TabCostModificationSettings[tab.defName] = newValue;
+                                LogOutput.WriteLogMessage(Errorlevel.Debug, $"Changed cost modifications for tab {tab.defName} to {newValue}");
+                            }
+                        }
+                        
+                        // Add undefined tech level cost setting
+                        AddSpace(ref drawpos, 70);
+                        AddCheckboxSetting(ref b_configCheckboxTreatUndefinedAsCurrentLevel, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 0);
                     }
                     break;
 

@@ -66,4 +66,6 @@
   <configResearchProjectInfo_TechsRemainingPlural>Осталось исследовать {0} технологий. Текущий уровень завершен на: {1}%\nОставшиеся технологии:\n{2}</configResearchProjectInfo_TechsRemainingPlural>
   <configResearchProjectInfo_TechsRemainingNone>Все технологии данного уровня исследованы.</configResearchProjectInfo_TechsRemainingNone>
   
+  <configPerTabCostModificationHeader>Настройки изменения стоимости по вкладкам:</configPerTabCostModificationHeader>
+  <configTabCostModification>Применить изменения стоимости к {0}</configTabCostModification>
 </LanguageData>

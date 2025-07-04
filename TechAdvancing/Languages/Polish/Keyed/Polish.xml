@@ -45,5 +45,7 @@
 	<TA_TL_Animal>Zwierzęcy</TA_TL_Animal>
 	<TA_TL_Undefined>Niezdefiniowany</TA_TL_Undefined>
 	
+	<configPerTabCostModificationHeader>Ustawienia modyfikacji kosztów dla zakładek:</configPerTabCostModificationHeader>
+	<configTabCostModification>Zastosuj modyfikacje kosztów do {0}</configTabCostModification>
 	
 </LanguageData>

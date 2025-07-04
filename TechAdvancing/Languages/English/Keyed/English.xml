@@ -66,4 +66,6 @@
   <configResearchProjectInfo_TechsRemainingPlural>There are {0} projects left to be researched. Current research completeness: {1}%\nThe remaining projects are:\n{2}</configResearchProjectInfo_TechsRemainingPlural>
   <configResearchProjectInfo_TechsRemainingNone>All projects of this techlevel have been researched.</configResearchProjectInfo_TechsRemainingNone>
   
+  <configPerTabCostModificationHeader>Per-Tab Cost Modification Settings:</configPerTabCostModificationHeader>
+  <configTabCostModification>Apply cost modifications to {0}</configTabCostModification>
 </LanguageData>
