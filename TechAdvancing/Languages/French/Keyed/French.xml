@@ -66,5 +66,4 @@
   <configResearchProjectInfo_TechsRemainingPlural>Il reste {0} projets à rechercher. Pourcentage du niveau actuellement complété : {1}%\nLes recherches restantes sont :\n{2}</configResearchProjectInfo_TechsRemainingPlural>
   <configResearchProjectInfo_TechsRemainingNone>Tous les projets de ce niveau de technologie ont été recherchés.</configResearchProjectInfo_TechsRemainingNone>
   
-  
 </LanguageData>

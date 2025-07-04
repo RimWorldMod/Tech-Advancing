@@ -66,5 +66,4 @@
   <configResearchProjectInfo_TechsRemainingPlural>Es verbleiben {0} Forschungsprojekte. Aktueller Komplettierungsgrad: {1}%\nDie verbleibenden Projekte sind:\n{2}</configResearchProjectInfo_TechsRemainingPlural>
   <configResearchProjectInfo_TechsRemainingNone>Alle Forschungsprojekte dieses Technologielevels sind bereits erforscht.</configResearchProjectInfo_TechsRemainingNone>
   
-  
 </LanguageData>

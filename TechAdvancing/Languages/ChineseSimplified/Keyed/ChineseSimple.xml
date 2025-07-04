@@ -64,5 +64,4 @@
   <configResearchProjectInfo_TechsRemainingPlural>还有{0}项研究未完成。当前研究完成度{1}%\n未完成的项目有：\n{2}</configResearchProjectInfo_TechsRemainingPlural>
   <configResearchProjectInfo_TechsRemainingNone>此技术级别的所有项目都已研究完成。</configResearchProjectInfo_TechsRemainingNone>
   
-  
 </LanguageData>
