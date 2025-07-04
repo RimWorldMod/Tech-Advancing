@@ -20,7 +20,7 @@ namespace TechAdvancing
         public Dictionary<Pawn, Faction> ColonyPeople = new Dictionary<Pawn, Faction>(); //pawn , ORIGINAL faction
 
         /// <summary>
-        /// Stores per-tab settings for cost modifications. Key is tab defName, value is whether cost modifications apply.
+        /// Stores per-tab settings for cost modifications. Key is tab defName, value is whether cost modifications apply. DEFAULT VALUE IS TRUE.
         /// </summary>
         public Dictionary<string, bool> TabCostModificationSettings = new Dictionary<string, bool>();
 

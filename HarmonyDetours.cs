@@ -62,20 +62,14 @@ namespace TechAdvancing
         static void Postfix(Verse.ResearchProjectDef __instance, ref float __result, TechLevel researcherTechLevel)
         {
             var worldComp = TechAdvancing_Config_Tab.worldCompSaveHandler;
-            if (worldComp != null && __instance.tab != null)
-            {
-                if (!worldComp.ShouldApplyCostModifications(__instance.tab.defName))
-                {
-                    __result = 1f;
-                    return;
-                }
-            }
-            
-            if (__instance.techLevel == TechLevel.Undefined && TechAdvancing_Config_Tab.b_configCheckboxTreatUndefinedAsCurrentLevel)
-            {
-                __result = 1f;
+
+            // Check whether we want to skip modifying techs with Undefined techlevel, and if the current one is such a tech, skip it.
+            if (TechAdvancing_Config_Tab.b_configCheckboxDontModifyCostOfUndefinedTLTechs && __instance.techLevel == TechLevel.Undefined) 
                 return;
-            }
+
+            // Check whether cost should be modified for the current tab, and if not, skip
+            if (worldComp != null && __instance.tab != null && !worldComp.ShouldApplyCostModifications(__instance.tab.defName)) 
+                return;
             
             if (researcherTechLevel == __instance.techLevel)
             {

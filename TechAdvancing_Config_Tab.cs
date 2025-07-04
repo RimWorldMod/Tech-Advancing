@@ -103,9 +103,9 @@ namespace TechAdvancing
         /// <summary>
         /// If checked, undefined tech level projects will be treated as your current tech level for cost calculations (no cost modification). Default TRUE.
         /// </summary>
-        [ConfigTabValueSaved("configCheckboxTreatUndefinedAsCurrentLevel")]
-        public static int ConfigCheckboxTreatUndefinedAsCurrentLevel { get => b_configCheckboxTreatUndefinedAsCurrentLevel ? 1 : 0; set => b_configCheckboxTreatUndefinedAsCurrentLevel = value == 1; }
-        public static bool b_configCheckboxTreatUndefinedAsCurrentLevel = true;
+        [ConfigTabValueSaved("configCheckboxDontModifyCostOfUndefinedTLTechs")]
+        public static int ConfigCheckboxDontModifyCostOfUndefinedTLTechs { get => b_configCheckboxDontModifyCostOfUndefinedTLTechs ? 1 : 0; set => b_configCheckboxDontModifyCostOfUndefinedTLTechs = value == 1; }
+        public static bool b_configCheckboxDontModifyCostOfUndefinedTLTechs = true;
 
 
         internal const int spaceBetweenSettings = 50;
@@ -350,7 +350,7 @@ namespace TechAdvancing
                         if (lastStateIgnoreUndefined != b_configCheckboxIgnoreTechlevelUndefined)
                             TA_ResearchManager.UpdateFinishedProjectCounts();
 
-                        AddCheckboxSetting(ref b_configCheckboxTreatUndefinedAsCurrentLevel, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 25);
+                        AddCheckboxSetting(ref b_configCheckboxDontModifyCostOfUndefinedTLTechs, "configCheckboxTreatUndefinedAsCurrentLevel".Translate(), 25);
 
                         AddSpace(ref drawpos, 40);
                         DrawText(canvas, "configPerTabCostModificationHeader".Translate(), ref drawpos);
