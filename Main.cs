@@ -54,14 +54,14 @@ namespace TechAdvancing
             TechAdvancing.TA_ResearchManager.RecalculateTechlevel(false);
         }
 
-        public static void OnNewPawn(Pawn newPawn)  //event for new pawn in the colony
+        public static void OnNewPawn(Pawn newPawn, Faction newFaction)  //event for new pawn in the colony
         {
-            if (newPawn?.Faction?.IsPlayer != true) // skip pawns on the map that dont belong to the player and pawns that are null or dont have a faction
+            if (newPawn == null || newFaction?.IsPlayer != true) // skip pawns on the map that wont belong to the player and pawns that are null or dont have a faction
             {
                 return;
             }
 
-            if (((int?)newPawn?.Faction?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial)
+            if (((int?)newPawn?.Faction?.def?.techLevel ?? -1) >= (int)TechLevel.Industrial) 
             {
                 if (!TechAdvancing.MapCompSaveHandler.ColonyPeople.ContainsKey(newPawn))
                 {

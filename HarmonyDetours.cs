@@ -131,7 +131,7 @@ namespace TechAdvancing
         [SuppressMessage("Style", "IDE0060:Remove unused parameters", Justification = "Referenced at runtime by harmony")]
         static void Prefix(Pawn __instance, Faction newFaction, Pawn recruiter = null)
         {
-            TechAdvancing.Event.OnNewPawn(__instance);
+            TechAdvancing.Event.OnNewPawn(__instance, newFaction);
         }
     }
 
