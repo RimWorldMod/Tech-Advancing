@@ -167,12 +167,12 @@ namespace TechAdvancing
                 return new Vector2(maxWidth, Text.CalcHeight(text, maxWidth));
             }
 
-            void AddCheckboxSetting(ref bool val, string name, int prefixSpace = spaceBetweenSettings)
+            void AddCheckboxSetting(ref bool val, string name, int prefixSpace = spaceBetweenSettings, bool paintable = false)
             {
                 AddSpace(ref drawpos, prefixSpace);
                 var size = CalcSizeOnCanvas(name);
                 const float standardHeight = 24f;
-                Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos - 2f, size.x + 40, standardHeight), name, ref val, false);
+                Widgets.CheckboxLabeled(new Rect(canvas.x, drawpos - 2f, size.x + 40, standardHeight), name, ref val, false, paintable: paintable);
             }
 
             float AddSliderSetting(float val, string name, float leftValue, float rightValue, float roundTo = 1f, int prefixSpace = spaceBetweenSettings)
@@ -375,7 +375,7 @@ namespace TechAdvancing
                             else if (tab.defName == "Anomaly")
                                 tabLabel += " (Default: Off)";
 
-                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), first ? 0 : 26);
+                            AddCheckboxSetting(ref newValue, "configTabCostModification".Translate(tabLabel), first ? 0 : 26, paintable:true);
                             first = false;
 
                             if (newValue != tabEnabled && worldCompSaveHandler != null)
