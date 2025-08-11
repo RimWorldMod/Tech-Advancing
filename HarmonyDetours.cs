@@ -93,7 +93,8 @@ namespace TechAdvancing
 
                 if (TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensive == 1)
                 {
-                    __result *= (float)(TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num));
+                    // -1 so that the multiplier is applied correctly for techs that are slightly more expensive
+                    __result *= (float)(TechAdvancing_Config_Tab.ConfigCheckboxMakeHigherResearchesSuperExpensiveFac * Math.Pow(2, num - 1));
                 }
             }
 

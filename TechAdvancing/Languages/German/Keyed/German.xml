@@ -53,7 +53,7 @@
   <config_menu_button_research_project_settings>Projekt Einstellungen</config_menu_button_research_project_settings>
   <config_menu_button_research_project_info>Projekt Info</config_menu_button_research_project_info>
   
-  <configCheckboxMakeHigherResearchesSuperExpensive>Erhöhe die Entwicklungskosten von Projekten die dein Technologielevel überschreiten um einen Faktor X.</configCheckboxMakeHigherResearchesSuperExpensive>
+  <configCheckboxMakeHigherResearchesSuperExpensive>Multipliziere die Entwicklungskosten von Projekten die dein Technologielevel überschreiten mit dem Faktor X*2^(projektTechLvl - deinTechLvl - 1).</configCheckboxMakeHigherResearchesSuperExpensive>
   <configCheckboxMakeHigherResearchesSuperExpensiveFac>Verwende folgenden Multiplikator für die obere Einstellung: (aktueller Faktor: x{0})</configCheckboxMakeHigherResearchesSuperExpensiveFac>
   <configChangeResearchCostFac>Vervielfache die Entwicklungskosten aller Forschungsprojekte mittels folgendem Wert: (aktueller Faktor: x{0})</configChangeResearchCostFac>
   <configDiscountPctForLowerTechs>Gewähre X^N Prozent Rabatt für Technologien, deren Technologielevel unter deinem liegt, wobei X der Wert des folgenden Schiebers ist.\nN steht für die Anzahl der Technologielevel die du dem Forschungsprojekt voraus bist. (Aktueller Rabatt: -{0}%)</configDiscountPctForLowerTechs>
