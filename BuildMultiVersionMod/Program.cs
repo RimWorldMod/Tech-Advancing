@@ -49,13 +49,13 @@ namespace BuildMultiVersionMod
             var currentDir = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
             Log("Current directory: " + currentDir);
 
-            var oldVersionFolder = Path.Combine(currentDir, "..", "..", "..", "TechAdvancingMulti", "OldVersions");
+            var oldVersionFolder = Path.Combine(currentDir, "..", "..","..", "..", "TechAdvancingMulti", "OldVersions");
             Log("OldVersion input directory: " + oldVersionFolder);
 
-            var latestFolder = Path.Combine(currentDir, "..", "..", "..", "TechAdvancing");
+            var latestFolder = Path.Combine(currentDir, "..", "..", "..", "..", "TechAdvancing", "TechAdvancing");
             Log("LatestTechadvancing input directory: " + latestFolder);
 
-            var outputFolder = Path.Combine(currentDir, "..", "..", "..", "TechAdvancingMulti", "TechAdvancing");
+            var outputFolder = Path.Combine(currentDir, "..", "..", "..", "..", "TechAdvancingMulti", "TechAdvancing");
             Log("Output directory: " + outputFolder);
 
             if (Directory.Exists(outputFolder))

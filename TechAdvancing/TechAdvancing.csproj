@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>    
+	</PropertyGroup>
+	<ItemGroup>
+	  <Reference Include="0Harmony">
+	    <HintPath>RimworldDlls\0Harmony.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Assembly-CSharp">
+	    <HintPath>RimworldDlls\Assembly-CSharp.dll</HintPath>
+	  </Reference>
+	  <Reference Include="UnityStubs">
+	    <HintPath>RimworldDlls\UnityStubs.dll</HintPath>
+	  </Reference>
+	  <Reference Include="0MultiplayerAPI">
+	    <HintPath>RimworldDlls\0MultiplayerAPI.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="XCOPY &quot;$(TargetDir)TechAdvancing.dll&quot; &quot;$(ProjectDir)TechAdvancing\Assemblies\&quot; /Y&#xD;&#xA;XCOPY &quot;$(TargetDir)0MultiplayerAPI.dll&quot; &quot;$(ProjectDir)TechAdvancing\Assemblies\&quot; /Y&#xD;&#xA;&#xD;&#xA;&quot;$(SolutionDir)BuildMultiVersionMod\bin\$(ConfigurationName)\net10.0\BuildMultiVersionMod.exe&quot;&#xD;&#xA;&#xD;&#xA;RD &quot;C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\TechAdvancing\&quot; /S /Q &#xD;&#xA;XCOPY &quot;$(SolutionDir)TechAdvancingMulti\TechAdvancing&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\TechAdvancing\&quot; /Y /E /S /I" />
+	</Target>
+	
+</Project>

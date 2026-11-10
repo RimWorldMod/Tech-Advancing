@@ -21,7 +21,7 @@ namespace TechAdvancing
         /// </summary>
         public static void Setup()
         {
-            var harmony = new Harmony("com.ghxx.rimworld.techadvancing");
+            var harmony = new Harmony("dev.ghxx.rimworld.techadvancing");
             harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
     }
@@ -31,7 +31,7 @@ namespace TechAdvancing
     /// </summary>
     [HarmonyPatch(typeof(RimWorld.MainTabWindow_Research))]
     [HarmonyPatch("DrawLeftRect")]
-    [HarmonyPatch(new Type[] { typeof(Rect) })]
+    [HarmonyPatch([typeof(Rect)])]
     class TA_Research_Menu_Patch
     {
         [SuppressMessage("Codequality", "IDE0051:Remove unused private member", Justification = "Referenced at runtime by harmony")]
