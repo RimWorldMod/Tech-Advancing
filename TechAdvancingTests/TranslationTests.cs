@@ -16,7 +16,7 @@ namespace TechAdvancingTests
         {
             string languageFolder = Path.Combine(
                 new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName,
-                @"..\..\..\..\TechAdvancing\Languages\");
+                @"..\..\..\..\TechAdvancing\TechAdvancing\Languages\");
 
             var xmlFiles = Directory.GetFiles(languageFolder, "*.xml", SearchOption.AllDirectories);
             foreach (var translation in xmlFiles)
